@@ -88,7 +88,8 @@ namespace MagicStorage
 
 		private static UIText recipePanelHeader;
 		private static UIText ingredientText;
-		private static UISlotZone ingredientZone = new UISlotZone(HoverItem, GetIngredient, smallScale);
+		private static UISlotZone previewZone = new UISlotZone(HoverItem, GetSelectedItem, inventoryScale);
+		private static UISlotZone ingredientZone = new UISlotZone(HoverIngredient, GetIngredient, smallScale);
 		private static UIText reqObjText;
 		private static UIText reqObjText2;
 		private static UIText storedItemsText;
@@ -97,7 +98,7 @@ namespace MagicStorage
 		private static int numRows2;
 		private static int displayRows2;
 		private static List<Item> storageItems = new List<Item>();
-		private static List<ItemData> blockStorageItems = new List<ItemData>();
+		private static HashSet<ItemData> blockStorageItems = new HashSet<ItemData>();
 
 		internal static UIScrollbar scrollBar2 = new UIScrollbar();
 		private static float scrollBar2ViewSize = 1f;
@@ -256,6 +257,13 @@ namespace MagicStorage
 			recipePanel.Append(recipePanelHeader);
 			ingredientText.Top.Set(30f, 0f);
 			recipePanel.Append(ingredientText);
+
+			previewZone.SetDimensions(1, 1);
+			previewZone.Top.Set(0f, 0f);
+			previewZone.Left.Set(-itemSlotWidth, 1f);
+			previewZone.Width.Set(itemSlotWidth, 0f);
+			previewZone.Height.Set(itemSlotHeight, 0f);
+			recipePanel.Append(previewZone);
 
 			ingredientZone.SetDimensions(numColumns2, 2);
 			ingredientZone.Top.Set(54f, 0f);
@@ -470,6 +478,7 @@ namespace MagicStorage
 			}
 			stationZone.DrawText();
 			recipeZone.DrawText();
+			previewZone.DrawText();
 			ingredientZone.DrawText();
 			storageZone.DrawText();
 			resultZone.DrawText();
@@ -551,6 +560,11 @@ namespace MagicStorage
 				context = 3;
 			}
 			return item;
+		}
+
+		private static Item GetSelectedItem(int slot, ref int context)
+		{
+			return selectedRecipe != null ? selectedRecipe.createItem : new Item();
 		}
 
 		private static Item GetResult(int slot, ref int context)
@@ -856,7 +870,6 @@ namespace MagicStorage
 					nextRecipeAvailable = new List<bool>();
 					nextRecipes.AddRange(threadRecipes);
 					nextRecipeAvailable.AddRange(threadRecipeAvailable);
-					
 				}
 				lock (threadLock)
 				{
@@ -1174,6 +1187,11 @@ namespace MagicStorage
 			hoverSlot = slot;
 		}
 
+		private static void HoverItem(int slot, ref int hoverSlot)
+		{
+			hoverSlot = slot;
+		}
+
 		private static void HoverRecipe(int slot, ref int hoverSlot)
 		{
 			int visualSlot = slot;
@@ -1190,9 +1208,24 @@ namespace MagicStorage
 			}
 		}
 
-		private static void HoverItem(int slot, ref int hoverSlot)
+		private static void HoverIngredient(int slot, ref int hoverSlot)
 		{
 			hoverSlot = slot;
+			if (MouseClicked && slot < selectedRecipe.requiredItem.Length)
+			{
+				Recipe[] itemRecipes = Array.FindAll(Main.recipe, recipe => (recipe.createItem.type == selectedRecipe.requiredItem[slot].type));
+				if (itemRecipes.Length != 0)
+				{
+					var index = Array.FindIndex(itemRecipes, recipe => IsAvailable(recipe));
+					if (index == -1)
+					{
+						index = 0;
+					}
+					selectedRecipe = itemRecipes[index];
+					RefreshStorageItems();
+					blockStorageItems.Clear();
+				}
+			}
 		}
 
 		private static void HoverStorage(int slot, ref int hoverSlot)
@@ -1204,13 +1237,13 @@ namespace MagicStorage
 				if (MouseClicked)
 				{
 					ItemData data = new ItemData(storageItems[slot]);
-					if (blockStorageItems.Contains(data))
+					blockStorageItems.Remove(data);
+					foreach (var item in storageItems)
 					{
-						blockStorageItems.Remove(data);
-					}
-					else
-					{
-						blockStorageItems.Add(data);
+						if ((storageItems[slot] != item) && RecipeGroupMatch(selectedRecipe, storageItems[slot].type, item.type))
+						{
+							blockStorageItems.Add(new ItemData(item));
+						}
 					}
 				}
 				hoverSlot = visualSlot;
