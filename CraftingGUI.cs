@@ -18,6 +18,7 @@ using MagicStorage.Sorting;
 
 namespace MagicStorage
 {
+<<<<<<< HEAD
 	public static class CraftingGUI
 	{
 		private const int padding = 4;
@@ -443,7 +444,10 @@ namespace MagicStorage
 				{
 					basePanel.Update(gameTime);
 				}
-				recipePanel.Update(gameTime);
+				if (recipePanel != null)
+				{
+					recipePanel.Update(gameTime);
+				}
 				UpdateRecipeText();
 				UpdateScrollBar();
 				UpdateCraftButton();
