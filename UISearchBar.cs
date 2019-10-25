@@ -121,6 +121,12 @@ namespace MagicStorage
 				if (KeyTyped(Keys.End))
 					cursorPosition = text.Length;
 
+				if ((Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl)) && KeyTyped(Keys.Back)) {
+					text = string.Empty;
+					cursorPosition = 0;
+					changed = true;
+				}
+
 				if (changed)
 					StorageGUI.RefreshItems();
 
