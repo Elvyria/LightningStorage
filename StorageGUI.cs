@@ -196,9 +196,9 @@ namespace MagicStorage
 				sortButtons = new UIButtonChoice(new Texture2D[]
 				{
 					Main.inventorySortTexture[0],
-					MagicStorage.Instance.GetTexture("SortID"),
-					MagicStorage.Instance.GetTexture("SortName"),
-					MagicStorage.Instance.GetTexture("SortNumber")
+					MagicStorage.Instance.GetTexture("Assets/SortID"),
+					MagicStorage.Instance.GetTexture("Assets/SortName"),
+					MagicStorage.Instance.GetTexture("Assets/SortNumber")
 				},
 				new LocalizedText[]
 				{
@@ -216,13 +216,13 @@ namespace MagicStorage
 			{
 				filterButtons = new UIButtonChoice(new Texture2D[]
 				{
-					MagicStorage.Instance.GetTexture("FilterAll"),
-					MagicStorage.Instance.GetTexture("FilterMelee"),
-					MagicStorage.Instance.GetTexture("FilterPickaxe"),
-					MagicStorage.Instance.GetTexture("FilterArmor"),
-					MagicStorage.Instance.GetTexture("FilterPotion"),
-					MagicStorage.Instance.GetTexture("FilterTile"),
-					MagicStorage.Instance.GetTexture("FilterMisc"),
+					MagicStorage.Instance.GetTexture("Assets/FilterAll"),
+					MagicStorage.Instance.GetTexture("Assets/FilterMelee"),
+					MagicStorage.Instance.GetTexture("Assets/FilterPickaxe"),
+					MagicStorage.Instance.GetTexture("Assets/FilterArmor"),
+					MagicStorage.Instance.GetTexture("Assets/FilterPotion"),
+					MagicStorage.Instance.GetTexture("Assets/FilterTile"),
+					MagicStorage.Instance.GetTexture("Assets/FilterMisc"),
 				},
 				new LocalizedText[]
 				{

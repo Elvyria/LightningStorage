@@ -1,7 +1,7 @@
 author = blushiemagic
 version = 0.4.3.3
 displayName = Magic Storage
-homepage = https://forums.terraria.org/index.php?threads/magic-storage.56294/
+homepage = https://github.com/Elvyria/MagicStorage
 hideCode = false
 hideResources = false
 includeSource = true
