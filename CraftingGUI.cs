@@ -18,7 +18,6 @@ using MagicStorage.Sorting;
 
 namespace MagicStorage
 {
-<<<<<<< HEAD
 	public static class CraftingGUI
 	{
 		private const int padding = 4;
