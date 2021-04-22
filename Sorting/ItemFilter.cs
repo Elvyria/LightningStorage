@@ -1,162 +1,143 @@
 using System;
-using System.Collections.Generic;
 using Terraria;
 
 namespace MagicStorage.Sorting
 {
-	public abstract class ItemFilter
+	public class FilterAll
 	{
-		public abstract bool Passes(Item item);
-
-		public bool Passes(object obj)
-		{
-			if (obj is Item)
-			{
-				return Passes((Item)obj);
-			}
-			if (obj is Recipe)
-			{
-				return Passes(((Recipe)obj).createItem);
-			}
-			return false;
-		}
-	}
-
-	public class FilterAll : ItemFilter
-	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return true;
 		}
 	}
 
-	public class FilterMelee : ItemFilter
+	public class FilterMelee
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.melee && item.pick == 0 && item.axe == 0 && item.hammer == 0;
 		}
 	}
 
-	public class FilterRanged : ItemFilter
+	public class FilterRanged
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.ranged;
 		}
 	}
 
-	public class FilterMagic : ItemFilter
+	public class FilterMagic
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.magic;
 		}
 	}
 
-	public class FilterSummon : ItemFilter
+	public class FilterSummon
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.summon;
 		}
 	}
 
-	public class FilterThrown : ItemFilter
+	public class FilterThrown
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.thrown;
 		}
 	}
 
-	public class FilterOtherWeapon : ItemFilter
+	public class FilterOtherWeapon
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return !item.melee && !item.ranged && !item.magic && !item.summon && !item.thrown && item.damage > 0;
 		}
 	}
 
-	public class FilterWeapon : ItemFilter
+	public class FilterWeapon
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
-			return item.damage > 0 && item.pick == 0 && item.axe == 0 && item.hammer == 0;
+			return item.damage > 0 && !item.accessory && item.pick == 0 && item.axe == 0 && item.hammer == 0;
 		}
 	}
 
-	public class FilterPickaxe : ItemFilter
+	public class FilterPickaxe
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.pick > 0;
 		}
 	}
 
-	public class FilterAxe : ItemFilter
+	public class FilterAxe
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.axe > 0;
 		}
 	}
 
-	public class FilterHammer : ItemFilter
+	public class FilterHammer
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.hammer > 0;
 		}
 	}
 
-	public class FilterTool : ItemFilter
+	public class FilterTool
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.pick > 0 || item.axe > 0 || item.hammer > 0;
 		}
 	}
 
-	public class FilterEquipment : ItemFilter
+	public class FilterEquipment
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0 || item.accessory || Main.projHook[item.shoot] || item.mountType >= 0 || (item.buffType > 0 && (Main.lightPet[item.buffType] || Main.vanityPet[item.buffType]));
 		}
 	}
 
-	public class FilterPotion : ItemFilter
+	public class FilterPotion
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.consumable && (item.healLife > 0 || item.healMana > 0 || item.buffType > 0);
 		}
 	}
 
-	public class FilterPlaceable : ItemFilter
+	public class FilterPlaceable
 	{
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			return item.createTile >= 0 || item.createWall > 0;
 		}
 	}
 
-	public class FilterMisc : ItemFilter
+	public class FilterMisc
 	{
-		private static List<ItemFilter> blacklist = new List<ItemFilter> {
-			new FilterWeapon(),
-			new FilterTool(),
-			new FilterEquipment(),
-			new FilterPotion(),
-			new FilterPlaceable()
+		private static Func<Item, bool>[] blacklist = new Func<Item, bool>[] {
+			FilterWeapon.Passes,
+			FilterTool.Passes,
+			FilterEquipment.Passes,
+			FilterPotion.Passes,
+			FilterPlaceable.Passes
 		};
 
-		public override bool Passes(Item item)
+		public static bool Passes(Item item)
 		{
 			foreach (var filter in blacklist)
 			{
-				if (filter.Passes(item))
+				if (filter(item))
 				{
 					return false;
 				}

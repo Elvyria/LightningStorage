@@ -1,5 +1,3 @@
-using System;
-
 namespace MagicStorage.Sorting
 {
 	public enum FilterMode

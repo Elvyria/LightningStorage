@@ -7,138 +7,361 @@ namespace MagicStorage.Sorting
 {
 	public static class ItemSorter
 	{
-		public static IEnumerable<Item> SortAndFilter(IEnumerable<Item> items, SortMode sortMode, FilterMode filterMode, string modFilter, string nameFilter)
+		public static List<Item> SortAndFilter(IEnumerable<Item> items, SortMode sortMode, FilterMode filterMode, string modFilter, string nameFilter)
 		{
-			ItemFilter filter;
-			switch (filterMode)
+			List<Item> result;
+
+			if (filterMode != FilterMode.All || modFilter.Length != 0 || nameFilter.Length != 0)
 			{
-			case FilterMode.All:
-				filter = new FilterAll();
-				break;
-			case FilterMode.Weapons:
-				filter = new FilterWeapon();
-				break;
-			case FilterMode.Tools:
-				filter = new FilterTool();
-				break;
-			case FilterMode.Equipment:
-				filter = new FilterEquipment();
-				break;
-			case FilterMode.Potions:
-				filter = new FilterPotion();
-				break;
-			case FilterMode.Placeables:
-				filter = new FilterPlaceable();
-				break;
-			case FilterMode.Misc:
-				filter = new FilterMisc();
-				break;
-			default:
-				filter = new FilterAll();
-				break;
+				Func<Item, bool> filterItem = ItemFilter(filterMode);
+
+				result = items.Where(item => filterItem(item) && FilterName(item, modFilter, nameFilter)).ToList();
 			}
-			IEnumerable<Item> filteredItems = items.Where((item) => filter.Passes(item) && FilterName(item, modFilter, nameFilter));
-			CompareFunction func;
-			switch (sortMode)
-			{
-			case SortMode.Default:
-				func = new CompareDefault();
-				break;
-			case SortMode.Id:
-				func = new CompareID();
-				break;
-			case SortMode.Name:
-				func = new CompareName();
-				break;
-			case SortMode.Quantity:
-				func = new CompareID();
-				break;
-			default:
-				return filteredItems;
-			}
-			BTree<Item> sortedTree = new BTree<Item>(func);
-			foreach (Item item in filteredItems)
-			{
-				sortedTree.Insert(item);
-			}
+			else result = items.ToList();
+
 			if (sortMode == SortMode.Quantity)
 			{
-				BTree<Item> oldTree = sortedTree;
-				sortedTree = new BTree<Item>(new CompareQuantity());
-				foreach (Item item in oldTree.GetSortedItems())
-				{
-					sortedTree.Insert(item);
-				}
+				result.Sort(new SortID());
+				Compress(result);
+				result.Sort(new SortQuantity());
 			}
-			return sortedTree.GetSortedItems();
+			else
+			{
+				result.Sort(Sort(sortMode));
+				Compress(result);
+			}
+
+			return result;
 		}
 
-		public static IEnumerable<Recipe> GetRecipes(SortMode sortMode, FilterMode filterMode, string modFilter, string nameFilter)
+		public static Recipe[] SortAndFilter(Recipe[] recipes, SortMode sortMode, FilterMode filterMode, string modFilter, string nameFilter)
 		{
-			ItemFilter filter;
-			switch (filterMode)
+			Recipe[] result = recipes;
+
+			if (filterMode != FilterMode.All || modFilter.Length != 0 || nameFilter.Length != 0)
 			{
-			case FilterMode.All:
-				filter = new FilterAll();
-				break;
-			case FilterMode.Weapons:
-				filter = new FilterWeapon();
-				break;
-			case FilterMode.Tools:
-				filter = new FilterTool();
-				break;
-			case FilterMode.Equipment:
-				filter = new FilterEquipment();
-				break;
-			case FilterMode.Potions:
-				filter = new FilterPotion();
-				break;
-			case FilterMode.Placeables:
-				filter = new FilterPlaceable();
-				break;
-			case FilterMode.Misc:
-				filter = new FilterMisc();
-				break;
-			default:
-				filter = new FilterAll();
-				break;
+				Func<Item, bool> filterItem = ItemFilter(filterMode);
+
+				result = Array.FindAll(recipes, recipe => !recipe.createItem.IsAir && filterItem(recipe.createItem) && FilterName(recipe.createItem, modFilter, nameFilter));
 			}
-			IEnumerable<Recipe> filteredRecipes = Main.recipe.Where((recipe, index) => index < Recipe.numRecipes && filter.Passes(recipe) && FilterName(recipe.createItem, modFilter, nameFilter));
-			CompareFunction func;
-			switch (sortMode)
+			else result = Array.FindAll(recipes, recipe => !recipe.createItem.IsAir);
+
+			if (sortMode != SortMode.Default)
 			{
-			case SortMode.Default:
-				func = new CompareDefault();
-				break;
-			case SortMode.Id:
-				func = new CompareID();
-				break;
-			case SortMode.Name:
-				func = new CompareName();
-				break;
-			default:
-				return filteredRecipes;
+				IComparer<Item> comparer = Sort(sortMode);
+				Array.Sort(result, (a, b) => comparer.Compare(a.createItem, b.createItem));
 			}
-			BTree<Recipe> sortedTree = new BTree<Recipe>(func);
-			foreach (Recipe recipe in filteredRecipes)
-			{
-				sortedTree.Insert(recipe);
-				if (CraftingGUI.threadNeedsRestart)
-				{
-					return new List<Recipe>();
-				}
-			}
-			return sortedTree.GetSortedItems();
+
+			return result;
 		}
 
-		private static bool FilterName(Item item, string modFilter, string filter)
+		// Broken
+		// Must be sorted
+		public static void Compress(Item[] items)
 		{
-			string modName = "Terraria";
-			if (item.modItem != null)
+			int len = items.Length;
+
+			for (int i = 0; i < len - 1; i++)
 			{
-				modName = item.modItem.mod.DisplayName;
+				Item item = items[i];
+				Item nextItem = items[i + 1];
+				int shift = 0;
+
+				if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+				{
+					item = item.Clone();
+					items[i] = item;
+					item.stack += nextItem.stack;
+					shift += 1;
+
+					for (int j = i + 2; j < len; j++)
+					{
+						nextItem = items[j];
+
+						if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+						{
+							item.stack += nextItem.stack;
+							shift += 1;
+						}
+						else break;
+					}
+
+					Array.Copy(items, i + shift + 1, items, i + 1, len - (i + shift));
+					len -= shift;
+				}
 			}
-			return modName.ToLowerInvariant().IndexOf(modFilter.ToLowerInvariant()) >= 0 && item.Name.ToLowerInvariant().IndexOf(filter.ToLowerInvariant()) >= 0;
+
+			Array.Resize(ref items, len);
+		}
+
+		// Must be sorted
+		public static void Compress(List<Item> items)
+		{
+			int len = items.Count;
+
+			for (int i = 0; i < len - 1; i++)
+			{
+				Item item = items[i];
+				Item nextItem = items[i + 1];
+				int shift = 0;
+
+				if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+				{
+					item = item.Clone();
+					items[i] = item;
+					item.stack += nextItem.stack;
+					shift += 1;
+
+					for (int j = i + 2; j < len; j++)
+					{
+						nextItem = items[j];
+
+						if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+						{
+							item.stack += nextItem.stack;
+
+							shift +=1;
+						}
+						else break;
+					}
+
+					items.RemoveRange(i + 1, shift);
+					len -= shift;
+				}
+
+			}
+		}
+
+		public static Recipe[] Filter(Recipe[] recipes, FilterMode mode, string mod, string name)
+		{
+			var result = recipes;
+
+			return result;
+		}
+
+		private static Func<Item, bool> ItemFilter(FilterMode mode)
+		{
+			switch (mode)
+			{
+				case FilterMode.Weapons:
+					return FilterWeapon.Passes;
+				case FilterMode.Tools:
+					return FilterTool.Passes;
+				case FilterMode.Equipment:
+					return FilterEquipment.Passes;
+				case FilterMode.Potions:
+					return FilterPotion.Passes;
+				case FilterMode.Placeables:
+					return FilterPlaceable.Passes;
+				case FilterMode.Misc:
+					return FilterMisc.Passes;
+			}
+
+			return FilterAll.Passes;
+		}
+
+		private static IComparer<Item> Sort(SortMode mode)
+		{
+			switch (mode)
+			{
+				case SortMode.Id:
+					return new SortID();
+				case SortMode.Name:
+					return new SortName();
+				case SortMode.Quantity:
+					return new SortQuantity();
+			}
+
+			return new SortDefault();
+		}
+
+		public class SortDefault : IComparer<Item>
+		{
+			int IComparer<Item>.Compare(Item a, Item b)
+			{
+				return Compare(a, b);
+			}
+
+			internal static int Compare(Item a, Item b)
+			{
+				int aRating = Rate(a);
+				int bRating = Rate(b);
+
+				int result = aRating.CompareTo(bRating);
+
+				if (result == 0)
+				{
+					if (aRating == SortRating.Ammo)
+						result = -a.ammo.CompareTo(b.ammo);
+					else if (aRating == SortRating.WeaponRanged)
+						result = a.useAmmo.CompareTo(b.useAmmo);
+				}
+
+				if (result == 0)
+				{
+					if (aRating <= SortRating.Ammo)
+						result = -a.damage.CompareTo(b.damage);
+					else if (aRating == SortRating.Pickaxe)
+						result = -a.pick.CompareTo(b.pick);
+					else if (aRating == SortRating.Axe)
+						result = -a.axe.CompareTo(b.axe);
+					else if (aRating == SortRating.Hammer)
+						result = -a.hammer.CompareTo(b.hammer);
+					else if (aRating == SortRating.PotionHealth)
+						result = -a.healLife.CompareTo(b.healLife);
+					else if (aRating == SortRating.PotionMana)
+						result = -a.healMana.CompareTo(b.healMana);
+				}
+
+				if (result == 0)
+					result = a.type.CompareTo(b.type);
+
+				if (result == 0)
+					result = -a.rare.CompareTo(b.rare);
+
+				return result;
+			}
+
+			static int Rate(Item item)
+			{
+				int rating = SortRating.Other;
+
+				if (Weapon(item))
+				{
+					if (item.melee)
+						rating = SortRating.WeaponMelee;
+					else if (item.ranged)
+						rating = SortRating.WeaponRanged;
+					else if (item.magic)
+						rating = SortRating.WeaponMagic;
+					else if (item.summon)
+						rating = SortRating.WeaponSummon;
+					else if (item.thrown)
+						rating = SortRating.WeaponThrown;
+					else
+						rating = SortRating.Weapon;
+				}
+
+				if (item.ammo > 0 && item.damage > 0)
+					return SortRating.Ammo;
+				else if (item.axe > 0 && item.pick > 0)
+					return SortRating.Picksaw;
+				else if (item.axe > 0 && item.hammer > 0)
+					return SortRating.Hamaxe;
+				else if (item.pick > 0)
+					return SortRating.Pickaxe;
+				else if (item.axe > 0)
+					return SortRating.Axe;
+				else if (item.hammer > 0)
+					return SortRating.Hammer;
+				else if (Armor(item))
+					return SortRating.Armor;
+				else if (item.vanity)
+					return SortRating.Vanity;
+				else if (item.accessory)
+					return SortRating.Accessory;
+				else if (Hook(item))
+					return SortRating.Hook;
+				else if (item.mountType != -1)
+					return SortRating.Mount;
+				else if (PotionHealth(item))
+					return SortRating.PotionHealth;
+				else if (PotionMana(item))
+					return SortRating.PotionMana;
+				else if (PotionRestoration(item))
+					return SortRating.PotionRestoration;
+				else if (item.dye > 0)
+					return SortRating.Dye;
+				else if (item.hairDye > 0)
+					return SortRating.DyeHair;
+				else if (item.createTile != -1)
+					return SortRating.Placeable;
+				else if (item.consumable)
+					return SortRating.Consumable;
+
+				return rating;
+			}
+
+			static bool Tool(Item item)
+			{
+				return item.axe > 0 || item.pick > 0 || item.hammer > 0;
+			}
+
+			static bool PotionHealth(Item item)
+			{
+				return item.healLife > 0 && item.healMana < 1 && item.consumable;
+			}
+
+			static bool PotionMana(Item item)
+			{
+				return item.healMana > 0 && item.healLife < 0 && item.consumable;
+			}
+
+			static bool PotionRestoration(Item item)
+			{
+				return item.healLife > 0 && item.healMana > 0 && item.consumable;
+			}
+
+			static bool Hook(Item item)
+			{
+				return Main.projHook[item.shoot];
+			}
+
+			static bool Armor(Item item)
+			{
+				return !item.vanity && (item.headSlot > 0 || item.bodySlot > 0 || item.legSlot > 0);
+			}
+
+			static bool Weapon(Item item)
+			{
+				return !item.accessory && item.ammo == 0 && !Tool(item);
+			}
+		}
+
+		public class SortID : IComparer<Item>
+		{
+			int IComparer<Item>.Compare(Item a, Item b)
+			{
+				int result = a.type.CompareTo(b.type);
+
+				if (result == 0)
+					return a.prefix.CompareTo(b.prefix);
+
+				return result;
+			}
+		}
+
+		public class SortType : IComparer<Item>
+		{
+			int IComparer<Item>.Compare(Item a, Item b)
+			{
+				return a.type.CompareTo(b.type);
+			}
+		}
+
+		public class SortName : IComparer<Item>
+		{
+			int IComparer<Item>.Compare(Item a, Item b)
+			{
+				return a.Name.CompareTo(b.Name);
+			}
+		}
+
+		public class SortQuantity : IComparer<Item>
+		{
+			int IComparer<Item>.Compare(Item a, Item b)
+			{
+				int result = -a.stack.CompareTo(b.stack);
+
+				return result;
+			}
+		}
+
+		public static bool FilterName(Item item, string mod, string name)
+		{
+			string modName = item.modItem == null ? "Terraria" : item.modItem.mod.DisplayName;
+
+			return item.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0 && modName.IndexOf(mod, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -342,20 +343,22 @@ namespace MagicStorage
 				CraftingGUI.RefreshItems();
 				return;
 			}
-			items.Clear();
+
 			didMatCheck.Clear();
 			TEStorageHeart heart = GetHeart();
 			if (heart == null)
 			{
 				return;
 			}
+
 			InitLangStuff();
 			InitSortButtons();
 			InitFilterButtons();
 			SortMode sortMode = (SortMode)sortButtons.Choice;
 			FilterMode filterMode = (FilterMode)filterButtons.Choice;
 
-			items.AddRange(ItemSorter.SortAndFilter(heart.GetStoredItems(), sortMode, filterMode, searchBar2.Text, searchBar.Text));
+			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), sortMode, filterMode, searchBar2.Text, searchBar.Text);
+
 			for (int k = 0; k < items.Count; k++)
 			{
 				didMatCheck.Add(false);
@@ -521,7 +524,7 @@ namespace MagicStorage
 			}
 			else
 			{
-				List<Item> items = new List<Item>();
+				List<Item> items = new List<Item>(40);
 				for (int k = 10; k < 50; k++)
 				{
 					if (!player.inventory[k].IsAir && !player.inventory[k].favorited)
