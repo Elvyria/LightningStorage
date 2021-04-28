@@ -83,7 +83,7 @@ namespace MagicStorage.Components
 
 		public override bool HasSpaceInStackFor(Item check, bool locked = false)
 		{
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().EnterReadLock();
 			}
@@ -94,7 +94,7 @@ namespace MagicStorage.Components
 			}
 			finally
 			{
-				if (Main.netMode == 2 && !locked)
+				if (Main.netMode == NetmodeID.Server && !locked)
 				{
 					GetHeart().ExitReadLock();
 				}
@@ -108,7 +108,7 @@ namespace MagicStorage.Components
 
 		public override bool HasItem(Item check, bool locked = false)
 		{
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().EnterReadLock();
 			}
@@ -119,7 +119,7 @@ namespace MagicStorage.Components
 			}
 			finally
 			{
-				if (Main.netMode == 2 && !locked)
+				if (Main.netMode == NetmodeID.Server && !locked)
 				{
 					GetHeart().ExitReadLock();
 				}
@@ -133,11 +133,11 @@ namespace MagicStorage.Components
 
 		public override void DepositItem(Item toDeposit, bool locked = false)
 		{
-			if (Main.netMode == 1 && !receiving)
+			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
 			{
 				return;
 			}
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().EnterWriteLock();
 			}
@@ -177,9 +177,9 @@ namespace MagicStorage.Components
 					hasChange = true;
 					finished = true;
 				}
-				if (hasChange && Main.netMode != 1)
+				if (hasChange && Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					if (Main.netMode == 2)
+					if (Main.netMode == NetmodeID.Server)
 					{
 						netQueue.Enqueue(UnitOperation.Deposit.Create(original));
 					}
@@ -188,7 +188,7 @@ namespace MagicStorage.Components
 			}
 			finally
 			{
-				if (Main.netMode == 2 && !locked)
+				if (Main.netMode == NetmodeID.Server && !locked)
 				{
 					GetHeart().ExitWriteLock();
 				}
@@ -197,11 +197,11 @@ namespace MagicStorage.Components
 
 		public override Item TryWithdraw(Item lookFor, bool locked = false)
 		{
-			if (Main.netMode == 1 && !receiving)
+			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
 			{
 				return new Item();
 			}
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().EnterWriteLock();
 			}
@@ -226,9 +226,9 @@ namespace MagicStorage.Components
 						lookFor.stack -= withdraw;
 						if (lookFor.stack <= 0)
 						{
-							if (Main.netMode != 1)
+							if (Main.netMode != NetmodeID.MultiplayerClient)
 							{
-								if (Main.netMode == 2)
+								if (Main.netMode == NetmodeID.Server)
 								{
 									netQueue.Enqueue(UnitOperation.Withdraw.Create(original));
 								}
@@ -242,9 +242,9 @@ namespace MagicStorage.Components
 				{
 					return new Item();
 				}
-				if (Main.netMode != 1)
+				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					if (Main.netMode == 2)
+					if (Main.netMode == NetmodeID.Server)
 					{
 						netQueue.Enqueue(UnitOperation.Withdraw.Create(original));
 					}
@@ -254,7 +254,7 @@ namespace MagicStorage.Components
 			}
 			finally
 			{
-				if (Main.netMode == 2 && !locked)
+				if (Main.netMode == NetmodeID.Server && !locked)
 				{
 					GetHeart().ExitWriteLock();
 				}
@@ -266,7 +266,7 @@ namespace MagicStorage.Components
 			Tile topLeft = Main.tile[Position.X, Position.Y];
 			int oldFrame = topLeft.frameX;
 			int style;
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().EnterReadLock();
 			}
@@ -282,7 +282,7 @@ namespace MagicStorage.Components
 			{
 				style = 1;
 			}
-			if (Main.netMode == 2 && !locked)
+			if (Main.netMode == NetmodeID.Server && !locked)
 			{
 				GetHeart().ExitReadLock();
 			}
@@ -318,7 +318,7 @@ namespace MagicStorage.Components
 			dict = unit1.hasItem;
 			unit1.hasItem = unit2.hasItem;
 			unit2.hasItem = dict;
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				unit1.netQueue.Clear();
 				unit2.netQueue.Clear();
@@ -332,15 +332,15 @@ namespace MagicStorage.Components
 		//precondition: lock is already taken
 		internal Item WithdrawStack()
 		{
-			if (Main.netMode == 1 && !receiving)
+			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
 			{
 				return new Item();
 			}
 			Item item = items[items.Count - 1];
 			items.RemoveAt(items.Count - 1);
-			if (Main.netMode != 1)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
-				if (Main.netMode == 2)
+				if (Main.netMode == NetmodeID.Server)
 				{
 					netQueue.Enqueue(UnitOperation.WithdrawStack.Create());
 				}
@@ -376,7 +376,7 @@ namespace MagicStorage.Components
 				}
 				hasItem.Add(data);
 			}
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				netQueue.Enqueue(UnitOperation.FullSync.Create());
 			}

@@ -63,7 +63,7 @@ namespace MagicStorage
 
 		public static void SendComponentPlace(int i, int j, int type)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				NetMessage.SendTileRange(Main.myPlayer, i, j, 2, 2);
 				NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, type);
@@ -77,7 +77,7 @@ namespace MagicStorage
 
 		public static void SendTEUpdate(int id, Point16 position)
 		{
-			if (Main.netMode != 2)
+			if (Main.netMode != NetmodeID.Server)
 			{
 				return;
 			}
@@ -110,7 +110,7 @@ namespace MagicStorage
 
 		public static void SendSearchAndRefresh(int i, int j)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
 				packet.Write((byte)MessageType.SearchAndRefreshNetwork);
@@ -145,7 +145,7 @@ namespace MagicStorage
 
 		public static void SendDeposit(int ent, Item item)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStorageOperation(ent, 0);
 				ItemIO.Send(item, packet, true);
@@ -155,7 +155,7 @@ namespace MagicStorage
 
 		public static void SendWithdraw(int ent, Item item, bool toInventory = false)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStorageOperation(ent, (byte)(toInventory ? 3 : 1));
 				ItemIO.Send(item, packet, true);
@@ -165,7 +165,7 @@ namespace MagicStorage
 
 		public static void SendDepositAll(int ent, List<Item> items)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStorageOperation(ent, 2);
 				packet.Write((byte)items.Count);
@@ -179,7 +179,7 @@ namespace MagicStorage
 
 		public static void ReceiveStorageOperation(BinaryReader reader, int sender)
 		{
-			if (Main.netMode != 2)
+			if (Main.netMode != NetmodeID.Server)
 			{
 				return;
 			}
@@ -243,7 +243,7 @@ namespace MagicStorage
 
 		public static void ReceiveOperationResult(BinaryReader reader)
 		{
-			if (Main.netMode != 1)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				return;
 			}
@@ -267,7 +267,7 @@ namespace MagicStorage
 
 		public static void SendRefreshNetworkItems(int ent)
 		{
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
 				packet.Write((byte)MessageType.RefreshNetworkItems);
@@ -278,7 +278,7 @@ namespace MagicStorage
 
 		public static void ClientSendTEUpdate(int id)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
 				packet.Write((byte)MessageType.ClientSendTEUpdate);
@@ -290,7 +290,7 @@ namespace MagicStorage
 
 		public static void ReceiveClientSendTEUpdate(BinaryReader reader, int sender)
 		{
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				int id = reader.ReadInt32();
 				TileEntity ent = TileEntity.Read(reader, true);
@@ -328,7 +328,7 @@ namespace MagicStorage
 
 		public static void SendDepositStation(int ent, Item item)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStationOperation(ent, 0);
 				ItemIO.Send(item, packet, true);
@@ -338,7 +338,7 @@ namespace MagicStorage
 
 		public static void SendWithdrawStation(int ent, int slot)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStationOperation(ent, 1);
 				packet.Write((byte)slot);
@@ -348,7 +348,7 @@ namespace MagicStorage
 
 		public static void SendStationSlotClick(int ent, Item item, int slot)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = PrepareStationOperation(ent, 2);
 				ItemIO.Send(item, packet, true);
@@ -359,7 +359,7 @@ namespace MagicStorage
 
 		public static void ReceiveStationOperation(BinaryReader reader, int sender)
 		{
-			if (Main.netMode != 2)
+			if (Main.netMode != NetmodeID.Server)
 			{
 				return;
 			}
@@ -419,7 +419,7 @@ namespace MagicStorage
 
 		public static void ReceiveStationResult(BinaryReader reader)
 		{
-			if (Main.netMode != 1)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				return;
 			}
@@ -454,7 +454,7 @@ namespace MagicStorage
 
 		public static void SendResetCompactStage(int ent)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
 				packet.Write((byte)MessageType.ResetCompactStage);
@@ -465,7 +465,7 @@ namespace MagicStorage
 
 		public static void ReceiveResetCompactStage(BinaryReader reader)
 		{
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				int ent = reader.ReadInt32();
 				if (TileEntity.ByID[ent] is TEStorageHeart)
@@ -477,7 +477,7 @@ namespace MagicStorage
 
 		public static void SendCraftRequest(int heart, List<Item> toWithdraw, Item result)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
 				packet.Write((byte)MessageType.CraftRequest);
@@ -494,7 +494,7 @@ namespace MagicStorage
 
 		public static void ReceiveCraftRequest(BinaryReader reader, int sender)
 		{
-			if (Main.netMode != 2)
+			if (Main.netMode != NetmodeID.Server)
 			{
 				return;
 			}

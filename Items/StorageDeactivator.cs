@@ -1,10 +1,12 @@
 ﻿using System;
+
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
-using MagicStorage.Components;
 using Terraria.Localization;
+
+using MagicStorage.Components;
 
 namespace MagicStorage.Items
 {
@@ -67,7 +69,7 @@ namespace MagicStorage.Items
 					if (storageUnit is TEStorageUnit)
 					{
 						((TEStorageUnit)storageUnit).UpdateTileFrameWithNetSend();
-						if (Main.netMode == 0)
+						if (Main.netMode == NetmodeID.SinglePlayer)
 						{
 							storageUnit.GetHeart().ResetCompactStage();
 						}

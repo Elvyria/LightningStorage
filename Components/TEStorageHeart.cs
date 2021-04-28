@@ -74,7 +74,7 @@ namespace MagicStorage.Components
 					k--;
 				}
 			}
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return;
 			}
@@ -82,7 +82,7 @@ namespace MagicStorage.Components
 			if (updateTimer >= 60)
 			{
 				updateTimer = 0;
-				if (Main.netMode != 2 || itemsLock.TryEnterWriteLock(2))
+				if (Main.netMode != NetmodeID.Server || itemsLock.TryEnterWriteLock(2))
 				{
 					try
 					{
@@ -90,7 +90,7 @@ namespace MagicStorage.Components
 					}
 					finally
 					{
-						if (Main.netMode == 2)
+						if (Main.netMode == NetmodeID.Server)
 						{
 							itemsLock.ExitWriteLock();
 						}
@@ -259,7 +259,7 @@ namespace MagicStorage.Components
 
 		public void DepositItem(Item toDeposit)
 		{
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				EnterWriteLock();
 			}
@@ -295,7 +295,7 @@ namespace MagicStorage.Components
 				{
 					ResetCompactStage();
 				}
-				if (Main.netMode == 2)
+				if (Main.netMode == NetmodeID.Server)
 				{
 					ExitWriteLock();
 				}
@@ -304,11 +304,11 @@ namespace MagicStorage.Components
 
 		public Item TryWithdraw(Item lookFor)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return new Item();
 			}
-			if (Main.netMode == 2)
+			if (Main.netMode == NetmodeID.Server)
 			{
 				EnterWriteLock();
 			}
@@ -346,7 +346,7 @@ namespace MagicStorage.Components
 			}
 			finally
 			{
-				if (Main.netMode == 2)
+				if (Main.netMode == NetmodeID.Server)
 				{
 					ExitWriteLock();
 				}

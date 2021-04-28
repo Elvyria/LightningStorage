@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
+using Microsoft.Xna.Framework;
+
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
 using Terraria.Localization;
 
 namespace MagicStorage
@@ -32,7 +34,6 @@ namespace MagicStorage
 			}
 
 			Instance = this;
-			InterfaceHelper.Initialize();
 			legendMod = ModLoader.GetMod("LegendOfTerraria3");
 			bluemagicMod = ModLoader.GetMod("Bluemagic");
 			AddTranslations();

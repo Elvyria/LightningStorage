@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+
 using Terraria;
+using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -149,11 +152,11 @@ namespace MagicStorage.Components
 				TEStorageHeart heart = storageUnit.GetHeart();
 				if (heart != null)
 				{
-					if (Main.netMode == 0)
+					if (Main.netMode == NetmodeID.SinglePlayer)
 					{
 						heart.ResetCompactStage();
 					}
-					else if (Main.netMode == 1)
+					else if (Main.netMode == NetmodeID.MultiplayerClient)
 					{
 						NetHelper.SendResetCompactStage(heart.ID);
 					}

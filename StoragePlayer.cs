@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.DataStructures;
+
 using MagicStorage.Components;
 
 namespace MagicStorage
@@ -152,7 +155,7 @@ namespace MagicStorage
 			int oldStack = item.stack;
 			if (StorageCrafting())
 			{
-				if (Main.netMode == 0)
+				if (Main.netMode == NetmodeID.SinglePlayer)
 				{
 					GetCraftingAccess().TryDepositStation(item);
 				}
@@ -164,7 +167,7 @@ namespace MagicStorage
 			}
 			else
 			{
-				if (Main.netMode == 0)
+				if (Main.netMode == NetmodeID.SinglePlayer)
 				{
 					GetStorageHeart().DepositItem(item);
 				}
