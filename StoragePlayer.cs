@@ -10,9 +10,28 @@ namespace MagicStorage
 {
 	public class StoragePlayer : ModPlayer
 	{
+		public static StoragePlayer LocalPlayer => Main.player[Main.myPlayer].GetModPlayer<StoragePlayer>();
+
 		public int timeSinceOpen = 1;
-		private Point16 storageAccess = new Point16(-1, -1);
 		public bool remoteAccess = false;
+
+		private Point16 storageAccess = new Point16(-1, -1);
+
+		public void RefreshItems()
+		{
+			if (storageAccess.X != -1)
+			{
+				TileEntity tile = TileEntity.ByPosition[storageAccess];
+				if (tile is TECraftingAccess)
+				{
+					MagicStorage.Instance.CraftingUI.RefreshItems();
+				}
+				else if (tile is TEStorageHeart)
+				{
+					MagicStorage.Instance.StorageUI.RefreshItems();
+				}
+			}
+		}
 
 		public override void UpdateDead()
 		{
@@ -62,29 +81,22 @@ namespace MagicStorage
 		{
 			storageAccess = point;
 			remoteAccess = remote;
-			StorageGUI.RefreshItems();
+			TileEntity tile = TileEntity.ByPosition[storageAccess];
+			if (tile is TECraftingAccess)
+			{
+				MagicStorage.Instance.UI.SetState(MagicStorage.Instance.CraftingUI);
+			}
+			else if (tile is TEStorageHeart)
+			{
+				MagicStorage.Instance.UI.SetState(MagicStorage.Instance.StorageUI);
+			}
 		}
 
 		public void CloseStorage()
 		{
+			MagicStorage.Instance.UI?.SetState(null);
+
 			storageAccess = new Point16(-1, -1);
-			Main.blockInput = false;
-			if (StorageGUI.searchBar != null)
-			{
-				StorageGUI.searchBar.Reset();
-			}
-			if (StorageGUI.searchBar2 != null)
-			{
-				StorageGUI.searchBar2.Reset();
-			}
-			if (CraftingGUI.searchBar != null)
-			{
-				CraftingGUI.searchBar.Reset();
-			}
-			if (CraftingGUI.searchBar2 != null)
-			{
-				CraftingGUI.searchBar2.Reset();
-			}
 		}
 
 		public Point16 ViewingStorage()
@@ -165,7 +177,7 @@ namespace MagicStorage
 			if (item.type != oldType || item.stack != oldStack)
 			{
 				Main.PlaySound(7, -1, -1, 1, 1f, 0f);
-				StorageGUI.RefreshItems();
+				RefreshItems();
 			}
 			return true;
 		}
@@ -207,11 +219,6 @@ namespace MagicStorage
 			}
 			Tile tile = Main.tile[storageAccess.X, storageAccess.Y];
 			return tile != null && tile.type == mod.TileType("CraftingAccess");
-		}
-
-		public static bool IsStorageCrafting()	
-		{
-			return Main.player[Main.myPlayer].GetModPlayer<StoragePlayer>().StorageCrafting();
 		}
 	}
 }

@@ -1,100 +1,90 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace MagicStorage
 {
 	public class UIButtonChoice : UIElement
 	{
-		private const int buttonSize = 32;
-		private const int buttonPadding = 8;
+		private const int size = 32;
+		private const int padding = 8;
+		private int hoverButton = -1;
 
-		private Texture2D[] buttons;
-		private LocalizedText[] names;
-		private int choice = 0;
+		private static readonly Texture2D backTexture = MagicStorage.Instance.GetTexture("Assets/SortButtonBackground");
+		private static readonly Texture2D backTextureActive = MagicStorage.Instance.GetTexture("Assets/SortButtonBackgroundActive");
 
-		public int Choice
+		private Texture2D[] textures;
+		private LocalizedText[] labels;
+
+		public int choice = 0;
+
+		public UIButtonChoice(Texture2D[] textures, LocalizedText[] labels)
 		{
-			get
-			{
-				return choice;
-			}
-		}
+			this.textures = textures;
+			this.labels = labels;
 
-		public UIButtonChoice(Texture2D[] buttons, LocalizedText[] names)
-		{
-			if (buttons.Length != names.Length || buttons.Length == 0)
-			{
-				throw new ArgumentException();
-			}
-			this.buttons = buttons;
-			this.names = names;
-			int width = buttonSize * buttons.Length + buttonPadding * (buttons.Length - 1);
+			int width = size * textures.Length + padding * (textures.Length - 1);
 			this.Width.Set(width, 0f);
 			this.MinWidth.Set(width, 0f);
-			this.Height.Set(buttonSize, 0f);
-			this.MinHeight.Set(buttonSize, 0f);
+			this.Height.Set(size, 0f);
+			this.MinHeight.Set(size, 0f);
+			this.OnClick += SelectButton;
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			int oldChoice = choice;
-			if (StorageGUI.MouseClicked && Parent != null)
-			{
-				for (int k = 0; k < buttons.Length; k++)
-				{
-					if (MouseOverButton(StorageGUI.curMouse.X, StorageGUI.curMouse.Y, k))
-					{
-						choice = k;
-						break;
-					}
-				}
-			}
-			if (oldChoice != choice)
-			{
-				StorageGUI.RefreshItems();
-			}
+			hoverButton = MouseButton();
 		}
 
-		private bool MouseOverButton(int mouseX, int mouseY, int button)
+		private void SelectButton(UIEvent e, UIElement _)
 		{
-			Rectangle dim = InterfaceHelper.GetFullRectangle(this);
-			float left = dim.X + button * (buttonSize + buttonPadding) * Main.UIScale;
-			float right = left + buttonSize * Main.UIScale;
-			float top = dim.Y;
-			float bottom = top + buttonSize * Main.UIScale;
-			return mouseX > left && mouseX < right && mouseY > top && mouseY < bottom;
+			int choice = MouseButton();
+			if (choice != -1)
+			{
+				this.choice = choice;
+			}
+
+		}
+
+		public int MouseButton()
+		{
+			if (!IsMouseHovering) return -1;
+
+			CalculatedStyle dim = GetDimensions();
+			float x = Main.mouseX - dim.X;
+			float y = Main.mouseY - dim.Y;
+
+			int column = (int)(x / (size + padding));
+
+			// Padding Check
+			if ((column + 1) * (size + padding) - padding < x)
+			{
+				return -1;
+			}
+
+			return column;
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
-			Texture2D backTexture = MagicStorage.Instance.GetTexture("Assets/SortButtonBackground");
-			Texture2D backTextureActive = MagicStorage.Instance.GetTexture("Assets/SortButtonBackgroundActive");
 			CalculatedStyle dim = GetDimensions();
-			for (int k = 0; k < buttons.Length; k++)
+			for (int k = 0; k < textures.Length; k++)
 			{
 				Texture2D texture = k == choice ? backTextureActive : backTexture;
-				Vector2 drawPos = new Vector2(dim.X + k * (buttonSize + buttonPadding), dim.Y);
-				Color color = MouseOverButton(StorageGUI.curMouse.X, StorageGUI.curMouse.Y, k) ? Color.Silver : Color.White;
+				Vector2 drawPos = new Vector2(dim.X + k * (size + padding), dim.Y);
+				Color color = hoverButton != -1 && hoverButton == k ? Color.Silver : Color.White;
 				Main.spriteBatch.Draw(texture, drawPos, color);
-				Main.spriteBatch.Draw(buttons[k], drawPos + new Vector2(1f), Color.White);
+				Main.spriteBatch.Draw(textures[k], drawPos + new Vector2(1f), Color.White);
 			}
 		}
 
-		public void DrawText()
+		public void DrawText(SpriteBatch spriteBatch)
 		{
-			for (int k = 0; k < buttons.Length; k++)
+			if (hoverButton != -1 && hoverButton < labels.Length)
 			{
-				if (MouseOverButton(StorageGUI.curMouse.X, StorageGUI.curMouse.Y, k))
-				{
-					Main.instance.MouseText(names[k].Value);
-				}
+				Main.instance.MouseText(labels[hoverButton].Value);
 			}
 		}
 	}

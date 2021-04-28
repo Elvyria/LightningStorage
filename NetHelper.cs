@@ -33,7 +33,7 @@ namespace MagicStorage
 			}
 			else if (type == MessageType.RefreshNetworkItems)
 			{
-				StorageGUI.RefreshItems();
+				StoragePlayer.LocalPlayer.RefreshItems();
 			}
 			else if (type == MessageType.ClientSendTEUpdate)
 			{
@@ -511,7 +511,7 @@ namespace MagicStorage
 				toWithdraw.Add(ItemIO.Receive(reader, true));
 			}
 			Item result = ItemIO.Receive(reader, true);
-			List<Item> items = CraftingGUI.DoCraft(heart, toWithdraw, result);
+			List<Item> items = MagicStorage.Instance.CraftingUI.DoCraft(heart, toWithdraw, result);
 			if (items.Count > 0)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();

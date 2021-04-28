@@ -24,11 +24,12 @@ namespace MagicStorage
 
 		public override bool Equals(Object other)
 		{
-			if (!(other is ItemData))
+			if (other is ItemData data)
 			{
-				return false;
+				return Matches(this, data);
 			}
-			return Matches(this, (ItemData)other);
+
+			return false;
 		}
 
 		public override int GetHashCode()
@@ -38,7 +39,7 @@ namespace MagicStorage
 
 		public static bool Matches(Item item1, Item item2)
 		{
-			return Matches(new ItemData(item1), new ItemData(item2));
+			return item1.netID == item2.netID && item2.prefix == item2.prefix;
 		}
 
 		public static bool Matches(ItemData data1, ItemData data2)
@@ -46,15 +47,16 @@ namespace MagicStorage
 			return data1.Type == data2.Type && data1.Prefix == data2.Prefix;
 		}
 
-		public static int Compare(Item item1, Item item2)
+		public static int Compare(Item a, Item b)
 		{
-			ItemData data1 = new ItemData(item1);
-			ItemData data2 = new ItemData(item2);
-			if (data1.Type != data2.Type)
+			int result = a.netID - b.netID;
+
+			if (result == 0)
 			{
-				return data1.Type - data2.Type;
+				result = a.prefix - b.prefix;
 			}
-			return data1.Prefix - data2.Prefix;
+
+			return result;
 		}
 	}
 }

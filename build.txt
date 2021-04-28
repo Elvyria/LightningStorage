@@ -1,8 +1,8 @@
 author = blushiemagic
-version = 0.4.3.5
+version = 0.4.4.0
 displayName = Magic Storage
 homepage = https://github.com/Elvyria/MagicStorage
 hideCode = false
 hideResources = false
-includeSource = true
-buildIgnore = OldArt\*, .git\*
+includeSource = false
+buildIgnore = .git\*

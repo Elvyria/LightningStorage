@@ -55,45 +55,6 @@ namespace MagicStorage.Sorting
 			return result;
 		}
 
-		// Broken
-		// Must be sorted
-		public static void Compress(Item[] items)
-		{
-			int len = items.Length;
-
-			for (int i = 0; i < len - 1; i++)
-			{
-				Item item = items[i];
-				Item nextItem = items[i + 1];
-				int shift = 0;
-
-				if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
-				{
-					item = item.Clone();
-					items[i] = item;
-					item.stack += nextItem.stack;
-					shift += 1;
-
-					for (int j = i + 2; j < len; j++)
-					{
-						nextItem = items[j];
-
-						if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
-						{
-							item.stack += nextItem.stack;
-							shift += 1;
-						}
-						else break;
-					}
-
-					Array.Copy(items, i + shift + 1, items, i + 1, len - (i + shift));
-					len -= shift;
-				}
-			}
-
-			Array.Resize(ref items, len);
-		}
-
 		// Must be sorted
 		public static void Compress(List<Item> items)
 		{
@@ -130,13 +91,6 @@ namespace MagicStorage.Sorting
 				}
 
 			}
-		}
-
-		public static Recipe[] Filter(Recipe[] recipes, FilterMode mode, string mod, string name)
-		{
-			var result = recipes;
-
-			return result;
 		}
 
 		private static Func<Item, bool> ItemFilter(FilterMode mode)
@@ -218,6 +172,9 @@ namespace MagicStorage.Sorting
 
 				if (result == 0)
 					result = -a.rare.CompareTo(b.rare);
+
+				if (result == 0)
+					result = -a.prefix.CompareTo(b.prefix);
 
 				return result;
 			}

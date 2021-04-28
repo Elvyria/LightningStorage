@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 using ReLogic.Graphics;
+
 using Terraria;
 using Terraria.Localization;
 using Terraria.GameInput;
@@ -14,25 +14,20 @@ namespace MagicStorage
 {
 	public class UISearchBar : UIElement
 	{
-		private static List<UISearchBar> searchBars = new List<UISearchBar>();
+		private bool focused = false;
+		public bool Focused
+		{
+			get
+			{
+				return focused;
+			}
+		}
 
 		private const int padding = 4;
 		private LocalizedText defaultText = Language.GetText("Mods.MagicStorage.Search");
 		private string text = string.Empty;
 		private int cursorPosition = 0;
-		private bool hasFocus = false;
 		private int cursorTimer = 0;
-
-		public UISearchBar()
-		{
-			this.SetPadding(padding);
-			searchBars.Add(this);
-		}
-
-		public UISearchBar(LocalizedText defaultText) : this()
-		{
-			this.defaultText = defaultText;
-		}
 
 		public string Text
 		{
@@ -42,100 +37,97 @@ namespace MagicStorage
 			}
 		}
 
-		public void Reset()
+		public UISearchBar()
 		{
-			text = string.Empty;
+			this.SetPadding(padding);
+			this.OnClick += Focus;
+			this.OnRightClick += Clear;
+		}
+
+		public UISearchBar(LocalizedText defaultText) : this()
+		{
+			this.defaultText = defaultText;
+		}
+
+		public void Focus()
+		{
+			if (!focused)
+			{
+				focused = true;
+				Main.blockInput = true;
+			}
+		}
+
+		public void Clear()
+		{
+			this.text = string.Empty;
 			cursorPosition = 0;
-			hasFocus = false;
-			CheckBlockInput();
+			cursorTimer = 0;
+		}
+
+		public void Clear(UIEvent _event, UIElement _element)
+		{
+			Clear();
+		}
+
+		public void Focus(UIEvent _event, UIElement _element)
+		{
+			Focus();
+		}
+
+		public void ResetFocus()
+		{
+			if (focused)
+			{
+				focused = false;
+				Main.blockInput = false;
+			}
+		}
+
+		public override void OnDeactivate()
+		{
+			ResetFocus();
+			Clear();
 		}
 
 		public override void Update(GameTime gameTime)
 		{
+			base.Update(gameTime);
+
+			if (!IsMouseHovering && PlayerInput.MouseInfo.LeftButton == ButtonState.Pressed && PlayerInput.MouseInfoOld.LeftButton == ButtonState.Released)
+				ResetFocus();
+		}
+
+		private void UpdateText()
+		{
 			cursorTimer++;
-			cursorTimer %= 60;
+			cursorTimer %= 70;
 
-			Rectangle dim = InterfaceHelper.GetFullRectangle(this);
-			MouseState mouse = StorageGUI.curMouse;
-			bool mouseOver = mouse.X > dim.X && mouse.X < dim.X + dim.Width && mouse.Y > dim.Y && mouse.Y < dim.Y + dim.Height;
-
-			if (StorageGUI.MouseClicked && Parent != null)
-			{
-				if (!hasFocus && mouseOver)
-				{
-					hasFocus = true;
-					CheckBlockInput();
-				}
-				else if (hasFocus && !mouseOver)
-				{
-					hasFocus = false;
-					CheckBlockInput();
-					cursorPosition = text.Length;
-				}
-			}
-			else if (StorageGUI.curMouse.RightButton == ButtonState.Pressed && StorageGUI.oldMouse.RightButton == ButtonState.Released && Parent != null && hasFocus && !mouseOver) {
-				hasFocus = false;
-				cursorPosition = text.Length;
-				CheckBlockInput();
-			} else if (StorageGUI.curMouse.RightButton == ButtonState.Pressed && StorageGUI.oldMouse.RightButton == ButtonState.Released && mouseOver) {
-				if (text.Length > 0) {
-					text = string.Empty;
-					cursorPosition = 0;
-				}
-			}
-
-			if (hasFocus)
+			if (focused)
 			{
 				PlayerInput.WritingText = true;
 				Main.instance.HandleIME();
-				string prev = text;
 
-				if (cursorPosition < text.Length && text.Length > 0)
-					prev = prev.Remove(cursorPosition);
+				string old = text;
 
-				string newString = Main.GetInputText(prev);
-				bool changed = false;
+				text = Main.GetInputText(old.Substring(0, cursorPosition)) + old.Substring(cursorPosition);
 
-				if (!newString.Equals(prev)) {
-					int newStringLength = newString.Length;
-					if (prev != text) newString += text.Substring(cursorPosition);
-					text = newString;
-					cursorPosition = newStringLength;
-					changed = true;
-				}
-
-				if (KeyTyped(Keys.Delete) && text.Length > 0 && cursorPosition <= text.Length - 1) {
-					text = text.Remove(cursorPosition, 1);
-					changed = true;
-				}
-
-				if (KeyTyped(Keys.Left) && cursorPosition > 0)
-					cursorPosition--;
-
-				if (KeyTyped(Keys.Right) && cursorPosition < text.Length)
-					cursorPosition++;
-
-				if (KeyTyped(Keys.Home))
-					cursorPosition = 0;
-
-				if (KeyTyped(Keys.End))
+				if (!text.Equals(old) && cursorPosition != text.Length)
 					cursorPosition = text.Length;
 
-				if ((Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl)) && KeyTyped(Keys.Back)) {
-					text = string.Empty;
+				if (Main.keyState.IsKeyDown(Keys.Delete) && text.Length > 0 && cursorPosition <= text.Length - 1)
+					text = text.Remove(cursorPosition, 1);
+				else if (KeyPressed(Keys.Left) && cursorPosition > 0)
+					cursorPosition--;
+				else if (KeyPressed(Keys.Right) && cursorPosition < text.Length)
+					cursorPosition++;
+				else if (KeyPressed(Keys.Home))
 					cursorPosition = 0;
-					changed = true;
-				}
-
-				if (changed)
-					StorageGUI.RefreshItems();
-
-				if (KeyTyped(Keys.Enter) || KeyTyped(Keys.Tab) || KeyTyped(Keys.Escape)) {
-					hasFocus = false;
-					CheckBlockInput();
-				}
+				else if (KeyPressed(Keys.End))
+					cursorPosition = text.Length;
+				else if (KeyPressed(Keys.Enter) || KeyPressed(Keys.Tab) || KeyPressed(Keys.Escape))
+					ResetFocus();
 			}
-			base.Update(gameTime);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -154,45 +146,28 @@ namespace MagicStorage
 			spriteBatch.Draw(texture, new Rectangle((int)dim.X + padding, (int)dim.Y + padding + innerHeight, innerWidth, padding), new Rectangle(padding, padding + 1, 1, padding), Color.White);
 			spriteBatch.Draw(texture, new Vector2(dim.X + padding + innerWidth, dim.Y + padding + innerHeight), new Rectangle(padding + 1, padding + 1, padding, padding), Color.White);
 
-			bool isEmpty = text.Length == 0;
-			string drawText = isEmpty ? defaultText.Value : text;
+			UpdateText();
+
+			string drawText = text;
+
+			if (text.Length == 0)
+				drawText = focused ? string.Empty : defaultText.Value;
+
 			DynamicSpriteFont font = Main.fontMouseText;
-			Vector2 size = font.MeasureString(drawText);
-			float scale = innerHeight / size.Y;
-			if (isEmpty && hasFocus)
-			{
-				drawText = string.Empty;
-				isEmpty = false;
-			}
-			Color color = Color.Black;
-			if (isEmpty)
-			{
-				color *= 0.75f;
-			}
+			float scale = innerHeight / font.MeasureString(drawText).Y;
+			Color color = focused ? Color.Black : Color.Black * 0.75f;
+
 			spriteBatch.DrawString(font, drawText, new Vector2(dim.X + padding, dim.Y + padding), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-			if (!isEmpty && hasFocus && cursorTimer < 30)
+			if (focused && cursorTimer < 30)
 			{
 				float drawCursor = font.MeasureString(drawText.Substring(0, cursorPosition)).X * scale;
 				spriteBatch.DrawString(font, "|", new Vector2(dim.X + padding + drawCursor, dim.Y + padding), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 			}
 		}
 
-		public bool KeyTyped(Keys key)
+		public bool KeyPressed(Keys key)
 		{
-			return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
-		}
-
-		private static void CheckBlockInput()
-		{
-			Main.blockInput = false;
-			foreach (UISearchBar searchBar in searchBars)
-			{
-				if (searchBar.hasFocus)
-				{
-					Main.blockInput = true;
-					break;
-				}
-			}
+			return Main.keyState.IsKeyDown(key) && Main.oldKeyState.IsKeyUp(key);
 		}
 	}
 }

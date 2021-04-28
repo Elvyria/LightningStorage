@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+
 using Microsoft.Xna.Framework;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -17,7 +20,7 @@ namespace MagicStorage.Components
 
 		public TECraftingAccess()
 		{
-			for (int k = 0; k < 10; k++)
+			for (int k = 0; k < stations.Length; k++)
 			{
 				stations[k] = new Item();
 			}
@@ -25,15 +28,18 @@ namespace MagicStorage.Components
 
 		public override bool ValidTile(Tile tile)
 		{
-			return tile.type == mod.TileType("CraftingAccess") && tile.frameX == 0 && tile.frameY == 0;
+			return tile.type == mod.TileType("CraftingAccess")
+				&& tile.frameX == 0
+				&& tile.frameY == 0;
 		}
 
 		public void TryDepositStation(Item item)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return;
 			}
+
 			foreach (Item station in stations)
 			{
 				if (station.type == item.type)
@@ -41,6 +47,7 @@ namespace MagicStorage.Components
 					return;
 				}
 			}
+
 			for (int k = 0; k < stations.Length; k++)
 			{
 				if (stations[k].IsAir)
@@ -60,26 +67,30 @@ namespace MagicStorage.Components
 
 		public Item TryWithdrawStation(int slot)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return new Item();
 			}
+
 			if (!stations[slot].IsAir)
 			{
 				Item item = stations[slot];
 				stations[slot] = new Item();
 				NetHelper.SendTEUpdate(ID, Position);
+
 				return item;
 			}
+
 			return new Item();
 		}
 
 		public Item DoStationSwap(Item item, int slot)
 		{
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return new Item();
 			}
+
 			if (!item.IsAir)
 			{
 				for (int k = 0; k < stations.Length; k++)
@@ -90,6 +101,7 @@ namespace MagicStorage.Components
 					}
 				}
 			}
+
 			if ((item.IsAir || item.stack == 1) && !stations[slot].IsAir)
 			{
 				Item temp = item;
@@ -110,30 +122,24 @@ namespace MagicStorage.Components
 				NetHelper.SendTEUpdate(ID, Position);
 				return item;
 			}
+
 			return item;
 		}
 
 		public override TagCompound Save()
 		{
 			TagCompound tag = new TagCompound();
-			IList<TagCompound> listStations = new List<TagCompound>();
-			foreach (Item item in stations)
-			{
-				listStations.Add(ItemIO.Save(item));
-			}
-			tag["Stations"] = listStations;
+			tag["Stations"] = stations.Select(item => ItemIO.Save(item)).ToList();
+
 			return tag;
 		}
 
 		public override void Load(TagCompound tag)
 		{
 			IList<TagCompound> listStations = tag.GetList<TagCompound>("Stations");
-			if (listStations != null && listStations.Count > 0)
+			if (listStations != null && listStations.Any())
 			{
-				for (int k = 0; k < stations.Length; k++)
-				{
-					stations[k] = ItemIO.Load(listStations[k]);
-				}
+				stations = listStations.Select(item => ItemIO.Load(item)).ToArray();
 			}
 		}
 
