@@ -32,6 +32,10 @@ namespace MagicStorage
 		private const int rows = 11;
 		private const int columns2 = 7;
 
+		private const int recipePanelColumns = 7;
+		private const int ingredientRows = 2;
+		private int storageRows = 4;
+
 		private int stackSplit;
 		private int stackDelay = 7;
 		private int stackCounter = 0;
@@ -112,7 +116,6 @@ namespace MagicStorage
 			recipePanel.Top = panel.Top;
 			recipePanel.Left.Set(recipeLeft, 0f);
 			recipePanel.Width.Set(recipeWidth, 0f);
-			recipePanel.Height.Set(Main.screenHeight - Main.instance.invBottom - 350f, 0f);
 
 			UIElement topBar = new UIElement();
 			topBar.Width.Set(0f, 1f);
@@ -224,7 +227,7 @@ namespace MagicStorage
 			recipeZone.SetScrollbar(scrollbar);
 			panel.Append(scrollbar);
 
-			recipeZone.SetDimensions(columns, rows);
+			recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (itemSlotHeight + 2 * recipeZone.padding)));
 
 			UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.SelectedRecipe"));
 			recipePanel.Append(recipePanelHeader);
@@ -240,7 +243,7 @@ namespace MagicStorage
 
 			ingredientZone = new UISlotZone(GetIngredient, smallScale);
 			ingredientZone.Top.Set(54f, 0f);
-			ingredientZone.SetDimensions(columns2, 2);
+			ingredientZone.SetDimensions(recipePanelColumns, ingredientRows);
 			ingredientZone.OnMouseDown += PressIngredient;
 			recipePanel.Append(ingredientZone);
 
@@ -258,7 +261,6 @@ namespace MagicStorage
 
 			storageZone = new UISlotZone(GetStorage, smallScale);
 			storageZone.Top.Set(214f, 0f);
-			storageZone.SetDimensions(7, 4);
 			recipePanel.Append(storageZone);
 
 			craftButton = new UITextPanel<LocalizedText>(Language.GetText("LegacyMisc.72"), 1f);
@@ -275,6 +277,23 @@ namespace MagicStorage
 			resultZone.Top.Set(-itemSlotHeight, 1f);
 			resultZone.OnMouseDown += PressResult;
 			recipePanel.Append(resultZone);
+
+			float recipeHeight = 0;
+
+			for (int k = storageRows; k > 0; k--)
+			{
+				storageZone.SetDimensions(recipePanelColumns, k);
+				recipeHeight = storageZone.Height.Pixels + ingredientZone.Height.Pixels + 230f;
+
+				if (recipeHeight < panel.Height.Pixels)
+				{
+					break;
+				}
+			}
+
+			Main.NewTextMultiline(recipeHeight.ToString() + " " + (Main.screenHeight / 2).ToString());
+
+			recipePanel.Height.Set(recipeHeight, 0f);
 
 			Append(panel);
 			Append(recipePanel);

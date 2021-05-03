@@ -15,7 +15,7 @@ namespace MagicStorage
 	{
 		public static readonly Item Air = new Item();
 
-		private const int padding = 4;
+		public int padding = 4;
 
 		private int columns = 1;
 		private int rows = 1;

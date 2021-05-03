@@ -28,7 +28,6 @@ namespace MagicStorage
 
 		private const int padding = 4;
 		private const int columns = 10;
-		private const int rows = 12;
 
 		private int stackSplit;
 		private int stackDelay = 7;
@@ -111,6 +110,7 @@ namespace MagicStorage
 			depositButton.OnClick += ClickDeposit;
 			depositButton.OnMouseOver += (a, b) => depositButton.BackgroundColor = lightBlue;
 			depositButton.OnMouseOut += (a, b) => depositButton.BackgroundColor = blue;
+
 			topBar.Append(depositButton);
 
 			float depositButtonRight = sortButtons.GetDimensions().Width + 2 * padding + depositButton.GetDimensions().Width;
@@ -118,12 +118,14 @@ namespace MagicStorage
 			searchBar.Left.Set(depositButtonRight + padding, 0f);
 			searchBar.Width.Set(-depositButtonRight - 2 * padding, 1f);
 			searchBar.Height.Set(0f, 1f);
+
 			topBar.Append(searchBar);
 
 			UIElement topBar2 = new UIElement();
 			topBar2.Width.Set(0f, 1f);
 			topBar2.Height.Set(32f, 0f);
 			topBar2.Top.Set(36f, 0f);
+
 			panel.Append(topBar2);
 
 			filterButtons = new UIButtonChoice(new Texture2D[]
@@ -161,6 +163,7 @@ namespace MagicStorage
 			searchBar2.Left.Set(depositButtonRight + padding, 0f);
 			searchBar2.Width.Set(-depositButtonRight - 2 * padding, 1f);
 			searchBar2.Height.Set(0f, 1f);
+
 			topBar2.Append(searchBar2);
 
 			slotZone = new UISlotZone(GetItem, inventoryScale);
@@ -174,15 +177,17 @@ namespace MagicStorage
 			UIScrollbar scrollbar = new UIScrollbar();
 			scrollbar.Left.Set(10, 0);
 			slotZone.SetScrollbar(scrollbar);
-			panel.Append(scrollbar);
 
-			slotZone.SetDimensions(columns, rows);
+			panel.Append(scrollbar);
 
 			capacityText = new UIText(string.Empty);
 			capacityText.Top.Set(-32f, 1f);
 			capacityText.Left.Set(6f, 0f);
 			capacityText.Height.Set(32f, 0);
 			panel.Append(capacityText);
+
+			float slotZoneHeight = capacityText.GetDimensions().Y - (filterButtons.GetDimensions().Y + filterButtons.GetDimensions().Height);
+			slotZone.SetDimensions(columns, (int)(slotZoneHeight / (slotHeight + slotZone.padding)));
 
 			Append(panel);
 		}
