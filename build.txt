@@ -1,5 +1,5 @@
 author = blushiemagic
-version = 0.4.4.0
+version = 0.4.4.1
 displayName = Magic Storage
 homepage = https://github.com/Elvyria/MagicStorage
 hideCode = false
