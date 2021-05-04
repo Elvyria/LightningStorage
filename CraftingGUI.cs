@@ -291,8 +291,6 @@ namespace MagicStorage
 				}
 			}
 
-			Main.NewTextMultiline(recipeHeight.ToString() + " " + (Main.screenHeight / 2).ToString());
-
 			recipePanel.Height.Set(recipeHeight, 0f);
 
 			Append(panel);
