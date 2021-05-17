@@ -999,7 +999,6 @@ namespace MagicStorage
 					Item withdraw = resultItem.Clone();
 					if (withdraw.stack > withdraw.maxStack)
 					{
-						Main.NewTextMultiline(withdraw.maxStack.ToString());
 						withdraw.stack = withdraw.maxStack;
 					}
 
