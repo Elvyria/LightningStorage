@@ -655,6 +655,11 @@ namespace MagicStorage
 
 			foreach (Item item in items)
 			{
+				if (!item.material)
+				{
+					continue;
+				}
+
 				if (itemCounts.ContainsKey(item.netID))
 				{
 					itemCounts[item.netID] += item.stack;
@@ -992,12 +997,13 @@ namespace MagicStorage
 				else
 				{
 					Item withdraw = resultItem.Clone();
-					if (withdraw.stack < withdraw.maxStack)
+					if (withdraw.stack > withdraw.maxStack)
 					{
+						Main.NewTextMultiline(withdraw.maxStack.ToString());
 						withdraw.stack = withdraw.maxStack;
 					}
 
-					Main.mouseItem = WithdrawItem(resultItem.Clone());
+					Main.mouseItem = WithdrawItem(withdraw);
 
 					if (ItemSlot.ShiftInUse)
 					{
