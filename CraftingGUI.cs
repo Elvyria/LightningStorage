@@ -863,6 +863,16 @@ namespace MagicStorage
 			{
 				foreach (Item item in items)
 				{
+					if (item.IsTheSameAs(selectedRecipe.createItem))
+					{
+						resultItem = item;
+					}
+
+					if (!item.material)
+					{
+						continue;
+					}
+
 					foreach (Item ingredient in selectedRecipe.requiredItem)
 					{
 						if (ingredient.type == 0)
@@ -873,11 +883,6 @@ namespace MagicStorage
 						{
 							storageItems.Add(item);
 						}
-					}
-
-					if (item.IsTheSameAs(selectedRecipe.createItem))
-					{
-						resultItem = item;
 					}
 				}
 			}
@@ -988,7 +993,7 @@ namespace MagicStorage
 		private void PressResult(UIEvent _event, UIElement _element)
 		{
 			int slot = resultZone.MouseSlot();
-			if (slot == 0 && selectedRecipe != null)
+			if (slot == 0 && selectedRecipe != null && !resultItem.IsAir)
 			{
 				if (!Main.mouseItem.IsAir)
 				{
@@ -1006,7 +1011,7 @@ namespace MagicStorage
 
 					if (ItemSlot.ShiftInUse)
 					{
-						Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, withdraw, false, true);
+						Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, false, true);
 					}
 				}
 
