@@ -1,5 +1,7 @@
 # Magic Storage
 
+## Multiplayer is currently not supported.
+
 ### Changes
 * Full UI rewrite.
 * All sorting and filtering algorithms where reworked and now around 10 times faster.
