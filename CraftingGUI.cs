@@ -30,12 +30,11 @@ namespace MagicStorage
 
 		private const int padding = 4;
 		private const int columns = 10;
-		private const int rows = 11;
 		private const int columns2 = 7;
 
 		private const int recipePanelColumns = 7;
 		private const int ingredientRows = 2;
-		private int storageRows = 4;
+		private const int storageRows = 4;
 
 		private int stackSplit;
 		private int stackDelay = 7;
@@ -53,7 +52,8 @@ namespace MagicStorage
 		private UISlotZone recipeZone;
 		private UISlotZone resultZone;
 
-		private List<Item> items = new List<Item>();
+		private List<Item> items;
+
 		private Dictionary<int, int> itemCounts = new Dictionary<int, int>();
 		private Dictionary<int, int> recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
 		private Item resultItem = UISlotZone.Air;
@@ -68,9 +68,11 @@ namespace MagicStorage
 		private bool zoneSnow = false;
 		private bool alchemyTable = false;
 
-		private List<Recipe> recipes = new List<Recipe>();
-		private List<Recipe> availableRecipes = new List<Recipe>();
-		private List<bool> recipeAvailable = new List<bool>();
+		private List<Recipe> recipes;
+		private List<bool>   availableRecipes;
+		private List<Recipe> displayedRecipes;
+
+		private List<bool> recipeAvailable;
 
 		private Recipe selectedRecipe;
 
@@ -352,6 +354,7 @@ namespace MagicStorage
 
 			UpdateStackTimer();
 			UpdateCraftButton();
+			UpdateResultSlot();
 
 			if (nameFilter != searchBar.Text || modFilter != searchBar2.Text)
 			{
@@ -416,7 +419,7 @@ namespace MagicStorage
 				}
 			}
 
-			if (!PlayerInput.Triggers.Current.MouseLeft)
+			if (!(PlayerInput.Triggers.Current.MouseLeft || PlayerInput.Triggers.Current.MouseRight))
 			{
 				stackSplit = 0;
 			}
@@ -424,6 +427,36 @@ namespace MagicStorage
 			if (stackSplit > 0)
 			{
 				stackSplit--;
+			}
+		}
+
+		private void UpdateResultSlot()
+		{
+			if (resultZone.IsMouseHovering && Main.mouseRight && stackSplit <= 1 && !resultItem.IsAir)
+			{
+				if (stackSplit == 0)
+				{
+					stackSplit = 15;
+				}
+				else
+				{
+					stackSplit = stackDelay;
+				}
+
+				Item withdraw = resultItem.Clone();
+				withdraw.stack = 1;
+
+				if (Main.mouseItem.IsAir)
+				{
+					Main.mouseItem = WithdrawItem(withdraw);
+				}
+				else if (Main.mouseItem.IsTheSameAs(resultItem) && Main.mouseItem.stack < Main.mouseItem.maxStack)
+				{
+					WithdrawItem(withdraw);
+					Main.mouseItem.stack += 1;
+				}
+
+				Main.PlaySound(12, -1, -1, 1);
 			}
 		}
 
@@ -635,8 +668,6 @@ namespace MagicStorage
 
 		public void RefreshItems()
 		{
-			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), SortMode.Id, FilterMode.All, "", "");
-
 			AnalyzeIngredients();
 
 			RefreshStorageItems();
@@ -645,8 +676,6 @@ namespace MagicStorage
 
 		private void RefreshRecipes()
 		{
-			Recipe[] temp = ItemSorter.SortAndFilter(Main.recipe, sortMode, filterMode, searchBar2.Text, searchBar.Text);
-
 			itemCounts.Clear();
 
 			foreach (int key in RecipeGroup.recipeGroups.Keys)
@@ -679,6 +708,8 @@ namespace MagicStorage
 				}
 			}
 
+			Recipe[] temp = ItemSorter.SortAndFilter(Main.recipe, sortMode, filterMode, modFilter, nameFilter);
+
 			if (recipeButtons.choice == 0)
 			{
 				recipes = temp.AsParallel().AsOrdered().Where(recipe => IsAvailable(recipe)).ToList();
@@ -702,10 +733,7 @@ namespace MagicStorage
 				Array.Resize(ref adjTiles, player.adjTile.Length);
 			}
 
-			for (int k = 0; k < adjTiles.Length; k++)
-			{
-				adjTiles[k] = false;
-			}
+			Array.Clear(adjTiles, 0, adjTiles.Length);
 
 			adjWater = false;
 			adjLava = false;
@@ -722,51 +750,56 @@ namespace MagicStorage
 					{
 						adjTiles[TileID.Furnaces] = true;
 					}
-					if (item.createTile == TileID.AdamantiteForge)
+					else if (item.createTile == TileID.AdamantiteForge)
 					{
 						adjTiles[TileID.Hellforge] = true;
 					}
-					if (item.createTile == TileID.MythrilAnvil)
+					else if (item.createTile == TileID.MythrilAnvil)
 					{
 						adjTiles[TileID.Anvils] = true;
 					}
-					if (item.createTile == TileID.BewitchingTable || item.createTile == TileID.Tables2)
+					else if (item.createTile == TileID.BewitchingTable || item.createTile == TileID.Tables2)
 					{
 						adjTiles[TileID.Tables] = true;
 					}
-					if (item.createTile == TileID.AlchemyTable)
+					else if (item.createTile == TileID.AlchemyTable)
 					{
 						adjTiles[TileID.Bottles] = true;
 						adjTiles[TileID.Tables] = true;
 						alchemyTable = true;
 					}
+
 					bool[] oldAdjTile = player.adjTile;
 					bool oldAdjWater = adjWater;
 					bool oldAdjLava = adjLava;
 					bool oldAdjHoney = adjHoney;
 					bool oldAlchemyTable = alchemyTable;
+
 					player.adjTile = adjTiles;
 					player.adjWater = false;
 					player.adjLava = false;
 					player.adjHoney = false;
 					player.alchemyTable = false;
+
 					TileLoader.AdjTiles(player, item.createTile);
+
 					if (player.adjWater)
 					{
-						adjWater = true;
+						adjWater = player.adjWater;
 					}
 					if (player.adjLava)
 					{
-						adjLava = true;
+						adjLava = player.adjLava;
 					}
 					if (player.adjHoney)
 					{
-						adjHoney = true;
+						adjHoney = player.adjHoney;
 					}
 					if (player.alchemyTable)
 					{
-						alchemyTable = true;
+						alchemyTable = player.alchemyTable;
 					}
+
 					player.adjTile = oldAdjTile;
 					player.adjWater = oldAdjWater;
 					player.adjLava = oldAdjLava;
@@ -777,19 +810,20 @@ namespace MagicStorage
 				{
 					adjWater = true;
 				}
-				if (item.type == ItemID.LavaBucket)
+				else if (item.type == ItemID.LavaBucket)
 				{
 					adjLava = true;
 				}
-				if (item.type == ItemID.HoneyBucket)
+				else if (item.type == ItemID.HoneyBucket)
 				{
 					adjHoney = true;
 				}
-				if (item.type == MagicStorage.Instance.ItemType("SnowBiomeEmulator"))
+				else if (item.type == MagicStorage.Instance.ItemType("SnowBiomeEmulator"))
 				{
 					zoneSnow = true;
 				}
 			}
+
 			adjTiles[MagicStorage.Instance.TileType("CraftingAccess")] = true;
 		}
 
@@ -829,7 +863,7 @@ namespace MagicStorage
 						|| recipe.anyWood && RecipeGroup.recipeGroups[RecipeGroupID.Wood].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.Wood] >= ingredient.stack
 						|| recipe.anySand && RecipeGroup.recipeGroups[RecipeGroupID.Sand].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.Sand] >= ingredient.stack
 						|| recipe.anyIronBar && RecipeGroup.recipeGroups[RecipeGroupID.IronBar].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.IronBar] >= ingredient.stack
-						|| recipe.anyIronBar && RecipeGroup.recipeGroups[RecipeGroupID.Fragment].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.Fragment] >= ingredient.stack
+						|| recipe.anyFragment && RecipeGroup.recipeGroups[RecipeGroupID.Fragment].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.Fragment] >= ingredient.stack
 						|| recipe.anyPressurePlate && RecipeGroup.recipeGroups[RecipeGroupID.PressurePlate].ContainsItem(ingredient.type) && recipeGroupCounts[RecipeGroupID.PressurePlate] >= ingredient.stack)
 				{
 					continue;
@@ -857,6 +891,8 @@ namespace MagicStorage
 
 		private void RefreshStorageItems()
 		{
+			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), SortMode.Id, FilterMode.All, "", "");
+
 			storageItems.Clear();
 			resultItem = UISlotZone.Air;
 
@@ -993,32 +1029,33 @@ namespace MagicStorage
 
 		private void PressResult(UIEvent _event, UIElement _element)
 		{
-			int slot = resultZone.MouseSlot();
-			if (slot == 0 && selectedRecipe != null && !resultItem.IsAir)
+			if (selectedRecipe == null || Main.mouseItem.IsAir && resultItem.IsAir || resultZone.MouseSlot() != 0)
 			{
-				if (!Main.mouseItem.IsAir)
-				{
-					TryDepositResult(Main.mouseItem);
-				}
-				else
-				{
-					Item withdraw = resultItem.Clone();
-					if (withdraw.stack > withdraw.maxStack)
-					{
-						withdraw.stack = withdraw.maxStack;
-					}
-
-					Main.mouseItem = WithdrawItem(withdraw);
-
-					if (ItemSlot.ShiftInUse)
-					{
-						Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, false, true);
-					}
-				}
-
-				RefreshItems();
-				Main.PlaySound(7, -1, -1, 1);
+				return;
 			}
+
+			if (!Main.mouseItem.IsAir && selectedRecipe.createItem.IsTheSameAs(Main.mouseItem))
+			{
+				TryDepositResult(Main.mouseItem);
+			}
+			else if (Main.mouseItem.IsAir && !resultItem.IsAir)
+			{
+				Item withdraw = resultItem.Clone();
+				if (withdraw.stack > withdraw.maxStack)
+				{
+					withdraw.stack = withdraw.maxStack;
+				}
+
+				Main.mouseItem = WithdrawItem(withdraw);
+
+				if (ItemSlot.ShiftInUse)
+				{
+					Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, false, true);
+				}
+			}
+
+			RefreshItems();
+			Main.PlaySound(7, -1, -1, 1);
 		}
 
 		private void SelectRecipe(Recipe recipe)
