@@ -27,7 +27,7 @@ namespace MagicStorage
 				TileEntity tile = TileEntity.ByPosition[storageAccess];
 				if (tile is TECraftingAccess)
 				{
-					MagicStorage.Instance.CraftingUI.RefreshItems();
+					MagicStorage.Instance.CraftingUI.Refresh();
 				}
 				else if (tile is TEStorageHeart)
 				{
