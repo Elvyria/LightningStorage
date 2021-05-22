@@ -53,6 +53,7 @@ namespace MagicStorage
 		private UISlotZone resultZone;
 
 		private List<Item> items;
+		private List<Item> ingredients = new List<Item>(Recipe.maxRequirements);
 
 		private Dictionary<int, int> itemCounts = new Dictionary<int, int>();
 		private Dictionary<int, int> recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
@@ -311,7 +312,7 @@ namespace MagicStorage
 				return;
 			}
 
-			RefreshItems();
+			Refresh();
 		}
 
 		public override void OnDeactivate()
@@ -360,7 +361,7 @@ namespace MagicStorage
 			{
 				nameFilter = searchBar.Text;
 				modFilter = searchBar2.Text;
-				RefreshItems();
+				Refresh();
 			}
 		}
 
@@ -388,7 +389,7 @@ namespace MagicStorage
 					}
 
 					TryCraft();
-					RefreshItems();
+					Refresh();
 					Main.PlaySound(7, -1, -1, 1);
 				}
 			}
@@ -500,54 +501,13 @@ namespace MagicStorage
 
 		private Item GetIngredient(int slot)
 		{
-			if (selectedRecipe != null && slot < selectedRecipe.requiredItem.Length)
+			if (selectedRecipe != null && slot < ingredients.Count)
 			{
-				Item item = selectedRecipe.requiredItem[slot].Clone();
-
-				RecipeGroup recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
-				if (selectedRecipe.anyWood && recipeGroup.ContainsItem(item.type))
-				{
-					item.SetNameOverride(recipeGroup.GetText());
-					return item;
-				}
-
-				recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
-				if (selectedRecipe.anySand && recipeGroup.ContainsItem(item.type))
-				{
-					item.SetNameOverride(recipeGroup.GetText());
-					return item;
-				}
-
-				recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
-				if (selectedRecipe.anyIronBar && recipeGroup.ContainsItem(item.type))
-				{
-					item.SetNameOverride(recipeGroup.GetText());
-					return item;
-				}
-
-				recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
-				if (selectedRecipe.anyFragment && recipeGroup.ContainsItem(item.type))
-				{
-					item.SetNameOverride(recipeGroup.GetText());
-					return item;
-				}
-
-				recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.PressurePlate];
-				if (selectedRecipe.anyPressurePlate && recipeGroup.ContainsItem(item.type))
-				{
-					item.SetNameOverride(recipeGroup.GetText());
-					return item;
-				}
-
-				if (selectedRecipe.ProcessGroupsForText(item.type, out string nameOverride))
-				{
-					item.SetNameOverride(nameOverride);
-				}
-
-				return item;
+				return ingredients[slot];
 			}
 
 			return UISlotZone.Air;
+
 		}
 
 		private Item GetStorage(int slot)
@@ -666,15 +626,15 @@ namespace MagicStorage
 			}
 		}
 
-		public void RefreshItems()
+		public void Refresh()
 		{
-			AnalyzeIngredients();
-
+			RefreshStations();
+			RefreshItems();
 			RefreshStorageItems();
 			RefreshRecipes();
 		}
 
-		private void RefreshRecipes()
+		private void RefreshItems()
 		{
 			itemCounts.Clear();
 
@@ -682,6 +642,8 @@ namespace MagicStorage
 			{
 				recipeGroupCounts[key] = 0;
 			}
+
+			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), SortMode.Id, FilterMode.All, "", "");
 
 			foreach (Item item in items)
 			{
@@ -708,6 +670,10 @@ namespace MagicStorage
 				}
 			}
 
+		}
+
+		private void RefreshRecipes()
+		{
 			Recipe[] temp = ItemSorter.SortAndFilter(Main.recipe, sortMode, filterMode, modFilter, nameFilter);
 
 			if (recipeButtons.choice == 0)
@@ -724,16 +690,18 @@ namespace MagicStorage
 			recipeZone.UpdateScrollBar((recipes.Count + columns - 1) / columns);
 		}
 
-		private void AnalyzeIngredients()
+		private void RefreshStations()
 		{
 			Player player = Main.player[Main.myPlayer];
 
 			if (adjTiles.Length != player.adjTile.Length)
 			{
-				Array.Resize(ref adjTiles, player.adjTile.Length);
+				adjTiles = new bool[player.adjTile.Length];
 			}
-
-			Array.Clear(adjTiles, 0, adjTiles.Length);
+			else
+			{
+				Array.Clear(adjTiles, 0, adjTiles.Length);
+			}
 
 			adjWater = false;
 			adjLava = false;
@@ -785,19 +753,19 @@ namespace MagicStorage
 
 					if (player.adjWater)
 					{
-						adjWater = player.adjWater;
+						adjWater = true;
 					}
 					if (player.adjLava)
 					{
-						adjLava = player.adjLava;
+						adjLava = true;
 					}
 					if (player.adjHoney)
 					{
-						adjHoney = player.adjHoney;
+						adjHoney = true;
 					}
 					if (player.alchemyTable)
 					{
-						alchemyTable = player.alchemyTable;
+						alchemyTable = true;
 					}
 
 					player.adjTile = oldAdjTile;
@@ -891,8 +859,6 @@ namespace MagicStorage
 
 		private void RefreshStorageItems()
 		{
-			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), SortMode.Id, FilterMode.All, "", "");
-
 			storageItems.Clear();
 			resultItem = UISlotZone.Air;
 
@@ -1023,7 +989,7 @@ namespace MagicStorage
 				Main.mouseItem = SwapStations(Main.mouseItem, slot);
 			}
 
-			RefreshItems();
+			Refresh();
 			Main.PlaySound(7, -1, -1, 1);
 		}
 
@@ -1054,7 +1020,7 @@ namespace MagicStorage
 				}
 			}
 
-			RefreshItems();
+			Refresh();
 			Main.PlaySound(7, -1, -1, 1);
 		}
 
@@ -1065,6 +1031,54 @@ namespace MagicStorage
 				selectedRecipe = recipe;
 
 				UpdateRecipeText();
+
+				ingredients.Clear();
+
+				foreach (Item requiredItem in selectedRecipe.requiredItem)
+				{
+					Item item = requiredItem.Clone();
+					ingredients.Add(item);
+
+					RecipeGroup recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
+					if (selectedRecipe.anyWood && recipeGroup.ContainsItem(item.type))
+					{
+						item.SetNameOverride(recipeGroup.GetText());
+						continue;
+					}
+
+					recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Sand];
+					if (selectedRecipe.anySand && recipeGroup.ContainsItem(item.type))
+					{
+						item.SetNameOverride(recipeGroup.GetText());
+						continue;
+					}
+
+					recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.IronBar];
+					if (selectedRecipe.anyIronBar && recipeGroup.ContainsItem(item.type))
+					{
+						item.SetNameOverride(recipeGroup.GetText());
+						continue;
+					}
+
+					recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.Fragment];
+					if (selectedRecipe.anyFragment && recipeGroup.ContainsItem(item.type))
+					{
+						item.SetNameOverride(recipeGroup.GetText());
+						continue;
+					}
+
+					recipeGroup = RecipeGroup.recipeGroups[RecipeGroupID.PressurePlate];
+					if (selectedRecipe.anyPressurePlate && recipeGroup.ContainsItem(item.type))
+					{
+						item.SetNameOverride(recipeGroup.GetText());
+						continue;
+					}
+
+					if (selectedRecipe.ProcessGroupsForText(item.type, out string nameOverride))
+					{
+						item.SetNameOverride(nameOverride);
+					}
+				}
 
 				RefreshStorageItems();
 			}
@@ -1094,7 +1108,7 @@ namespace MagicStorage
 
 		private void TryCraft()
 		{
-			List<Item> availableItems = new List<Item>(storageItems.Where(item => !blockStorageItems.Contains(new ItemData(item))).Select(item => item.Clone()));
+			List<Item> availableItems = storageItems.Where(item => !blockStorageItems.Contains(new ItemData(item))).Select(item => item.Clone()).ToList();
 			List<Item> toWithdraw = new List<Item>(selectedRecipe.requiredItem.Length);
 			foreach (Item item in selectedRecipe.requiredItem)
 			{
