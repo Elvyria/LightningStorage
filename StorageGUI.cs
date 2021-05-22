@@ -17,6 +17,7 @@ using Terraria.UI;
 
 using ReLogic.Graphics;
 
+using MagicStorage.UI;
 using MagicStorage.Components;
 using MagicStorage.Sorting;
 

@@ -17,6 +17,7 @@ using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.UI;
 
+using MagicStorage.UI;
 using MagicStorage.Components;
 using MagicStorage.Sorting;
 

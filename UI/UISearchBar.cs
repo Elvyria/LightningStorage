@@ -10,7 +10,7 @@ using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace MagicStorage
+namespace MagicStorage.UI
 {
 	public class UISearchBar : UIElement
 	{

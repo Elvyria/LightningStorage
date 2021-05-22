@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 
-namespace MagicStorage
+namespace MagicStorage.UI
 {
 	public class UISlotZone : UIElement
 	{
