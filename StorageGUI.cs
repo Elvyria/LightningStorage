@@ -36,7 +36,6 @@ namespace MagicStorage
 
 		private TEStorageHeart heart;
 		private List<Item> items = new List<Item>();
-		private List<bool> didMatCheck = new List<bool>();
 
 		private UISlotZone slotZone;
 		private UIText capacityText;
@@ -314,7 +313,6 @@ namespace MagicStorage
 		private Item GetItem(int slot)
 		{
 			Item item = slot >= 0 && slot < items.Count ? items[slot] : UISlotZone.Air;
-			// TODO: didMatCheck ?
 
 			return item;
 		}
@@ -322,14 +320,6 @@ namespace MagicStorage
 		public void RefreshItems()
 		{
 			items = ItemSorter.SortAndFilter(heart.GetStoredItems(), sortMode, filterMode, searchBar2.Text, searchBar.Text);
-
-			didMatCheck.Clear();
-			didMatCheck.Capacity = items.Capacity;
-
-			for (int k = 0; k < items.Count; k++)
-			{
-				didMatCheck.Add(false);
-			}
 
 			UpdateCounter();
 
@@ -489,11 +479,9 @@ namespace MagicStorage
 			{
 				return heart.TryWithdraw(item);
 			}
-			else
-			{
-				NetHelper.SendWithdraw(heart.ID, item, toInventory);
-				return new Item();
-			}
+
+			NetHelper.SendWithdraw(heart.ID, item, toInventory);
+			return new Item();
 		}
 	}
 }
