@@ -456,6 +456,15 @@ namespace MagicStorage
 					WithdrawItem(withdraw);
 					Main.mouseItem.stack += 1;
 				}
+				else return;
+
+				RefreshItems();
+				RefreshStorageItems();
+
+				if (withdraw.material)
+				{
+					RefreshRecipes();
+				}
 
 				Main.PlaySound(12, -1, -1, 1);
 			}
@@ -989,7 +998,9 @@ namespace MagicStorage
 				Main.mouseItem = SwapStations(Main.mouseItem, slot);
 			}
 
-			Refresh();
+			RefreshStations();
+			RefreshRecipes();
+
 			Main.PlaySound(7, -1, -1, 1);
 		}
 
@@ -1020,7 +1031,14 @@ namespace MagicStorage
 				}
 			}
 
-			Refresh();
+			RefreshItems();
+			RefreshStorageItems();
+
+			if (withdraw.material)
+			{
+				RefreshRecipes();
+			}
+
 			Main.PlaySound(7, -1, -1, 1);
 		}
 
