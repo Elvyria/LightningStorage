@@ -1031,13 +1031,7 @@ namespace MagicStorage
 				}
 			}
 
-			RefreshItems();
-			RefreshStorageItems();
-
-			if (withdraw.material)
-			{
-				RefreshRecipes();
-			}
+			Refresh();
 
 			Main.PlaySound(7, -1, -1, 1);
 		}
