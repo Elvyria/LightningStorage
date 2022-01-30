@@ -25,14 +25,7 @@ namespace MagicStorage.Items
 			recipe.AddIngredient(ItemID.SoulofFright);
 			recipe.AddIngredient(ItemID.SoulofMight);
 			recipe.AddIngredient(ItemID.SoulofSight);
-			if (MagicStorage.legendMod == null)
-			{
-				recipe.AddIngredient(ItemID.Sapphire);
-			}
-			else
-			{
-				recipe.AddRecipeGroup("MagicStorage:AnySapphire");
-			}
+			recipe.AddIngredient(ItemID.Sapphire);
 			recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

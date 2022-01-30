@@ -26,14 +26,7 @@ namespace MagicStorage.Items
 			recipe.AddIngredient(ItemID.FragmentVortex, 5);
 			recipe.AddIngredient(ItemID.FragmentNebula, 5);
 			recipe.AddIngredient(ItemID.FragmentStardust, 5);
-			if (MagicStorage.legendMod == null)
-			{
-				recipe.AddIngredient(ItemID.Ruby);
-			}
-			else
-			{
-				recipe.AddRecipeGroup("MagicStorage:AnyRuby");
-			}
+			recipe.AddIngredient(ItemID.Ruby);
 			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

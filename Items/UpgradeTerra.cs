@@ -27,22 +27,11 @@ namespace MagicStorage.Items
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 
-			Mod otherMod = MagicStorage.bluemagicMod;
-			if (otherMod != null)
+			Mod calamityMod = ModLoader.GetMod("CalamityMod");
+			if (calamityMod != null)
 			{
 				recipe = new ModRecipe(mod);
-				recipe.AddIngredient(otherMod, "InfinityCrystal");
-				recipe.AddRecipeGroup("MagicStorage:AnyDiamond");
-				recipe.AddTile(otherMod, "PuriumAnvil");
-				recipe.SetResult(this);
-				recipe.AddRecipe();
-			}
-
-			otherMod = ModLoader.GetMod("CalamityMod");
-			if (otherMod != null)
-			{
-				recipe = new ModRecipe(mod);
-				recipe.AddIngredient(otherMod, "CosmiliteBar", 20);
+				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
 				recipe.AddRecipeGroup("MagicStorage:AnyDiamond");
 				recipe.AddTile(TileID.LunarCraftingStation);
 				recipe.SetResult(this);

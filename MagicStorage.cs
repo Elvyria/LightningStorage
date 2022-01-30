@@ -15,8 +15,6 @@ namespace MagicStorage
 	public class MagicStorage : Mod
 	{
 		public static MagicStorage Instance;
-		public static Mod bluemagicMod;
-		public static Mod legendMod;
 
 		#pragma warning disable 0649
 		internal UserInterface UI;
@@ -26,18 +24,9 @@ namespace MagicStorage
 
 		private GameTime _lastUpdateUiGameTime;
 
-		public static readonly Version requiredVersion = new Version(0, 11);
-
 		public override void Load()
 		{
-			if (ModLoader.version < requiredVersion)
-			{
-				throw new Exception("Magic storage requires a tModLoader version of at least " + requiredVersion);
-			}
-
 			Instance = this;
-			legendMod = ModLoader.GetMod("LegendOfTerraria3");
-			bluemagicMod = ModLoader.GetMod("Bluemagic");
 
 			if (!Main.dedServ)
 			{
@@ -54,8 +43,6 @@ namespace MagicStorage
 			CraftingUI = null;
 
 			Instance = null;
-			bluemagicMod = null;
-			legendMod = null;
 		}
 
 		public override void AddRecipeGroups()
@@ -104,34 +91,10 @@ namespace MagicStorage
 			RecipeGroup.RegisterGroup("MagicStorage:AnyChest", group);
 
 			group = new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Language.GetTextValue("Mods.MagicStorage.Common.SnowBiomeBlock"), ItemID.SnowBlock, ItemID.IceBlock, ItemID.PurpleIceBlock, ItemID.PinkIceBlock);
-			if (bluemagicMod != null)
-			{
-				group.ValidItems.Add(bluemagicMod.ItemType("DarkBlueIce"));
-			}
 			RecipeGroup.RegisterGroup("MagicStorage:AnySnowBiomeBlock", group);
 
 			group = new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Diamond), ItemID.Diamond, ItemType("ShadowDiamond"));
-			if (legendMod != null)
-			{
-				group.ValidItems.Add(legendMod.ItemType("GemChrysoberyl"));
-				group.ValidItems.Add(legendMod.ItemType("GemAlexandrite"));
-			}
-
 			RecipeGroup.RegisterGroup("MagicStorage:AnyDiamond", group);
-
-			if (legendMod != null)
-			{
-				RecipeGroup.RegisterGroup("MagicStorage:AnyAmethyst",
-						new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Amethyst), ItemID.Amethyst, legendMod.ItemType("GemOnyx"), legendMod.ItemType("GemSpinel")));
-				RecipeGroup.RegisterGroup("MagicStorage:AnyTopaz",
-						new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Topaz), ItemID.Topaz, legendMod.ItemType("GemGarnet")));
-				RecipeGroup.RegisterGroup("MagicStorage:AnySapphire",
-						new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Sapphire), ItemID.Sapphire, legendMod.ItemType("GemCharoite")));
-				RecipeGroup.RegisterGroup("MagicStorage:AnyEmerald",
-						new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Emerald), legendMod.ItemType("GemPeridot")));
-				RecipeGroup.RegisterGroup("MagicStorage:AnyRuby",
-						new RecipeGroup(() => Language.GetText("LangMisc.37").Value + " " + Lang.GetItemNameValue(ItemID.Ruby), ItemID.Ruby, legendMod.ItemType("GemOpal")));
-			}
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
