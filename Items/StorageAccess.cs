@@ -8,14 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageAccess : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.AddTranslation(GameCulture.Russian, "Модуль Доступа к Хранилищу");
-			DisplayName.AddTranslation(GameCulture.Polish, "Okno dostępu do magazynu");
-			DisplayName.AddTranslation(GameCulture.French, "Access de Stockage");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Acceso de Almacenamiento");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储装置");
-		}
 		
 		public override void SetDefaults()
 		{

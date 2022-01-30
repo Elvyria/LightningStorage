@@ -1,0 +1,95 @@
+ItemName.UpgradeBlueChlorophyte=Actualización de Unidad de Almacenamiento (Clorofita Azul)
+ItemTooltip.UpgradeBlueChlorophyte=Capacidad de unidad de almacenamiento mejorada a 240\n<right> en la unidad de almacenamiento (Sagrado) para utilizar
+
+ItemName.StorageConnector=Conector de Almacenamiento
+
+ItemName.UpgradeCrimtane=Actualización de Unidad de Almacenamiento (Carmesí)
+ItemTooltip.UpgradeCrimtane=Capacidad de unidad de almacenamiento mejorada a 80\n<right> en la unidad de almacenamiento para utilizar
+
+ItemName.CraftingAccess=Interfaz de Elaboración de almacenamiento
+
+ItemName.UpgradeHallowed=Actualización de Unidad de Almacenamiento (Sagrado)
+ItemTooltip.UpgradeHallowed=Capacidad de unidad de almacenamiento mejorada a 160\n<right> en la unidad de almacenamiento (Piedra Infernal) para utilizar
+
+ItemName.StorageUnitTerra=Unidad de Almacenamiento (Tierra)
+
+ItemName.StorageUnitHallowed=Unidad de Almacenamiento (Sagrado)
+
+ItemName.UpgradeLuminite=Actualización de Unidad de Almacenamiento (Luminita)
+ItemTooltip.UpgradeLuminite=Capacidad de unidad de almacenamiento mejorada a 320\n<right> en la unidad de almacenamiento (Clorofita Azul) para utilizar
+
+ItemName.ShadowDiamond=Diamante sombreado
+ItemTooltip.ShadowDiamond=Sigue habiendo huellas de luz en el interior
+
+ItemName.UpgradeHellstone=Actualización de Unidad de Almacenamiento (Piedra Infernal)
+ItemTooltip.UpgradeHellstone=Capacidad de unidad de almacenamiento mejorada a 120\n<right> en la unidad de almacenamiento (Endemoniado/Carmesí) para utilizar
+
+ItemName.UpgradeDemonite=Actualización de Unidad de Almacenamiento (Endemoniado)
+ItemTooltip.UpgradeDemonite=Capacidad de unidad de almacenamiento mejorada a 80\n<right> en la unidad de almacenamiento para utilizar
+
+ItemName.StorageDeactivator=Varita de unidad de almacenamiento
+ItemTooltip.StorageDeactivator=<right> para cambiar el unidad de almacenamiento activo/inactivo
+
+ItemName.StorageUnitHellstone=Unidad de Almacenamiento (Piedra Infernal)
+
+ItemName.CreativeStorageUnit=Unidad de Almacenamiento Creativa
+
+ItemName.StorageHeart=Corazón de Almacenamiento
+
+ItemName.StorageUnitDemonite=Unidad de Almacenamiento (Endemoniado)
+
+ItemName.StorageUnit=Unidad de Almacenamiento
+
+ItemName.StorageUnitCrimtane=Unidad de Almacenamiento (Carmesí)
+
+ItemName.UpgradeTerra=Actualización de Unidad de Almacenamiento (Tierra)
+ItemTooltip.UpgradeTerra=Capacidad de unidad de almacenamiento mejorada a 640\n<right> en la unidad de almacenamiento (Luminita) para utilizar
+
+ItemName.StorageUnitLuminite=Unidad de Almacenamiento (Luminita)
+
+ItemName.StorageComponent=Componente de Almacenamiento
+
+ItemName.RadiantJewel=Joya Radiante
+ItemTooltip.RadiantJewel='Brilla con una luz deslumbrante'
+
+ItemName.StorageUnitBlueChlorophyte=Unidad de Almacenamiento (Clorofita Azul)
+
+ItemName.SnowBiomeEmulator=Emulador de bioma de la nieve
+ItemTooltip.SnowBiomeEmulator=Permite la Interfaz de Elaboración de almacenamiento a hacer de recetas de bioma de la nieve
+
+ItemName.StorageUnitTiny=Unidad de Almacenamiento Minúsculo
+
+ItemName.RemoteAccess=Acceso a Almacenamiento Remoto
+
+ItemName.LocatorDisk=Disco Locador
+ItemTooltip.LocatorDisk=<right> el Corazón de Almacenamiento para registrar su ubicación\n<right> el Acceso de Almacenamiento Remoto para establecerlo\nNo se destruye cuando se usa
+
+ItemName.StorageAccess=Acceso de Almacenamiento
+
+ItemName.Locator=Locador
+ItemTooltip.Locator=<right> el Corazón de Almacenamiento para registrar su ubicación\n<right> el Acceso de Almacenamiento Remoto para establecerlo\n<right> Stockage Éloigné pour le mettre en place
+
+Common.CraftingStations=Estaciones de elaboración
+Common.DepositAll=Depositar todo
+Common.FilterAll=Filtrar todo
+Common.FilterEquips=Filtrar por equipamiento
+Common.FilterMisc=Filtrar por otros
+Common.FilterPotions=Filtrar por poción
+Common.FilterTiles=Filtrar por metido
+Common.FilterTools=Filtrar por herramientas
+Common.FilterWeapons=Filtrar por armas
+Common.Ingredients=Ingredientes
+Common.RecipeAll=Mostrar todas las recetas
+Common.RecipeAvailable=Mostrar recetas disponibles
+Common.Recipes=Recetas
+Common.Search=Buscar
+Common.SearchMod=búsqueda por mod
+Common.SearchName=búsqueda por nombre
+Common.SelectedRecipe=Receta seleccionada
+Common.SetTo=Ajustado a: X={0}, Y={1}
+Common.SnowBiomeBlock=Bloque de Biomas de la Nieve
+Common.SortDefault=Clasificación por defecto
+Common.SortID=Ordenar por ID
+Common.SortName=Ordenar por nombre
+Common.SortStack=Ordenar por pilas
+Common.StoredItems=Ingredientes almacenados

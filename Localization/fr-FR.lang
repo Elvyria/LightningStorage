@@ -1,0 +1,95 @@
+ItemName.UpgradeBlueChlorophyte=Amélioration d'Unité de stockage (Chlorophylle Bleu)
+ItemTooltip.UpgradeBlueChlorophyte=améliore la capacité de unité de stockage à 240\n<right> l'unité de stockage (Sacré) pour utiliser
+
+ItemName.StorageConnector=Connecteur de Stockage
+
+ItemName.UpgradeCrimtane=Amélioration d'Unité de stockage (Carmitane)
+ItemTooltip.UpgradeCrimtane=améliore la capacité de unité de stockage à 80\n<right> l'unité de stockage pour utiliser
+
+ItemName.CraftingAccess=Interface de Stockage Artisanat
+
+ItemName.UpgradeHallowed=Amélioration d'Unité de stockage (Sacré)
+ItemTooltip.UpgradeHallowed=améliore la capacité de unité de stockage à 160\n<right> l'unité de stockage (Infernale) pour utiliser
+
+ItemName.StorageUnitTerra=Unité de stockage (Terra)
+
+ItemName.StorageUnitHallowed=Unité de stockage (Sacré)
+
+ItemName.UpgradeLuminite=Amélioration d'Unité de stockage (Luminite)
+ItemTooltip.UpgradeLuminite=améliore la capacité de unité de stockage à 320\n<right> l'unité de stockage (Chlorophylle Bleu) pour utiliser
+
+ItemName.ShadowDiamond=Diamant sombre
+ItemTooltip.ShadowDiamond=Des traces de lumière s'attarde encore à l'intérieur
+
+ItemName.UpgradeHellstone=Amélioration d'Unité de stockage (Infernale)
+ItemTooltip.UpgradeHellstone=améliore la capacité de unité de stockage à 120\n<right> l'unité de stockage (Démonite/Carmitane) pour utiliser
+
+ItemName.UpgradeDemonite=Amélioration d'Unité de stockage (Démonite)
+ItemTooltip.UpgradeDemonite=améliore la capacité de unité de stockage à 80\n<right> l'unité de stockage pour utiliser
+
+ItemName.StorageDeactivator=Baguetter d'unité de stockage
+ItemTooltip.StorageDeactivator=<right> pour changer l'unité de stockage actif/inactif
+
+ItemName.StorageUnitHellstone=Unité de stockage (Infernale)
+
+ItemName.CreativeStorageUnit=Unité de Stockage Créatif
+
+ItemName.StorageHeart=Cœur de Stockage
+
+ItemName.StorageUnitDemonite=Unité de stockage (Démonite)
+
+ItemName.StorageUnit=Unité de stockage
+
+ItemName.StorageUnitCrimtane=Unité de stockage (Carmitane)
+
+ItemName.UpgradeTerra=Amélioration d'Unité de stockage (Terra)
+ItemTooltip.UpgradeTerra=améliore la capacité de unité de stockage à 640\n<right> l'unité de stockage (Luminite) pour utiliser
+
+ItemName.StorageUnitLuminite=Unité de stockage (Luminite)
+
+ItemName.StorageComponent=Composant de Stockage
+
+ItemName.RadiantJewel=Bijou Rayonnant
+ItemTooltip.RadiantJewel='Il brille avec une lumière aveuglante'
+
+ItemName.StorageUnitBlueChlorophyte=Unité de stockage (Chlorophylle Bleu)
+
+ItemName.SnowBiomeEmulator=Emulateur de biome de neige
+ItemTooltip.SnowBiomeEmulator=Permet à L'interface de Stockage Artisanat de créer des recettes de biome de neige
+
+ItemName.StorageUnitTiny=Unité de Stockage Miniscule
+
+ItemName.RemoteAccess=Fenêtre d'accès éloigné
+
+ItemName.LocatorDisk=Disque Localisateur
+ItemTooltip.LocatorDisk=<right> Cœur du Stockage pour enregistrer son emplacement\n<right> Stockage Éloigné pour le mettre en place\nN'est pas détruit lors de son utilisation
+
+ItemName.StorageAccess=Access de Stockage
+
+ItemName.Locator=Localisateur
+ItemTooltip.Locator=<right> le Cœur de Stockage pour enregistrer son emplacement\n<right> le Stockage Éloigné pour le mettre en place
+
+Common.CraftingStations=Stations d'artisanat
+Common.DepositAll=Déposer tout
+Common.FilterAll=Filtrer tout
+Common.FilterEquips=Filtrer par Équipement
+Common.FilterMisc=Filtrer par miscellanées
+Common.FilterPotions=Filtrer par potions
+Common.FilterTiles=Filtrer par placeable
+Common.FilterTools=Filtrer par outils
+Common.FilterWeapons=Filtrer par armes
+Common.Ingredients=Ingrédients
+Common.RecipeAll=Afficher toutes les recettes
+Common.RecipeAvailable=Afficher les recettes disponibles
+Common.Recipes=Recettes
+Common.Search=Rechercher
+Common.SearchMod=Recherche par mod
+Common.SearchName=Recherche par nom
+Common.SelectedRecipe=Recette sélectionnée
+Common.SetTo=Mis à: X={0}, Y={1}
+Common.SnowBiomeBlock=Bloc de biome de neige
+Common.SortDefault=Tri Standard
+Common.SortID=Trier par ID
+Common.SortName=Trier par nom
+Common.SortStack=Trier par piles
+Common.StoredItems=Ingrédients Stockés

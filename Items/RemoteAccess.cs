@@ -7,16 +7,7 @@ using Terraria.Localization;
 namespace MagicStorage.Items
 {
 	public class RemoteAccess : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Remote Storage Access");
-			DisplayName.AddTranslation(GameCulture.Russian, "Модуль Удаленного Доступа к Хранилищу");
-			DisplayName.AddTranslation(GameCulture.Polish, "Zdalna Jednostka Dostępu");
-			DisplayName.AddTranslation(GameCulture.French, "Fenêtre d'accès éloigné");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Acceso a Almacenamiento Remoto");
-			DisplayName.AddTranslation(GameCulture.Chinese, "远程存储装置");
-		}	
+	{	
 
 		public override void SetDefaults()
 		{

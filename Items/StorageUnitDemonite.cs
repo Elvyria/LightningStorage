@@ -8,15 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageUnitDemonite : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Demonite Storage Unit");
-			DisplayName.AddTranslation(GameCulture.Russian, "Демонитовая Ячейка Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Jednostka magazynująca (Demonit)");
-			DisplayName.AddTranslation(GameCulture.French, "Unité de stockage (Démonite)");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Unidad de Almacenamiento (Endemoniado)");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储单元(魔金)");
-		}
 
 		public override void SetDefaults()
 		{

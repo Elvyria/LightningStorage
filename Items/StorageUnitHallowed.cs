@@ -8,15 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageUnitHallowed : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Hallowed Storage Unit");
-			DisplayName.AddTranslation(GameCulture.Russian, "Святая Ячейка Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Jednostka magazynująca (Święcona)");
-			DisplayName.AddTranslation(GameCulture.French, "Unité de stockage (Sacré)");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Unidad de Almacenamiento (Sagrado)");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储单元(神圣)");
-		}
 
 		public override void SetDefaults()
 		{

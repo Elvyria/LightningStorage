@@ -134,9 +134,9 @@ namespace MagicStorage
 					},
 					new LocalizedText[]
 					{
-					Language.GetText("Mods.MagicStorage.SortDefault"),
-					Language.GetText("Mods.MagicStorage.SortID"),
-					Language.GetText("Mods.MagicStorage.SortName")
+					Language.GetText("Mods.MagicStorage.Common.SortDefault"),
+					Language.GetText("Mods.MagicStorage.Common.SortID"),
+					Language.GetText("Mods.MagicStorage.Common.SortName")
 					});
 
 			sortButtons.OnClick += ClickSortButtons;
@@ -152,8 +152,8 @@ namespace MagicStorage
 					},
 					new LocalizedText[]
 					{
-					Language.GetText("Mods.MagicStorage.RecipeAvailable"),
-					Language.GetText("Mods.MagicStorage.RecipeAll")
+					Language.GetText("Mods.MagicStorage.Common.RecipeAvailable"),
+					Language.GetText("Mods.MagicStorage.Common.RecipeAll")
 					});
 
 			recipeButtons.OnClick += ClickRecipeButtons;
@@ -162,7 +162,7 @@ namespace MagicStorage
 			topBar.Append(recipeButtons);
 			float recipeButtonsRight = recipeButtonsLeft + recipeButtons.GetDimensions().Width + padding;
 
-			searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.SearchName"));
+			searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
 			searchBar.Left.Set(recipeButtonsRight + padding, 0f);
 			searchBar.Width.Set(-recipeButtonsRight - 2 * padding, 1f);
 			searchBar.Height.Set(0f, 1f);
@@ -186,13 +186,13 @@ namespace MagicStorage
 					},
 					new LocalizedText[]
 					{
-					Language.GetText("Mods.MagicStorage.FilterAll"),
-					Language.GetText("Mods.MagicStorage.FilterWeapons"),
-					Language.GetText("Mods.MagicStorage.FilterTools"),
-					Language.GetText("Mods.MagicStorage.FilterEquips"),
-					Language.GetText("Mods.MagicStorage.FilterPotions"),
-					Language.GetText("Mods.MagicStorage.FilterTiles"),
-					Language.GetText("Mods.MagicStorage.FilterMisc")
+					Language.GetText("Mods.MagicStorage.Common.FilterAll"),
+					Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
+					Language.GetText("Mods.MagicStorage.Common.FilterTools"),
+					Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
+					Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
+					Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
+					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
 					});
 
 			filterButtons.OnClick += ClickFilterButtons;
@@ -201,13 +201,13 @@ namespace MagicStorage
 
 			float filterButtonsRight = filterButtons.GetDimensions().Width + padding;
 
-			searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.SearchMod"));
+			searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
 			searchBar2.Left.Set(filterButtonsRight + padding, 0f);
 			searchBar2.Width.Set(-filterButtonsRight - 2 * padding, 1f);
 			searchBar2.Height.Set(0f, 1f);
 			topBar2.Append(searchBar2);
 
-			UIText stationText = new UIText(Language.GetText("Mods.MagicStorage.CraftingStations"));
+			UIText stationText = new UIText(Language.GetText("Mods.MagicStorage.Common.CraftingStations"));
 			stationText.Top.Set(76f, 0f);
 			panel.Append(stationText);
 
@@ -217,7 +217,7 @@ namespace MagicStorage
 			stationZone.OnMouseDown += PressStation;
 			panel.Append(stationZone);
 
-			UIText recipeText = new UIText(Language.GetText("Mods.MagicStorage.Recipes"));
+			UIText recipeText = new UIText(Language.GetText("Mods.MagicStorage.Common.Recipes"));
 			recipeText.Top.Set(152f, 0f);
 			panel.Append(recipeText);
 
@@ -233,10 +233,10 @@ namespace MagicStorage
 
 			recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (itemSlotHeight + 2 * recipeZone.padding)));
 
-			UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.SelectedRecipe"));
+			UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.Common.SelectedRecipe"));
 			recipePanel.Append(recipePanelHeader);
 
-			UIText ingredientText = new UIText(Language.GetText("Mods.MagicStorage.Ingredients"));
+			UIText ingredientText = new UIText(Language.GetText("Mods.MagicStorage.Common.Ingredients"));
 			ingredientText.Top.Set(30f, 0f);
 			recipePanel.Append(ingredientText);
 
@@ -259,7 +259,7 @@ namespace MagicStorage
 			reqObjText2.Top.Set(160f, 0f);
 			recipePanel.Append(reqObjText2);
 
-			UIText storedItemsText = new UIText(Language.GetText("Mods.MagicStorage.StoredItems"));
+			UIText storedItemsText = new UIText(Language.GetText("Mods.MagicStorage.Common.StoredItems"));
 			storedItemsText.Top.Set(190f, 0f);
 			recipePanel.Append(storedItemsText);
 

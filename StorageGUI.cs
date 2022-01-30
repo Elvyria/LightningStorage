@@ -85,10 +85,10 @@ namespace MagicStorage
 					},
 					new LocalizedText[]
 					{
-					Language.GetText("Mods.MagicStorage.SortDefault"),
-					Language.GetText("Mods.MagicStorage.SortID"),
-					Language.GetText("Mods.MagicStorage.SortName"),
-					Language.GetText("Mods.MagicStorage.SortStack")
+					Language.GetText("Mods.MagicStorage.Common.SortDefault"),
+					Language.GetText("Mods.MagicStorage.Common.SortID"),
+					Language.GetText("Mods.MagicStorage.Common.SortName"),
+					Language.GetText("Mods.MagicStorage.Common.SortStack")
 					});
 
 			sortButtons.OnClick += (a, b) => {
@@ -101,7 +101,7 @@ namespace MagicStorage
 
 			topBar.Append(sortButtons);
 
-			UITextPanel<LocalizedText> depositButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.MagicStorage.DepositAll"), 1f);
+			UITextPanel<LocalizedText> depositButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.MagicStorage.Common.DepositAll"), 1f);
 			depositButton.Left.Set(sortButtons.GetDimensions().Width + 2 * padding, 0f);
 			depositButton.Width.Set(128f, 0f);
 			depositButton.Height.Set(-2 * padding, 1f);
@@ -114,7 +114,7 @@ namespace MagicStorage
 			topBar.Append(depositButton);
 
 			float depositButtonRight = sortButtons.GetDimensions().Width + 2 * padding + depositButton.GetDimensions().Width;
-			searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.SearchName"));
+			searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
 			searchBar.Left.Set(depositButtonRight + padding, 0f);
 			searchBar.Width.Set(-depositButtonRight - 2 * padding, 1f);
 			searchBar.Height.Set(0f, 1f);
@@ -140,13 +140,13 @@ namespace MagicStorage
 					},
 					new LocalizedText[]
 					{
-					Language.GetText("Mods.MagicStorage.FilterAll"),
-					Language.GetText("Mods.MagicStorage.FilterWeapons"),
-					Language.GetText("Mods.MagicStorage.FilterTools"),
-					Language.GetText("Mods.MagicStorage.FilterEquips"),
-					Language.GetText("Mods.MagicStorage.FilterPotions"),
-					Language.GetText("Mods.MagicStorage.FilterTiles"),
-					Language.GetText("Mods.MagicStorage.FilterMisc")
+					Language.GetText("Mods.MagicStorage.Common.FilterAll"),
+					Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
+					Language.GetText("Mods.MagicStorage.Common.FilterTools"),
+					Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
+					Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
+					Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
+					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
 					});
 
 			filterButtons.OnClick += (a, b) => {
@@ -159,7 +159,7 @@ namespace MagicStorage
 
 			topBar2.Append(filterButtons);
 
-			searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.SearchMod"));
+			searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
 			searchBar2.Left.Set(depositButtonRight + padding, 0f);
 			searchBar2.Width.Set(-depositButtonRight - 2 * padding, 1f);
 			searchBar2.Height.Set(0f, 1f);

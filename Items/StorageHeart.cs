@@ -8,14 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageHeart : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.AddTranslation(GameCulture.Russian, "Сердце Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Serce Jednostki Magazynującej");
-			DisplayName.AddTranslation(GameCulture.French, "Cœur de Stockage");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Corazón de Almacenamiento");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储核心");
-		}
 		
 		public override void SetDefaults()
 		{

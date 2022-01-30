@@ -12,22 +12,6 @@ namespace MagicStorage.Items
 {
 	public class PortableAccess : Locator
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Portable Remote Storage Access");
-			DisplayName.AddTranslation(GameCulture.Russian, "Портативный Модуль Удаленного Доступа к Хранилищу");
-			DisplayName.AddTranslation(GameCulture.Chinese, "便携式远程存储装置");
-
-			Tooltip.SetDefault("<right> Storage Heart to store location"
-				+ "\nCurrently not set to any location"
-				+ "\nUse item to access your storage");
-			Tooltip.AddTranslation(GameCulture.Russian, "<right> по Cердцу Хранилища чтобы запомнить его местоположение"
-				+ "\nВ данный момент Сердце Хранилища не привязанно"
-				+ "\nИспользуйте что бы получить доступ к вашему Хранилищу");
-			Tooltip.AddTranslation(GameCulture.Chinese, "<right>存储核心可储存其定位点"
-				+ "\n目前未设置为任何位置"
-				+ "\n使用可直接访问你的存储");
-		}
 
 		public override void SetDefaults()
 		{
@@ -122,7 +106,7 @@ namespace MagicStorage.Items
 			{
 				if (isSet && lines[k].mod == "Terraria" && lines[k].Name == "Tooltip1")
 				{
-					lines[k].text = Language.GetTextValue("Mods.MagicStorage.SetTo", location.X, location.Y);
+					lines[k].text = Language.GetTextValue("Mods.MagicStorage.Common.SetTo", location.X, location.Y);
 				}
 				else if (!isSet && lines[k].mod == "Terraria" && lines[k].Name == "Tooltip2")
 				{

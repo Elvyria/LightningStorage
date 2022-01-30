@@ -24,7 +24,7 @@ namespace MagicStorage.UI
 		}
 
 		private const int padding = 4;
-		private LocalizedText defaultText = Language.GetText("Mods.MagicStorage.Search");
+		private LocalizedText defaultText = Language.GetText("Mods.MagicStorage.Common.Search");
 		private string text = string.Empty;
 		private int cursorPosition = 0;
 		private int cursorTimer = 0;

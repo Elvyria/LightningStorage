@@ -8,15 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageUnitTerra : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Terra Storage Unit");
-			DisplayName.AddTranslation(GameCulture.Russian, "Терра Ячейка Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Jednostka magazynująca (Terra)");
-			DisplayName.AddTranslation(GameCulture.French, "Unité de stockage (Terra)");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Unidad de Almacenamiento (Tierra)");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储单元(泰拉)");
-		}
 
 		public override void SetDefaults()
 		{

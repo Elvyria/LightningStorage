@@ -8,15 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageUnitCrimtane : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Crimtane Storage Unit");
-			DisplayName.AddTranslation(GameCulture.Russian, "Кримтановая Ячейка Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Jednostka magazynująca (Karmazynium)");
-			DisplayName.AddTranslation(GameCulture.French, "Unité de stockage (Carmitane)");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Unidad de Almacenamiento (Carmesí)");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储单元(血腥)");
-		}
 
 		public override void SetDefaults()
 		{

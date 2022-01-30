@@ -7,15 +7,7 @@ using Terraria.Localization;
 namespace MagicStorage.Items
 {
 	public class StorageConnector : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.AddTranslation(GameCulture.Russian, "Соединитель Ячеек Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Łącznik");
-			DisplayName.AddTranslation(GameCulture.French, "Connecteur de Stockage");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Conector de Almacenamiento");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储连接器");
-		}	
+	{	
 	
 		public override void SetDefaults()
 		{

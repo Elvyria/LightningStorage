@@ -8,15 +8,6 @@ namespace MagicStorage.Items
 {
 	public class StorageUnitHellstone : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Hellstone Storage Unit");
-			DisplayName.AddTranslation(GameCulture.Russian, "Адская Ячейка Хранилища");
-			DisplayName.AddTranslation(GameCulture.Polish, "Jednostka magazynująca (Piekielny kamień)");
-			DisplayName.AddTranslation(GameCulture.French, "Unité de stockage (Infernale)");
-			DisplayName.AddTranslation(GameCulture.Spanish, "Unidad de Almacenamiento (Piedra Infernal)");
-			DisplayName.AddTranslation(GameCulture.Chinese, "存储单元(狱岩)");
-		}
 
 		public override void SetDefaults()
 		{
