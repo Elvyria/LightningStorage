@@ -18,9 +18,11 @@ namespace MagicStorage
 		public static Mod bluemagicMod;
 		public static Mod legendMod;
 
+		#pragma warning disable 0649
 		internal UserInterface UI;
 		internal StorageGUI StorageUI;
 		internal CraftingGUI CraftingUI;
+		#pragma warning restore 0649
 
 		private GameTime _lastUpdateUiGameTime;
 

@@ -39,7 +39,7 @@ namespace MagicStorage
 
 		public static bool Matches(Item item1, Item item2)
 		{
-			return item1.netID == item2.netID && item2.prefix == item2.prefix;
+			return item1.netID == item2.netID && item1.prefix == item2.prefix;
 		}
 
 		public static bool Matches(ItemData data1, ItemData data2)

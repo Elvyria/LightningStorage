@@ -70,8 +70,6 @@ namespace MagicStorage
 		private bool alchemyTable = false;
 
 		private List<Recipe> recipes;
-		private List<bool>   availableRecipes;
-		private List<Recipe> displayedRecipes;
 
 		private List<bool> recipeAvailable;
 

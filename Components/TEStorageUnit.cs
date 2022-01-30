@@ -410,18 +410,6 @@ namespace MagicStorage.Components
 			trueWriter.Write((ushort)buffer.Length);
 			trueWriter.Write(buffer.ToArray());
 
-			/* Compression stats and debugging code (server side) */
-			if (false)
-			{
-				MemoryStream decompressedBuffer = new MemoryStream(65536);
-				DeflateStream decompressor = new DeflateStream(buffer, CompressionMode.Decompress, true);
-				decompressor.CopyTo(decompressedBuffer);
-				decompressor.Close(); 
-
-				Console.WriteLine("Magic Storage Data Compression Stats: " + decompressedBuffer.Length + " => " + buffer.Length);
-				decompressor.Dispose(); decompressedBuffer.Dispose();
-			}
-
 			/* Dispose all objects */
 			writer.Dispose(); writerBuffer.Dispose(); compressor.Dispose(); buffer.Dispose();
 		}
