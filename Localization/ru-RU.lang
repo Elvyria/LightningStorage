@@ -21,9 +21,6 @@ ItemName.StorageUnitHallowed=Святая Ячейка Хранилища
 ItemName.UpgradeLuminite=Люминитовое Улучшение Ячейки Хранилища
 ItemTooltip.UpgradeLuminite=Увеличивает количество слотов в Ячейке Хранилища до 320\n<right> на Синей Хлорофитовой Ячейке Хранилища для улучшения
 
-ItemName.ShadowDiamond=Теневой Алмаз
-ItemTooltip.ShadowDiamond=Следы света все еще мелькают внутри
-
 ItemName.UpgradeHellstone=Адское Улучшение Ячейки Хранилища
 ItemTooltip.UpgradeHellstone=Увеличивает количество слотов в Ячейке Хранилища до 120\n<right> на Демонитовой/Кримтановой Ячейке Хранилища для улучшения
 

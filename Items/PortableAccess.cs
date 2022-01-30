@@ -121,7 +121,7 @@ namespace MagicStorage.Items
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod, "LocatorDisk");
 			recipe.AddIngredient(mod, "RadiantJewel");
-			recipe.AddRecipeGroup("MagicStorage:AnyDiamond", 3);
+			recipe.AddIngredient(ItemID.Diamond, 3);
 			recipe.AddIngredient(ItemID.Ruby, 7);
 			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
@@ -133,7 +133,7 @@ namespace MagicStorage.Items
 				recipe = new ModRecipe(mod);
 				recipe.AddIngredient(mod, "LocatorDisk");
 				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
-				recipe.AddRecipeGroup("MagicStorage:AnyDiamond", 3);
+				recipe.AddIngredient(ItemID.Diamond, 3);
 				recipe.AddIngredient(ItemID.Ruby, 7);
 				recipe.AddTile(TileID.LunarCraftingStation);
 				recipe.SetResult(this);

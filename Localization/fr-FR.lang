@@ -18,9 +18,6 @@ ItemName.StorageUnitHallowed=Unité de stockage (Sacré)
 ItemName.UpgradeLuminite=Amélioration d'Unité de stockage (Luminite)
 ItemTooltip.UpgradeLuminite=améliore la capacité de unité de stockage à 320\n<right> l'unité de stockage (Chlorophylle Bleu) pour utiliser
 
-ItemName.ShadowDiamond=Diamant sombre
-ItemTooltip.ShadowDiamond=Des traces de lumière s'attarde encore à l'intérieur
-
 ItemName.UpgradeHellstone=Amélioration d'Unité de stockage (Infernale)
 ItemTooltip.UpgradeHellstone=améliore la capacité de unité de stockage à 120\n<right> l'unité de stockage (Démonite/Carmitane) pour utiliser
 

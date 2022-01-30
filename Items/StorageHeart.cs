@@ -29,7 +29,7 @@ namespace MagicStorage.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(null, "StorageComponent");
-			recipe.AddRecipeGroup("MagicStorage:AnyDiamond", 3);
+			recipe.AddIngredient(ItemID.Diamond, 3);
 			recipe.AddIngredient(ItemID.Emerald, 7);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);

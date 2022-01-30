@@ -22,7 +22,7 @@ namespace MagicStorage.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(null, "RadiantJewel");
-			recipe.AddRecipeGroup("MagicStorage:AnyDiamond");
+			recipe.AddIngredient(ItemID.Diamond);
 			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -32,7 +32,7 @@ namespace MagicStorage.Items
 			{
 				recipe = new ModRecipe(mod);
 				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
-				recipe.AddRecipeGroup("MagicStorage:AnyDiamond");
+				recipe.AddIngredient(ItemID.Diamond);
 				recipe.AddTile(TileID.LunarCraftingStation);
 				recipe.SetResult(this);
 				recipe.AddRecipe();

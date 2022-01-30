@@ -21,9 +21,6 @@ ItemName.StorageUnitHallowed=存储单元(神圣)
 ItemName.UpgradeLuminite=存储升级珠(夜明)
 ItemTooltip.UpgradeLuminite=将存储单元升级至320容量\n<right>一个存储单元(夜明)可镶嵌
 
-ItemName.ShadowDiamond=暗影钻石
-ItemTooltip.ShadowDiamond=那道光所余留的痕迹依旧
-
 ItemName.UpgradeHellstone=存储升级珠(狱岩)
 ItemTooltip.UpgradeHellstone=将存储单元升级至120容量\n<right>一个存储单元(血腥/魔金)可镶嵌
 

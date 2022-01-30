@@ -19,8 +19,6 @@ ItemName.StorageUnitHallowed=Hallowed Storage Unit
 ItemName.UpgradeLuminite=Luminite Storage Upgrade
 ItemTooltip.UpgradeLuminite=Upgrades Storage Unit to 320 capacity\n<right> a Blue Chlorophyte Storage Unit to use
 
-ItemTooltip.ShadowDiamond=Traces of light still linger inside
-
 ItemName.UpgradeHellstone=Hellstone Storage Upgrade
 ItemTooltip.UpgradeHellstone=Upgrades Storage Unit to 120 capacity\n<right> a Demonite/Crimtane Storage Unit to use
 

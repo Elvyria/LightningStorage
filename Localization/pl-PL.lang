@@ -18,9 +18,6 @@ ItemName.StorageUnitHallowed=Jednostka magazynująca (Święcona)
 ItemName.UpgradeLuminite=Ulepszenie jednostki magazynującej (Luminowany)
 ItemTooltip.UpgradeLuminite=Ulepsza jednostkę magazynującą do 320 miejsc\n<right> na Jednostkę magazynującą (Niebieski Chlorofit), aby użyć
 
-ItemName.ShadowDiamond=Mroczny Diament
-ItemTooltip.ShadowDiamond=Ślady światła wciąż pozostają w środku
-
 ItemName.UpgradeHellstone=Ulepszenie jednostki magazynującej (Piekielny kamień)
 ItemTooltip.UpgradeHellstone=Ulepsza jednostkę magazynującą do 120 miejsc\n<right> na Jednostkę magazynującą (Karmazynit/Demonit), aby użyć
 
