@@ -21,8 +21,8 @@ namespace MagicStorage.Items
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "RadiantJewel");
-			recipe.AddIngredient(ItemID.Diamond);
+			recipe.AddIngredient(ItemID.Diamond, 3);
+			recipe.AddIngredient(ItemID.Ruby, 7);
 			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -32,7 +32,6 @@ namespace MagicStorage.Items
 			{
 				recipe = new ModRecipe(mod);
 				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
-				recipe.AddIngredient(ItemID.Diamond);
 				recipe.AddTile(TileID.LunarCraftingStation);
 				recipe.SetResult(this);
 				recipe.AddRecipe();

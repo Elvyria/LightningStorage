@@ -39,8 +39,6 @@ ItemTooltip.UpgradeTerra=Upgrades Storage Unit to 640 capacity\n<right> a Lumini
 
 ItemName.StorageUnitLuminite=Luminite Storage Unit
 
-ItemTooltip.RadiantJewel='Shines with a dazzling light'
-
 ItemName.StorageUnitBlueChlorophyte=Blue Chlorophyte Storage Unit
 
 ItemName.SnowBiomeEmulator=Broken Snowglobe

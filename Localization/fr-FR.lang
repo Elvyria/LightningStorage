@@ -46,9 +46,6 @@ ItemName.StorageUnitLuminite=Unité de stockage (Luminite)
 
 ItemName.StorageComponent=Composant de Stockage
 
-ItemName.RadiantJewel=Bijou Rayonnant
-ItemTooltip.RadiantJewel='Il brille avec une lumière aveuglante'
-
 ItemName.StorageUnitBlueChlorophyte=Unité de stockage (Chlorophylle Bleu)
 
 ItemName.SnowBiomeEmulator=Emulateur de biome de neige

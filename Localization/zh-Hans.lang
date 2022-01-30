@@ -49,9 +49,6 @@ ItemName.StorageUnitLuminite=存储单元(夜明)
 
 ItemName.StorageComponent=存储组件
 
-ItemName.RadiantJewel=光芒四射的宝石
-ItemTooltip.RadiantJewel='闪耀着耀眼的光芒'
-
 ItemName.StorageUnitBlueChlorophyte=存储单元(蓝色叶绿)
 
 ItemName.SnowBiomeEmulator=雪地环境模拟器

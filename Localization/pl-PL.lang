@@ -46,9 +46,6 @@ ItemName.StorageUnitLuminite=Jednostka magazynująca (Luminowana)
 
 ItemName.StorageComponent=Komponent Magazynu
 
-ItemName.RadiantJewel=Promieniejący klejnot
-ItemTooltip.RadiantJewel='Świeci oślepiającym światłem'
-
 ItemName.StorageUnitBlueChlorophyte=Jednostka magazynująca (Niebieski Chlorofit)
 
 ItemName.SnowBiomeEmulator=Emulator Śnieżnego Biomu
