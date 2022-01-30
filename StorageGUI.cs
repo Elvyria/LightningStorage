@@ -25,6 +25,8 @@ namespace MagicStorage
 {
 	class StorageGUI : UIState
 	{
+		private bool isMouseHovering;
+
 		private const float inventoryScale = 0.85f;
 
 		private const int padding = 4;
@@ -225,14 +227,14 @@ namespace MagicStorage
 			// TODO: Check access and heart changes
 
 			Main.HidePlayerCraftingMenu = true;
+			foreach (UIElement element in Elements)
+			{
+				if (element.IsMouseHovering) {
+					isMouseHovering = true;
+					Main.LocalPlayer.mouseInterface = true;
 
-			if (IsMouseHovering)
-			{
-				Main.LocalPlayer.mouseInterface = true;
-			}
-			else
-			{
-				Main.LocalPlayer.mouseInterface = false;
+					break;
+				}
 			}
 
 			UpdateStackTimer();
@@ -250,7 +252,7 @@ namespace MagicStorage
 		{
 			base.Draw(spriteBatch);
 
-			if (IsMouseHovering)
+			if (isMouseHovering)
 			{
 				filterButtons.DrawText(spriteBatch);
 				sortButtons.DrawText(spriteBatch);

@@ -25,6 +25,8 @@ namespace MagicStorage
 {
 	class CraftingGUI : UIState
 	{
+		private bool isMouseHovering;
+
 		private const float inventoryScale = 0.85f;
 		private const float smallScale = 0.7f;
 
@@ -95,8 +97,8 @@ namespace MagicStorage
 
 		public override void OnInitialize()
 		{
-			float itemSlotWidth = Main.inventoryBackTexture.Width * inventoryScale;
-			float itemSlotHeight = Main.inventoryBackTexture.Height * inventoryScale;
+			float slotWidth = Main.inventoryBackTexture.Width * inventoryScale;
+			float slotHeight = Main.inventoryBackTexture.Height * inventoryScale;
 			float smallSlotWidth = Main.inventoryBackTexture.Width * smallScale;
 			float smallSlotHeight = Main.inventoryBackTexture.Height * smallScale;
 
@@ -104,12 +106,15 @@ namespace MagicStorage
 			float panelLeft = 20f;
 
 			UIPanel panel = new UIPanel();
-			float innerPanelWidth = columns * (itemSlotWidth + padding) + 20f + padding;
+			float innerPanelLeft = panelLeft + panel.PaddingLeft;
+			float innerPanelWidth = columns * (slotWidth + padding) + 20f + padding;
 			float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
-			panel.Top.Set(Main.instance.invBottom + 60, 0f);
-			panel.Left.Set(20f, 0f);
+			float panelHeight = Main.screenHeight - panelTop - 40f;
+			panel.Left.Set(panelLeft, 0f);
+			panel.Top.Set(panelTop, 0f);
 			panel.Width.Set(panelWidth, 0f);
-			panel.Height.Set(Main.screenHeight - Main.instance.invBottom - 80f, 0f);
+			panel.Height.Set(panelHeight, 0f);
+			panel.Recalculate();
 
 			UIPanel recipePanel = new UIPanel();
 			float recipeLeft = panelLeft + panelWidth;
@@ -229,7 +234,7 @@ namespace MagicStorage
 			recipeZone.SetScrollbar(scrollbar);
 			panel.Append(scrollbar);
 
-			recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (itemSlotHeight + 2 * recipeZone.padding)));
+			recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + 2 * recipeZone.padding)));
 
 			UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.Common.SelectedRecipe"));
 			recipePanel.Append(recipePanelHeader);
@@ -240,7 +245,7 @@ namespace MagicStorage
 
 			previewZone = new UISlotZone(GetSelectedItem, inventoryScale);
 			previewZone.Top.Set(0f, 0f);
-			previewZone.Left.Set(-itemSlotWidth, 1f);
+			previewZone.Left.Set(-slotWidth, 1f);
 			recipePanel.Append(previewZone);
 
 			ingredientZone = new UISlotZone(GetIngredient, smallScale);
@@ -275,8 +280,8 @@ namespace MagicStorage
 			recipePanel.Append(craftButton);
 
 			resultZone = new UISlotZone(GetResultItem, inventoryScale);
-			resultZone.Left.Set(-itemSlotWidth, 1f);
-			resultZone.Top.Set(-itemSlotHeight, 1f);
+			resultZone.Left.Set(-slotWidth, 1f);
+			resultZone.Top.Set(-slotHeight, 1f);
 			resultZone.OnMouseDown += PressResult;
 			recipePanel.Append(resultZone);
 
@@ -294,6 +299,7 @@ namespace MagicStorage
 			}
 
 			recipePanel.Height.Set(recipeHeight, 0f);
+			recipePanel.Recalculate();
 
 			Append(panel);
 			Append(recipePanel);
@@ -345,10 +351,14 @@ namespace MagicStorage
 			// TODO: Check access and heart changes
 
 			Main.HidePlayerCraftingMenu = true;
-
-			if (IsMouseHovering)
+			foreach (UIElement element in Elements)
 			{
-				Main.LocalPlayer.mouseInterface = true;
+				if (element.IsMouseHovering) {
+					isMouseHovering = true;
+					Main.LocalPlayer.mouseInterface = true;
+
+					break;
+				}
 			}
 
 			UpdateStackTimer();
@@ -472,7 +482,7 @@ namespace MagicStorage
 		{
 			base.Draw(spriteBatch);
 
-			if (IsMouseHovering)
+			if (isMouseHovering)
 			{
 				recipeButtons.DrawText(spriteBatch);
 				filterButtons.DrawText(spriteBatch);
