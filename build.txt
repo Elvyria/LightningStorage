@@ -5,4 +5,5 @@ homepage = https://github.com/Elvyria/MagicStorage
 hideCode = false
 hideResources = false
 includeSource = false
+includePDB = false
 buildIgnore = .git/*
