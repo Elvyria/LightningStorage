@@ -7,4 +7,6 @@
 * All sorting and filtering algorithms where reworked and now around 10 times faster.
 * Slot for craft recipe result preview.
 * Click on required ingredients to show recipe. No more need to search everything with hands. 
-* Ingredient selection now work as you expect. Select the one you WANT to craft from.
+* Removed Shadow Diamond and Radiant Jewel.
+* Removed recipe integrations with [Legend of Terraria 3](https://forums.terraria.org/index.php?threads/legend-of-terraria-3.44805/) and [Elemental Unleash](https://forums.terraria.org/index.php?threads/elemental-unleash-bluemagics-endgame-bosses-mod.45905/).
+* Localization is [separated](Localization) from code.
