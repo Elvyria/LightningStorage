@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace MagicStorage.Components
@@ -64,32 +59,30 @@ namespace MagicStorage.Components
 
 		public abstract Item TryWithdraw(Item lookFor, bool locked = false);
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = new TagCompound();
 			tag.Set("Inactive", inactive);
 			TagCompound tagCenter = new TagCompound();
 			tagCenter.Set("X", center.X);
 			tagCenter.Set("Y", center.Y);
 			tag.Set("Center", tagCenter);
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
 			inactive = tag.GetBool("Inactive");
 			TagCompound tagCenter = tag.GetCompound("Center");
 			center = new Point16(tagCenter.GetShort("X"), tagCenter.GetShort("Y"));
 		}
 
-		public override void NetSend(BinaryWriter writer, bool lightSend)
+		public override void NetSend(BinaryWriter writer)
 		{
 			writer.Write(inactive);
 			writer.Write(center.X);
 			writer.Write(center.Y);
 		}
 
-		public override void NetReceive(BinaryReader reader, bool lightReceive)
+		public override void NetReceive(BinaryReader reader)
 		{
 			inactive = reader.ReadBoolean();
 			center = new Point16(reader.ReadInt16(), reader.ReadInt16());

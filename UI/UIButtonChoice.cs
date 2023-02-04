@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using Terraria;
 using Terraria.Localization;
 using Terraria.UI;
@@ -13,15 +15,15 @@ namespace MagicStorage.UI
 		private const int padding = 8;
 		private int hoverButton = -1;
 
-		private static readonly Texture2D backTexture = MagicStorage.Instance.GetTexture("Assets/SortButtonBackground");
-		private static readonly Texture2D backTextureActive = MagicStorage.Instance.GetTexture("Assets/SortButtonBackgroundActive");
+		private static readonly Asset<Texture2D> backTexture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackground");
+		private static readonly Asset<Texture2D> backTextureActive = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackgroundActive");
 
-		private Texture2D[] textures;
+		private Asset<Texture2D>[] textures;
 		private LocalizedText[] labels;
 
 		public int choice = 0;
 
-		public UIButtonChoice(Texture2D[] textures, LocalizedText[] labels)
+		public UIButtonChoice(Asset<Texture2D>[] textures, LocalizedText[] labels)
 		{
 			this.textures = textures;
 			this.labels = labels;
@@ -73,11 +75,11 @@ namespace MagicStorage.UI
 			CalculatedStyle dim = GetDimensions();
 			for (int k = 0; k < textures.Length; k++)
 			{
-				Texture2D texture = k == choice ? backTextureActive : backTexture;
+				Texture2D texture = k == choice ? backTextureActive.Value : backTexture.Value;
 				Vector2 drawPos = new Vector2(dim.X + k * (size + padding), dim.Y);
 				Color color = hoverButton != -1 && hoverButton == k ? Color.Silver : Color.White;
 				Main.spriteBatch.Draw(texture, drawPos, color);
-				Main.spriteBatch.Draw(textures[k], drawPos + new Vector2(1f), Color.White);
+				Main.spriteBatch.Draw(textures[k].Value, drawPos + new Vector2(1f), Color.White);
 			}
 		}
 

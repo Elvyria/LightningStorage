@@ -1,0 +1,233 @@
+
+Mods: {
+	MagicStorage: {
+		Items: {
+			UpgradeBlueChlorophyte: {
+				DisplayName: Amélioration d'Unité de stockage (Chlorophylle Bleu)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 240
+					<right> l'unité de stockage (Sacré) pour utiliser
+					'''
+			}
+
+			PortableAccess: {
+				/* DisplayName: Portable Remote Storage Access */
+				/* Tooltip:
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					''' */
+			}
+
+			UpgradeCrimtane: {
+				DisplayName: Amélioration d'Unité de stockage (Carmitane)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 80
+					<right> l'unité de stockage pour utiliser
+					'''
+			}
+
+			CraftingAccess: {
+				DisplayName: Interface de Stockage Artisanat
+			}
+
+			UpgradeHallowed: {
+				DisplayName: Amélioration d'Unité de stockage (Sacré)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 160
+					<right> l'unité de stockage (Infernale) pour utiliser
+					'''
+			}
+
+			StorageUnitTerra: {
+				DisplayName: Unité de stockage (Terra)
+			}
+
+			StorageUnitHallowed: {
+				DisplayName: Unité de stockage (Sacré)
+			}
+
+			UpgradeLuminite: {
+				DisplayName: Amélioration d'Unité de stockage (Luminite)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 320
+					<right> l'unité de stockage (Chlorophylle Bleu) pour utiliser
+					'''
+			}
+
+			UpgradeHellstone: {
+				DisplayName: Amélioration d'Unité de stockage (Infernale)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 120
+					<right> l'unité de stockage (Démonite/Carmitane) pour utiliser
+					'''
+			}
+
+			UpgradeDemonite: {
+				DisplayName: Amélioration d'Unité de stockage (Démonite)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 80
+					<right> l'unité de stockage pour utiliser
+					'''
+			}
+
+			StorageDeactivator: {
+				DisplayName: Baguetter d'unité de stockage
+				Tooltip: <right> pour changer l'unité de stockage actif/inactif
+			}
+
+			StorageUnitHellstone: {
+				DisplayName: Unité de stockage (Infernale)
+			}
+
+			StorageUnitDemonite: {
+				DisplayName: Unité de stockage (Démonite)
+			}
+
+			StorageUnitCrimtane: {
+				DisplayName: Unité de stockage (Carmitane)
+			}
+
+			UpgradeTerra: {
+				DisplayName: Amélioration d'Unité de stockage (Terra)
+				Tooltip:
+					'''
+					améliore la capacité de unité de stockage à 640
+					<right> l'unité de stockage (Luminite) pour utiliser
+					'''
+			}
+
+			StorageUnitLuminite: {
+				DisplayName: Unité de stockage (Luminite)
+			}
+
+			StorageUnitBlueChlorophyte: {
+				DisplayName: Unité de stockage (Chlorophylle Bleu)
+			}
+
+			SnowBiomeEmulator: {
+				DisplayName: Emulateur de biome de neige
+				Tooltip: Permet à L'interface de Stockage Artisanat de créer des recettes de biome de neige
+			}
+
+			StorageUnitTiny: {
+				DisplayName: Unité de Stockage Miniscule
+			}
+
+			RemoteAccess: {
+				DisplayName: Fenêtre d'accès éloigné
+			}
+
+			LocatorDisk: {
+				DisplayName: Disque Localisateur
+				Tooltip:
+					'''
+					<right> Cœur du Stockage pour enregistrer son emplacement
+					<right> Stockage Éloigné pour le mettre en place
+					N'est pas détruit lors de son utilisation
+					'''
+			}
+
+			StorageConnector: {
+				DisplayName: Connecteur de Stockage
+			}
+
+			CreativeStorageUnit: {
+				DisplayName: Unité de Stockage Créatif
+			}
+
+			StorageHeart: {
+				DisplayName: Cœur de Stockage
+			}
+
+			StorageUnit: {
+				DisplayName: Unité de stockage
+			}
+
+			StorageComponent: {
+				DisplayName: Composant de Stockage
+			}
+
+			StorageAccess: {
+				DisplayName: Access de Stockage
+			}
+
+			Locator: {
+				DisplayName: Localisateur
+				Tooltip:
+					'''
+					<right> le Cœur de Stockage pour enregistrer son emplacement
+					<right> le Stockage Éloigné pour le mettre en place
+					'''
+			}
+		}
+
+		Common: {
+			CraftingStations: Stations d'artisanat
+			DepositAll: Déposer tout
+			FilterAll: Filtrer tout
+			FilterEquips: Filtrer par Équipement
+			FilterMisc: Filtrer par miscellanées
+			FilterPotions: Filtrer par potions
+			FilterTiles: Filtrer par placeable
+			FilterTools: Filtrer par outils
+			FilterWeapons: Filtrer par armes
+			Ingredients: Ingrédients
+			RecipeAll: Afficher toutes les recettes
+			RecipeAvailable: Afficher les recettes disponibles
+			Recipes: Recettes
+			Search: Rechercher
+			SearchMod: Recherche par mod
+			SearchName: Recherche par nom
+			SelectedRecipe: Recette sélectionnée
+			SetTo: Mis à: X={0}, Y={1}
+			SnowBiomeBlock: Bloc de biome de neige
+			SortDefault: Tri Standard
+			SortID: Trier par ID
+			SortName: Trier par nom
+			SortStack: Trier par piles
+			StoredItems: Ingrédients Stockés
+		}
+
+		Tiles: {
+			CraftingAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			CreativeStorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+
+			RemoteAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageComponent: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageConnector: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageHeart: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+		}
+	}
+}

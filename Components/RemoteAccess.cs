@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.ID;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
+using Terraria;
+
 using MagicStorage.Items;
 
 namespace MagicStorage.Components
@@ -15,15 +11,15 @@ namespace MagicStorage.Components
 	{
 		public override ModTileEntity GetTileEntity()
 		{
-			return mod.GetTileEntity("TERemoteAccess");
+			return ModContent.GetInstance<TERemoteAccess>();
 		}
 
 		public override int ItemType(int frameX, int frameY)
 		{
-			return mod.ItemType("RemoteAccess");
+			return ModContent.ItemType<Items.RemoteAccess>();
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -34,26 +30,26 @@ namespace MagicStorage.Components
 			return ((TERemoteAccess)ent).GetHeart();
 		}
 
-		public override bool NewRightClick(int i, int j)
+		public override bool RightClick(int i, int j)
 		{
 			Player player = Main.player[Main.myPlayer];
 			Item item = player.inventory[player.selectedItem];
-			if (item.type == mod.ItemType("Locator") || item.type == mod.ItemType("LocatorDisk"))
+			if (item.type == ModContent.ItemType<Locator>() || item.type == ModContent.ItemType<LocatorDisk>())
 			{
-				if (Main.tile[i, j].frameX % 36 == 18)
+				if (Main.tile[i, j].TileFrameX % 36 == 18)
 				{
 					i--;
 				}
-				if (Main.tile[i, j].frameY % 36 == 18)
+				if (Main.tile[i, j].TileFrameX % 36 == 18)
 				{
 					j--;
 				}
 				TERemoteAccess ent = (TERemoteAccess)TileEntity.ByPosition[new Point16(i, j)];
-				Locator locator = (Locator)item.modItem;
+				Locator locator = (Locator)item.ModItem;
 				string message;
 				if (ent.TryLocate(locator.location, out message))
 				{
-					if (item.type == mod.ItemType("LocatorDisk"))
+					if (item.type == ModContent.ItemType<Items.LocatorDisk>())
 					{
 						locator.location = new Point16(-1, -1);
 					}
@@ -67,11 +63,11 @@ namespace MagicStorage.Components
 					Main.mouseItem = item.Clone();
 				}
 				Main.NewText(message);
-                return true;
+				return true;
 			}
 			else
 			{
-				return base.NewRightClick(i, j);
+				return base.RightClick(i, j);
 			}
 		}
 	}

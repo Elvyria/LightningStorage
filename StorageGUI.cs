@@ -1,25 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+
+using ReLogic.Content;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameInput;
+using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.UI;
-
-using ReLogic.Graphics;
 
 using MagicStorage.UI;
 using MagicStorage.Components;
 using MagicStorage.Sorting;
+
+using UISearchBar = MagicStorage.UI.UISearchBar;
 
 namespace MagicStorage
 {
@@ -56,8 +56,8 @@ namespace MagicStorage
 
 		public override void OnInitialize()
 		{
-			float slotWidth = Main.inventoryBackTexture.Width * inventoryScale;
-			float slotHeight = Main.inventoryBackTexture.Height * inventoryScale;
+			float slotWidth = TextureAssets.InventoryBack.Value.Width * inventoryScale;
+			float slotHeight = TextureAssets.InventoryBack.Value.Height * inventoryScale;
 
 			float panelTop = Main.instance.invBottom + 60;
 			float panelLeft = 20f;
@@ -78,12 +78,12 @@ namespace MagicStorage
 			topBar.Height.Set(32f, 0f);
 			panel.Append(topBar);
 
-			sortButtons = new UIButtonChoice(new Texture2D[]
+			sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
 					{
-					Main.inventorySortTexture[0],
-					MagicStorage.Instance.GetTexture("Assets/SortID"),
-					MagicStorage.Instance.GetTexture("Assets/SortName"),
-					MagicStorage.Instance.GetTexture("Assets/SortNumber")
+					TextureAssets.InventorySort[0],
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortNumber")
 					},
 					new LocalizedText[]
 					{
@@ -130,15 +130,15 @@ namespace MagicStorage
 
 			panel.Append(topBar2);
 
-			filterButtons = new UIButtonChoice(new Texture2D[]
+			filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
 					{
-					MagicStorage.Instance.GetTexture("Assets/FilterAll"),
-					MagicStorage.Instance.GetTexture("Assets/FilterMelee"),
-					MagicStorage.Instance.GetTexture("Assets/FilterPickaxe"),
-					MagicStorage.Instance.GetTexture("Assets/FilterArmor"),
-					MagicStorage.Instance.GetTexture("Assets/FilterPotion"),
-					MagicStorage.Instance.GetTexture("Assets/FilterTile"),
-					MagicStorage.Instance.GetTexture("Assets/FilterMisc"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
+					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
 					},
 					new LocalizedText[]
 					{
@@ -226,7 +226,7 @@ namespace MagicStorage
 
 			// TODO: Check access and heart changes
 
-			Main.HidePlayerCraftingMenu = true;
+			Main.hidePlayerCraftingMenu = true;
 			foreach (UIElement element in Elements)
 			{
 				if (element.IsMouseHovering) {
@@ -333,7 +333,7 @@ namespace MagicStorage
 			if (TryDepositAll())
 			{
 				RefreshItems();
-				Main.PlaySound(7, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.Grab);
 			}
 		}
 
@@ -359,7 +359,7 @@ namespace MagicStorage
 
 				if (ItemSlot.ShiftInUse)
 				{
-					Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, false, true);
+					Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryUIToInventorySettings);
 				}
 
 				changed = true;
@@ -368,7 +368,7 @@ namespace MagicStorage
 			if (changed)
 			{
 				RefreshItems();
-				Main.PlaySound(7, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.Grab);
 			}
 		}
 
@@ -401,7 +401,7 @@ namespace MagicStorage
 					Main.mouseItem = DoWithdraw(item);
 					changed = true;
 				}
-				else if (Main.mouseItem.IsTheSameAs(item) && Main.mouseItem.stack < item.maxStack)
+				else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < item.maxStack)
 				{
 					DoWithdraw(item);
 					Main.mouseItem.stack += 1;
@@ -412,7 +412,7 @@ namespace MagicStorage
 			if (changed)
 			{
 				RefreshItems();
-				Main.PlaySound(12, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.MenuTick);
 			}
 		}
 

@@ -1,0 +1,233 @@
+
+Mods: {
+	MagicStorage: {
+		Items: {
+			UpgradeBlueChlorophyte: {
+				DisplayName: Синее Хлорофитовое Улучшение Ячейки
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 240
+					<right> на Святой Ячейке Хранилища для улучшения
+					'''
+			}
+
+			PortableAccess: {
+				DisplayName: Портативный Модуль Удаленного Доступа к Хранилищу
+				Tooltip:
+					'''
+					<right> по Cердцу Хранилища чтобы запомнить его местоположение
+					В данный момент Сердце Хранилища не привязанно
+					Используйте что бы получить доступ к вашему Хранилищу
+					'''
+			}
+
+			UpgradeCrimtane: {
+				DisplayName: Кримтановое Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 80
+					<right> на Ячейке Хранилища для улучшения
+					'''
+			}
+
+			CraftingAccess: {
+				DisplayName: Модуль Создания Предметов
+			}
+
+			UpgradeHallowed: {
+				DisplayName: Святое Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 160
+					<right> на Адской Ячейке Хранилища для улучшения
+					'''
+			}
+
+			StorageUnitTerra: {
+				DisplayName: Терра Ячейка Хранилища
+			}
+
+			StorageUnitHallowed: {
+				DisplayName: Святая Ячейка Хранилища
+			}
+
+			UpgradeLuminite: {
+				DisplayName: Люминитовое Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 320
+					<right> на Синей Хлорофитовой Ячейке Хранилища для улучшения
+					'''
+			}
+
+			UpgradeHellstone: {
+				DisplayName: Адское Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 120
+					<right> на Демонитовой/Кримтановой Ячейке Хранилища для улучшения
+					'''
+			}
+
+			UpgradeDemonite: {
+				DisplayName: Демонитовое Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 80
+					<right> на Ячейке Хранилища для улучшения
+					'''
+			}
+
+			StorageDeactivator: {
+				DisplayName: Жезл Ячейки Хранилища
+				Tooltip: <right> на Ячейке Хранилища что бы активировать/деактивировать ее
+			}
+
+			StorageUnitHellstone: {
+				DisplayName: Адская Ячейка Хранилища
+			}
+
+			StorageUnitDemonite: {
+				DisplayName: Демонитовая Ячейка Хранилища
+			}
+
+			StorageUnitCrimtane: {
+				DisplayName: Кримтановая Ячейка Хранилища
+			}
+
+			UpgradeTerra: {
+				DisplayName: Терра Улучшение Ячейки Хранилища
+				Tooltip:
+					'''
+					Увеличивает количество слотов в Ячейке Хранилища до 640
+					<right> на Люминитовой Ячейке Хранилища для улучшения
+					'''
+			}
+
+			StorageUnitLuminite: {
+				DisplayName: Люминитовая Ячейка Хранилища
+			}
+
+			StorageUnitBlueChlorophyte: {
+				DisplayName: Синяя Хлорофитовая Ячейка Хранилища
+			}
+
+			SnowBiomeEmulator: {
+				DisplayName: Сломанная Снежная Сфера
+				Tooltip: Позволяет Модулю Создания Предметов создавать предметы требующие нахождения игрока в снежном биоме
+			}
+
+			StorageUnitTiny: {
+				DisplayName: Малая Ячейка Хранилища
+			}
+
+			RemoteAccess: {
+				DisplayName: Модуль Удаленного Доступа к Хранилищу
+			}
+
+			LocatorDisk: {
+				DisplayName: Локатор с CD Приводом
+				Tooltip:
+					'''
+					<right> по Cердцу Хранилища чтобы запомнить его местоположение
+					<right> на Модуль Удаленного Доступа к Хранилищу чтобы привязать его к Сердцу Хранилища
+					Не пропадает при использовании
+					'''
+			}
+
+			StorageConnector: {
+				DisplayName: Соединитель Ячеек Хранилища
+			}
+
+			CreativeStorageUnit: {
+				DisplayName: Креативная Ячейка Хранилища
+			}
+
+			StorageHeart: {
+				DisplayName: Сердце Хранилища
+			}
+
+			StorageUnit: {
+				DisplayName: Ячейка Хранилища
+			}
+
+			StorageComponent: {
+				DisplayName: Компонент Хранилища
+			}
+
+			StorageAccess: {
+				DisplayName: Модуль Доступа к Хранилищу
+			}
+
+			Locator: {
+				DisplayName: Локатор
+				Tooltip:
+					'''
+					<right> по Cердцу Хранилища чтобы запомнить его местоположение
+					<right> на Модуль Удаленного Доступа к Хранилищу чтобы привязать его к Сердцу Хранилища
+					'''
+			}
+		}
+
+		Common: {
+			CraftingStations: Станции создания
+			/* DepositAll: Deposit All */
+			FilterAll: Фильтр (Всё)
+			FilterEquips: Фильтр (Снаряжения)
+			FilterMisc: Фильтр (Разное)
+			FilterPotions: Фильтр (Зелья)
+			FilterTiles: Фильтр (Размещаемое)
+			FilterTools: Фильтр (Инструменты)
+			FilterWeapons: Фильтр (Оружия)
+			/* Ingredients: Ingredients */
+			/* RecipeAll: Show all recipes */
+			/* RecipeAvailable: Show available recipes */
+			Recipes: Рецепты
+			Search: Поиск
+			SearchMod: Поиск по моду
+			SearchName: Поиск по имени
+			/* SelectedRecipe: Selected Recipe */
+			SetTo: Переместить всё
+			/* SnowBiomeBlock: Snow Biome Block */
+			SortDefault: Стандартная сортировка
+			SortID: Сортировка по ID
+			SortName: Сортировка по имени
+			SortStack: Сортировка по стакам
+			/* StoredItems: Stored Ingredients */
+		}
+
+		Tiles: {
+			CraftingAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			CreativeStorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+
+			RemoteAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageComponent: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageConnector: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageHeart: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+		}
+	}
+}

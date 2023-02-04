@@ -1,10 +1,7 @@
-﻿using System;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
 using MagicStorage.Components;
 
@@ -15,29 +12,29 @@ namespace MagicStorage.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 24;
-			item.height = 28;
-			item.useTurn = true;
-			item.autoReuse = true;
-			item.useAnimation = 15;
-			item.useTime = 15;
-			item.useStyle = 1;
-			item.tileBoost = 20;
-			item.rare = 1;
-			item.value = Item.sellPrice(0, 0, 40, 0);
+			Item.width = 24;
+			Item.height = 28;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 15;
+			Item.useStyle = 1;
+			Item.tileBoost = 20;
+			Item.rare = 1;
+			Item.value = Item.sellPrice(0, 0, 40, 0);
 		}
 
-		public override bool UseItem(Player player)
+		public override bool? UseItem(Player player)
 		{
 			if (player.whoAmI == Main.myPlayer && player.itemAnimation > 0 && player.itemTime == 0 && player.controlUseItem)
 			{
 				int i = Player.tileTargetX;
 				int j = Player.tileTargetY;
-				if (Main.tile[i, j].frameX % 36 == 18)
+				if (Main.tile[i, j].TileFrameX % 36 == 18)
 				{
 					i--;
 				}
-				if (Main.tile[i, j].frameY % 36 == 18)
+				if (Main.tile[i, j].TileFrameY % 36 == 18)
 				{
 					j--;
 				}
@@ -64,12 +61,11 @@ namespace MagicStorage.Items
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ActuationRod);
-			recipe.AddIngredient(null, "StorageComponent");
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient(ItemID.ActuationRod)
+				.AddIngredient(null, "StorageComponent")
+				.AddTile(TileID.Anvils)
+				.Register();
 		}
 	}
 }

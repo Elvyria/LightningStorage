@@ -1,8 +1,6 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
 namespace MagicStorage.Items
 {
@@ -11,21 +9,20 @@ namespace MagicStorage.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 12;
-			item.height = 12;
-			item.maxStack = 99;
-			item.rare = 1;
-			item.value = Item.sellPrice(0, 0, 32, 0);
+			Item.width = 12;
+			Item.height = 12;
+			Item.maxStack = 99;
+			Item.rare = 1;
+			Item.value = Item.sellPrice(0, 0, 32, 0);
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.CrimtaneBar, 10);
-			recipe.AddIngredient(ItemID.Amethyst);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient(ItemID.CrimtaneBar, 10)
+				.AddIngredient(ItemID.Amethyst)
+				.AddTile(TileID.Anvils)
+				.Register();
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace MagicStorage.Sorting
 {
@@ -66,7 +67,7 @@ namespace MagicStorage.Sorting
 				Item nextItem = items[i + 1];
 				int shift = 0;
 
-				if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+				if (item.type == nextItem.type && item.prefix == nextItem.prefix)
 				{
 					item = item.Clone();
 					items[i] = item;
@@ -77,7 +78,7 @@ namespace MagicStorage.Sorting
 					{
 						nextItem = items[j];
 
-						if (item.IsTheSameAs(nextItem) && item.prefix == nextItem.prefix)
+						if (item.type == nextItem.type && item.prefix == nextItem.prefix)
 						{
 							item.stack += nextItem.stack;
 
@@ -185,15 +186,15 @@ namespace MagicStorage.Sorting
 
 				if (Weapon(item))
 				{
-					if (item.melee)
+					if (item.CountsAsClass(DamageClass.Melee))
 						rating = SortRating.WeaponMelee;
-					else if (item.ranged)
+					else if (item.CountsAsClass(DamageClass.Ranged))
 						rating = SortRating.WeaponRanged;
-					else if (item.magic)
+					else if (item.CountsAsClass(DamageClass.Magic))
 						rating = SortRating.WeaponMagic;
-					else if (item.summon)
+					else if (item.CountsAsClass(DamageClass.Summon))
 						rating = SortRating.WeaponSummon;
-					else if (item.thrown)
+					else if (item.CountsAsClass(DamageClass.Throwing))
 						rating = SortRating.WeaponThrown;
 					else
 						rating = SortRating.Weapon;
@@ -316,7 +317,7 @@ namespace MagicStorage.Sorting
 
 		public static bool FilterName(Item item, string mod, string name)
 		{
-			string modName = item.modItem == null ? "Terraria" : item.modItem.mod.DisplayName;
+			string modName = item.ModItem == null ? "Terraria" : item.ModItem.Mod.DisplayName;
 
 			return item.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0 && modName.IndexOf(mod, StringComparison.OrdinalIgnoreCase) >= 0;
 		}

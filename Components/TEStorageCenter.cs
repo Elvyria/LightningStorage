@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace MagicStorage.Components
@@ -99,9 +94,8 @@ namespace MagicStorage.Components
 			return TileEntity.ByPosition.ContainsKey(point) && TileEntity.ByPosition[point] is TEStorageCenter;
 		}
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = new TagCompound();
 			List<TagCompound> tagUnits = new List<TagCompound>();
 			foreach (Point16 storageUnit in storageUnits)
 			{
@@ -110,11 +104,11 @@ namespace MagicStorage.Components
 				tagUnit.Set("Y", storageUnit.Y);
 				tagUnits.Add(tagUnit);
 			}
+
 			tag.Set("StorageUnits", tagUnits);
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
 			foreach (TagCompound tagUnit in tag.GetList<TagCompound>("StorageUnits"))
 			{
@@ -122,7 +116,7 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetSend(BinaryWriter writer, bool lightSend)
+		public override void NetSend(BinaryWriter writer)
 		{
 			writer.Write((short)storageUnits.Count);
 			foreach (Point16 storageUnit in storageUnits)
@@ -132,7 +126,7 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetReceive(BinaryReader reader, bool lightReceive)
+		public override void NetReceive(BinaryReader reader)
 		{
 			int count = reader.ReadInt16();
 			for (int k = 0; k < count; k++)

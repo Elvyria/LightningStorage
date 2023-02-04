@@ -1,13 +1,8 @@
-using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-using Microsoft.Xna.Framework;
-
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -28,9 +23,9 @@ namespace MagicStorage.Components
 
 		public override bool ValidTile(Tile tile)
 		{
-			return tile.type == mod.TileType("CraftingAccess")
-				&& tile.frameX == 0
-				&& tile.frameY == 0;
+			return tile.TileType == ModContent.TileType<CraftingAccess>()
+				&& tile.TileFrameX == 0
+				&& tile.TileFrameY == 0;
 		}
 
 		public void TryDepositStation(Item item)
@@ -126,15 +121,12 @@ namespace MagicStorage.Components
 			return item;
 		}
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = new TagCompound();
 			tag["Stations"] = stations.Select(item => ItemIO.Save(item)).ToList();
-
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
 			IList<TagCompound> listStations = tag.GetList<TagCompound>("Stations");
 			if (listStations != null && listStations.Any())
@@ -143,7 +135,7 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetSend(BinaryWriter writer, bool lightSend)
+		public override void NetSend(BinaryWriter writer)
 		{
 			foreach (Item item in stations)
 			{
@@ -151,7 +143,7 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetReceive(BinaryReader reader, bool lightReceive)
+		public override void NetReceive(BinaryReader reader)
 		{
 			for (int k = 0; k < stations.Length; k++)
 			{

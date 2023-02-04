@@ -1,27 +1,24 @@
-﻿using System;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
 namespace MagicStorage.Items
 {
 	public class CreativeStorageUnit : ModItem
 	{
-		
+
 		public override void SetDefaults()
 		{
-			item.width = 26;
-			item.height = 26;
-			item.maxStack = 99;
-			item.useTurn = true;
-			item.autoReuse = true;
-			item.useAnimation = 15;
-			item.useTime = 10;
-			item.useStyle = 1;
-			item.consumable = true;
-			item.rare = 0;
-			item.createTile = mod.TileType("CreativeStorageUnit");
+			Item.width = 26;
+			Item.height = 26;
+			Item.maxStack = 99;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 10;
+			Item.useStyle = 1;
+			Item.consumable = true;
+			Item.rare = 0;
+			Item.createTile = ModContent.TileType<Components.CreativeStorageUnit>();
 		}
 	}
 }

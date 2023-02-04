@@ -1,0 +1,233 @@
+
+Mods: {
+	MagicStorage: {
+		Items: {
+			UpgradeBlueChlorophyte: {
+				DisplayName: Blue Chlorophyte Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 240 capacity
+					<right> a Hallowed Storage Unit to use
+					'''
+			}
+
+			PortableAccess: {
+				DisplayName: Portable Remote Storage Access
+				Tooltip:
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					'''
+			}
+
+			UpgradeCrimtane: {
+				DisplayName: Crimtane Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 80 capacity
+					<right> a Storage Unit to use
+					'''
+			}
+
+			CraftingAccess: {
+				DisplayName: Storage Crafting Interface
+			}
+
+			UpgradeHallowed: {
+				DisplayName: Hallowed Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 160 capacity
+					<right> a Hellstone Storage Unit to use
+					'''
+			}
+
+			StorageUnitTerra: {
+				DisplayName: Terra Storage Unit
+			}
+
+			StorageUnitHallowed: {
+				DisplayName: Hallowed Storage Unit
+			}
+
+			UpgradeLuminite: {
+				DisplayName: Luminite Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 320 capacity
+					<right> a Blue Chlorophyte Storage Unit to use
+					'''
+			}
+
+			UpgradeHellstone: {
+				DisplayName: Hellstone Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 120 capacity
+					<right> a Demonite/Crimtane Storage Unit to use
+					'''
+			}
+
+			UpgradeDemonite: {
+				DisplayName: Demonite Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 80 capacity
+					<right> a Storage Unit to use
+					'''
+			}
+
+			StorageDeactivator: {
+				DisplayName: Storage Unit Wand
+				Tooltip: <right> Storage Unit to toggle between Active/Inactive
+			}
+
+			StorageUnitHellstone: {
+				DisplayName: Hellstone Storage Unit
+			}
+
+			StorageUnitDemonite: {
+				DisplayName: Demonite Storage Unit
+			}
+
+			StorageUnitCrimtane: {
+				DisplayName: Crimtane Storage Unit
+			}
+
+			UpgradeTerra: {
+				DisplayName: Terra Storage Upgrade
+				Tooltip:
+					'''
+					Upgrades Storage Unit to 640 capacity
+					<right> a Luminite Storage Unit to use
+					'''
+			}
+
+			StorageUnitLuminite: {
+				DisplayName: Luminite Storage Unit
+			}
+
+			StorageUnitBlueChlorophyte: {
+				DisplayName: Blue Chlorophyte Storage Unit
+			}
+
+			SnowBiomeEmulator: {
+				DisplayName: Broken Snowglobe
+				Tooltip: Allows the Storage Crafting Interface to craft snow biome recipes
+			}
+
+			StorageUnitTiny: {
+				DisplayName: Tiny Storage Unit
+			}
+
+			RemoteAccess: {
+				DisplayName: Remote Storage Access
+			}
+
+			LocatorDisk: {
+				DisplayName: Locator Drive
+				Tooltip:
+					'''
+					<right> Storage Heart to store location
+					<right> Remote Storage Access to set it
+					Does not get destroyed upon use
+					'''
+			}
+
+			StorageConnector: {
+				DisplayName: Storage Connector
+			}
+
+			CreativeStorageUnit: {
+				DisplayName: Creative Storage Unit
+			}
+
+			StorageHeart: {
+				DisplayName: Storage Heart
+			}
+
+			StorageUnit: {
+				DisplayName: Storage Unit
+			}
+
+			StorageComponent: {
+				DisplayName: Storage Component
+			}
+
+			StorageAccess: {
+				DisplayName: Storage Access
+			}
+
+			Locator: {
+				DisplayName: Locator
+				Tooltip:
+					'''
+					<right> Storage Heart to store location
+					<right> Remote Storage Access to set it
+					'''
+			}
+		}
+
+		Common: {
+			CraftingStations: Crafting Stations
+			DepositAll: Deposit All
+			FilterAll: Filter All
+			FilterEquips: Filter Equipment
+			FilterMisc: Filter Misc
+			FilterPotions: Filter Potions
+			FilterTiles: Filter Placeables
+			FilterTools: Filter Tools
+			FilterWeapons: Filter Weapons
+			Ingredients: Ingredients
+			RecipeAll: Show all recipes
+			RecipeAvailable: Show available recipes
+			Recipes: Recipes
+			Search: Search
+			SearchMod: Search Mod
+			SearchName: Search Name
+			SelectedRecipe: Selected Recipe
+			SetTo: Set to: X={0}, Y={1}
+			SnowBiomeBlock: Snow Biome Block
+			SortDefault: Default Sorting
+			SortID: Sort by ID
+			SortName: Sort by Name
+			SortStack: Sort by Stacks
+			StoredItems: Stored Ingredients
+		}
+
+		Tiles: {
+			CraftingAccess: {
+				MapEntry: Magic Storage
+			}
+
+			CreativeStorageUnit: {
+				MapEntry: Magic Storage
+			}
+
+			RemoteAccess: {
+				MapEntry: Magic Storage
+			}
+
+			StorageAccess: {
+				MapEntry: Magic Storage
+			}
+
+			StorageComponent: {
+				MapEntry: Magic Storage
+			}
+
+			StorageConnector: {
+				MapEntry: Magic Storage
+			}
+
+			StorageHeart: {
+				MapEntry: Magic Storage
+			}
+
+			StorageUnit: {
+				MapEntry: Magic Storage
+			}
+		}
+	}
+}

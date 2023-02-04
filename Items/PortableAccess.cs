@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using Terraria.Localization;
 
 namespace MagicStorage.Items
@@ -15,24 +13,24 @@ namespace MagicStorage.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 28;
-			item.maxStack = 1;
-			item.rare = 11;
-			item.useStyle = 1;
-			item.useAnimation = 28;
-			item.useTime = 28;
-			item.value = Item.sellPrice(0, 10, 0, 0);
+			Item.width = 28;
+			Item.height = 28;
+			Item.maxStack = 1;
+			Item.rare = 11;
+			Item.useStyle = 1;
+			Item.useAnimation = 28;
+			Item.useTime = 28;
+			Item.value = Item.sellPrice(0, 10, 0, 0);
 		}
 
-		public override bool UseItem(Player player)
+		public override bool? UseItem(Player player)
 		{
 			if (player.whoAmI == Main.myPlayer)
 			{
 				if (location.X >= 0 && location.Y >= 0)
 				{
 					Tile tile = Main.tile[location.X, location.Y];
-					if (!tile.active() || tile.type != mod.TileType("StorageHeart") || tile.frameX != 0 || tile.frameY != 0)
+					if (!tile.HasTile || tile.TileType != ModContent.TileType<Components.StorageHeart>() || tile.TileFrameX != 0 || tile.TileFrameY != 0)
 					{
 						Main.NewText("Storage Heart is missing!");
 					}
@@ -54,14 +52,14 @@ namespace MagicStorage.Items
 			StoragePlayer modPlayer = player.GetModPlayer<StoragePlayer>();
 			if (player.sign > -1)
 			{
-				Main.PlaySound(11, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.MenuClose);
 				player.sign = -1;
 				Main.editSign = false;
 				Main.npcChatText = string.Empty;
 			}
 			if (Main.editChest)
 			{
-				Main.PlaySound(12, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.MenuTick);
 				Main.editChest = false;
 				Main.npcChatText = string.Empty;
 			}
@@ -72,7 +70,7 @@ namespace MagicStorage.Items
 			}
 			if (player.talkNPC > -1)
 			{
-				player.talkNPC = -1;
+				player.SetTalkNPC(-1);
 				Main.npcChatCornerItem = 0;
 				Main.npcChatText = string.Empty;
 			}
@@ -84,7 +82,7 @@ namespace MagicStorage.Items
 			if (prevOpen == toOpen)
 			{
 				modPlayer.CloseStorage();
-				Main.PlaySound(11, -1, -1, 1);
+				SoundEngine.PlaySound(SoundID.MenuClose);
 				Recipe.FindRecipes();
 			}
 			else
@@ -94,7 +92,7 @@ namespace MagicStorage.Items
 				modPlayer.timeSinceOpen = 0;
 				Main.playerInventory = true;
 				Main.recBigList = false;
-				Main.PlaySound(hadChestOpen || hadOtherOpen ? 12 : 10, -1, -1, 1);
+				SoundEngine.PlaySound(hadChestOpen || hadOtherOpen ? SoundID.MenuTick : SoundID.MenuOpen);
 				Recipe.FindRecipes();
 			}
 		}
@@ -104,11 +102,11 @@ namespace MagicStorage.Items
 			bool isSet = location.X >= 0 && location.Y >= 0;
 			for (int k = 0; k < lines.Count; k++)
 			{
-				if (isSet && lines[k].mod == "Terraria" && lines[k].Name == "Tooltip1")
+				if (isSet && lines[k].Mod == "Terraria" && lines[k].Name == "Tooltip1")
 				{
-					lines[k].text = Language.GetTextValue("Mods.MagicStorage.Common.SetTo", location.X, location.Y);
+					lines[k].Text = Language.GetTextValue("Mods.MagicStorage.Common.SetTo", location.X, location.Y);
 				}
-				else if (!isSet && lines[k].mod == "Terraria" && lines[k].Name == "Tooltip2")
+				else if (!isSet && lines[k].Mod == "Terraria" && lines[k].Name == "Tooltip2")
 				{
 					lines.RemoveAt(k);
 					k--;
@@ -118,23 +116,20 @@ namespace MagicStorage.Items
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod, "LocatorDisk");
-			recipe.AddIngredient(ItemID.Diamond, 3);
-			recipe.AddIngredient(ItemID.Ruby, 7);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient<LocatorDisk>()
+				.AddIngredient(ItemID.Diamond, 3)
+				.AddIngredient(ItemID.Ruby, 7)
+				.AddTile(TileID.LunarCraftingStation)
+				.Register();
 
-			Mod calamityMod = ModLoader.GetMod("CalamityMod");
-			if (calamityMod != null)
+			if (ModLoader.TryGetMod("CalamityMod", out var calamityMod))
 			{
-				recipe = new ModRecipe(mod);
-				recipe.AddIngredient(mod, "LocatorDisk");
-				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
-				recipe.AddTile(TileID.LunarCraftingStation);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
+				CreateRecipe()
+					.AddIngredient<LocatorDisk>()
+					.AddIngredient(calamityMod, "CosmiliteBar", 20)
+					.AddTile(TileID.LunarCraftingStation)
+					.Register();
 			}
 		}
 	}

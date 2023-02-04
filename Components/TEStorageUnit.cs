@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Threading;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -26,7 +24,7 @@ namespace MagicStorage.Components
 		{
 			get
 			{
-				int style = Main.tile[Position.X, Position.Y].frameY / 36;
+				int style = Main.tile[Position.X, Position.Y].TileFrameY / 36;
 				if (style == 8)
 				{
 					return 4;
@@ -78,7 +76,7 @@ namespace MagicStorage.Components
 
 		public override bool ValidTile(Tile tile)
 		{
-			return tile.type == mod.TileType("StorageUnit") && tile.frameX % 36 == 0 && tile.frameY % 36 == 0;
+			return tile.TileType == ModContent.TileType<StorageUnit>() && tile.TileFrameX % 36 == 0 && tile.TileFrameY % 36 == 0;
 		}
 
 		public override bool HasSpaceInStackFor(Item check, bool locked = false)
@@ -264,7 +262,7 @@ namespace MagicStorage.Components
 		public bool UpdateTileFrame(bool locked = false)
 		{
 			Tile topLeft = Main.tile[Position.X, Position.Y];
-			int oldFrame = topLeft.frameX;
+			int oldFrame = topLeft.TileFrameX;
 			int style;
 			if (Main.netMode == NetmodeID.Server && !locked)
 			{
@@ -291,10 +289,10 @@ namespace MagicStorage.Components
 				style += 3;
 			}
 			style *= 36;
-			topLeft.frameX = (short)style;
-			Main.tile[Position.X, Position.Y + 1].frameX = (short)style;
-			Main.tile[Position.X + 1, Position.Y].frameX = (short)(style + 18);
-			Main.tile[Position.X + 1, Position.Y + 1].frameX = (short)(style + 18);
+			topLeft.TileFrameX = (short)style;
+			Main.tile[Position.X, Position.Y + 1].TileFrameX = (short)style;
+			Main.tile[Position.X + 1, Position.Y].TileFrameX = (short)(style + 18);
+			Main.tile[Position.X + 1, Position.Y + 1].TileFrameX = (short)(style + 18);
 			return oldFrame != style;
 		}
 
@@ -302,7 +300,7 @@ namespace MagicStorage.Components
 		{
 			if (UpdateTileFrame(locked))
 			{
-				NetMessage.SendTileRange(-1, Position.X, Position.Y, 2, 2);
+				NetMessage.SendTileSquare(-1, Position.X, Position.Y, 2, 2);
 			}
 		}
 
@@ -349,21 +347,22 @@ namespace MagicStorage.Components
 			return item;
 		}
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = base.Save();
+			base.SaveData(tag);
+
 			List<TagCompound> tagItems = new List<TagCompound>();
 			foreach (Item item in items)
 			{
 				tagItems.Add(ItemIO.Save(item));
 			}
+
 			tag.Set("Items", tagItems);
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
-			base.Load(tag);
+			base.LoadData(tag);
 			ClearItemsData();
 			foreach (TagCompound tagItem in tag.GetList<TagCompound>("Items"))
 			{
@@ -382,7 +381,7 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetSend(BinaryWriter trueWriter, bool lightSend)
+		public override void NetSend(BinaryWriter trueWriter)
 		{
 			/* Recreate a BinaryWriter writer */
 			MemoryStream buffer = new MemoryStream(65536);
@@ -391,8 +390,8 @@ namespace MagicStorage.Components
 			BinaryWriter writer = new BinaryWriter(writerBuffer);
 
 			/* Original code */
-			base.NetSend(writer, lightSend);
-			if (netQueue.Count > Capacity / 2 || !lightSend)
+			base.NetSend(writer);
+			if (netQueue.Count > Capacity / 2)
 			{
 				netQueue.Clear();
 				netQueue.Enqueue(UnitOperation.FullSync.Create());
@@ -402,7 +401,7 @@ namespace MagicStorage.Components
 			{
 				netQueue.Dequeue().Send(writer, this);
 			}
-			
+
 			/* Forces data to be flushed into the compressed buffer */
 			writerBuffer.Flush(); compressor.Close();
 
@@ -414,7 +413,7 @@ namespace MagicStorage.Components
 			writer.Dispose(); writerBuffer.Dispose(); compressor.Dispose(); buffer.Dispose();
 		}
 
-		public override void NetReceive(BinaryReader trueReader, bool lightReceive)
+		public override void NetReceive(BinaryReader trueReader)
 		{
 			/* Reads the buffer off the network */
 			MemoryStream buffer = new MemoryStream(65536);
@@ -428,7 +427,7 @@ namespace MagicStorage.Components
 			BinaryReader reader = new BinaryReader(decompressor);
 
 			/* Original code */
-			base.NetReceive(reader, lightReceive);
+			base.NetReceive(reader);
 			if (TileEntity.ByPosition.ContainsKey(Position) && TileEntity.ByPosition[Position] is TEStorageUnit)
 			{
 				TEStorageUnit other = (TEStorageUnit)TileEntity.ByPosition[Position];
@@ -451,7 +450,7 @@ namespace MagicStorage.Components
 				RepairMetadata();
 			}
 			receiving = false;
-			
+
 			/* Dispose all objects */
 			reader.Dispose(); decompressor.Dispose(); bufferWriter.Dispose(); buffer.Dispose();
 		}

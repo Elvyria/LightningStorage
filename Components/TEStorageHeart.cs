@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -22,7 +19,7 @@ namespace MagicStorage.Components
 
 		public override bool ValidTile(Tile tile)
 		{
-			return tile.type == mod.TileType("StorageHeart") && tile.frameX == 0 && tile.frameY == 0;
+			return tile.TileType == ModContent.TileType<StorageHeart>() && tile.TileFrameX == 0 && tile.TileFrameY == 0;
 		}
 
 		public override TEStorageHeart GetHeart()
@@ -353,9 +350,10 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = base.Save();
+			base.SaveData(tag);
+
 			List<TagCompound> tagRemotes = new List<TagCompound>();
 			foreach (Point16 remoteAccess in remoteAccesses)
 			{
@@ -364,22 +362,23 @@ namespace MagicStorage.Components
 				tagRemote.Set("Y", remoteAccess.Y);
 				tagRemotes.Add(tagRemote);
 			}
+
 			tag.Set("RemoteAccesses", tagRemotes);
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
-			base.Load(tag);
+			base.LoadData(tag);
+
 			foreach (TagCompound tagRemote in tag.GetList<TagCompound>("RemoteAccesses"))
 			{
 				remoteAccesses.Add(new Point16(tagRemote.GetShort("X"), tagRemote.GetShort("Y")));
 			}
 		}
 
-		public override void NetSend(BinaryWriter writer, bool lightSend)
+		public override void NetSend(BinaryWriter writer)
 		{
-			base.NetSend(writer, lightSend);
+			base.NetSend(writer);
 			writer.Write((short)remoteAccesses.Count);
 			foreach (Point16 remoteAccess in remoteAccesses)
 			{
@@ -388,9 +387,9 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override void NetReceive(BinaryReader reader, bool lightReceive)
+		public override void NetReceive(BinaryReader reader)
 		{
-			base.NetReceive(reader, lightReceive);
+			base.NetReceive(reader);
 			int count = reader.ReadInt16();
 			for (int k = 0; k < count; k++)
 			{

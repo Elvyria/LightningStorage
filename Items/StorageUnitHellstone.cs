@@ -1,8 +1,5 @@
-﻿using System;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
 namespace MagicStorage.Items
 {
@@ -11,34 +8,32 @@ namespace MagicStorage.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 26;
-			item.height = 26;
-			item.maxStack = 99;
-			item.useTurn = true;
-			item.autoReuse = true;
-			item.useAnimation = 15;
-			item.useTime = 10;
-			item.useStyle = 1;
-			item.consumable = true;
-			item.rare = 2;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.createTile = mod.TileType("StorageUnit");
-			item.placeStyle = 3;
+			Item.width = 26;
+			Item.height = 26;
+			Item.maxStack = 99;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 10;
+			Item.useStyle = 1;
+			Item.consumable = true;
+			Item.rare = 2;
+			Item.value = Item.sellPrice(0, 0, 50, 0);
+			Item.createTile = ModContent.TileType<Components.StorageUnit>();
+			Item.placeStyle = 3;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StorageUnitDemonite"));
-			recipe.AddIngredient(mod.ItemType("UpgradeHellstone"));
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient(ModContent.ItemType<Items.StorageUnitDemonite>())
+				.AddIngredient(ModContent.ItemType<Items.UpgradeHellstone>())
+				.Register();
 
-			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StorageUnitCrimtane"));
-			recipe.AddIngredient(mod.ItemType("UpgradeHellstone"));
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient(ModContent.ItemType<Items.StorageUnitCrimtane>())
+				.AddIngredient(ModContent.ItemType<Items.UpgradeHellstone>())
+				.Register();
 		}
 	}
 }

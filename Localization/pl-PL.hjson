@@ -1,0 +1,233 @@
+
+Mods: {
+	MagicStorage: {
+		Items: {
+			UpgradeBlueChlorophyte: {
+				DisplayName: Ulepszenie jednostki magazynującej (Niebieski Chlorofit)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 240 miejsc
+					<right> na Jednostkę magazynującą (Święconą), aby użyć
+					'''
+			}
+
+			PortableAccess: {
+				/* DisplayName: Portable Remote Storage Access */
+				/* Tooltip:
+					'''
+					<right> Storage Heart to store location
+					Currently not set to any location
+					Use item to access your storage
+					''' */
+			}
+
+			UpgradeCrimtane: {
+				DisplayName: Ulepszenie jednostki magazynującej (Karmazynit)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 80 miejsc
+					<right> na Jednostkę magazynującą (Standardową), aby użyć
+					'''
+			}
+
+			CraftingAccess: {
+				DisplayName: Interfejs Rzemieślniczy Magazynu
+			}
+
+			UpgradeHallowed: {
+				DisplayName: Ulepszenie jednostki magazynującej (Święcone)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 160 miejsc
+					<right> na Jednostkę magazynującą (Piekielny kamień), aby użyć
+					'''
+			}
+
+			StorageUnitTerra: {
+				DisplayName: Jednostka magazynująca (Terra)
+			}
+
+			StorageUnitHallowed: {
+				DisplayName: Jednostka magazynująca (Święcona)
+			}
+
+			UpgradeLuminite: {
+				DisplayName: Ulepszenie jednostki magazynującej (Luminowany)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 320 miejsc
+					<right> na Jednostkę magazynującą (Niebieski Chlorofit), aby użyć
+					'''
+			}
+
+			UpgradeHellstone: {
+				DisplayName: Ulepszenie jednostki magazynującej (Piekielny kamień)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 120 miejsc
+					<right> na Jednostkę magazynującą (Karmazynit/Demonit), aby użyć
+					'''
+			}
+
+			UpgradeDemonite: {
+				DisplayName: Ulepszenie jednostki magazynującej (Demonit)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 80 miejsc
+					<right> na Jednostkę magazynującą (Standardową), aby użyć
+					'''
+			}
+
+			StorageDeactivator: {
+				DisplayName: Różdżka jednostki magazynującej
+				Tooltip: <right> aby przełączyć Jednostkę Magazynującą (wł./wył.)
+			}
+
+			StorageUnitHellstone: {
+				DisplayName: Jednostka magazynująca (Piekielny kamień)
+			}
+
+			StorageUnitDemonite: {
+				DisplayName: Jednostka magazynująca (Demonit)
+			}
+
+			StorageUnitCrimtane: {
+				DisplayName: Jednostka magazynująca (Karmazynium)
+			}
+
+			UpgradeTerra: {
+				DisplayName: Ulepszenie jednostki magazynującej (Terra)
+				Tooltip:
+					'''
+					Ulepsza jednostkę magazynującą do 640 miejsc
+					<right> na Jednostkę magazynującą (Luminowaną), aby użyć
+					'''
+			}
+
+			StorageUnitLuminite: {
+				DisplayName: Jednostka magazynująca (Luminowana)
+			}
+
+			StorageUnitBlueChlorophyte: {
+				DisplayName: Jednostka magazynująca (Niebieski Chlorofit)
+			}
+
+			SnowBiomeEmulator: {
+				DisplayName: Emulator Śnieżnego Biomu
+				Tooltip: Dodaje funkcje do Interfejsu Rzemieślniczego, pozwalającą na wytwarzanie przedmiotów dostępnych jedynie w Śnieżnym Biomie
+			}
+
+			StorageUnitTiny: {
+				DisplayName: Mała jednostka magazynująca
+			}
+
+			RemoteAccess: {
+				DisplayName: Zdalna Jednostka Dostępu
+			}
+
+			LocatorDisk: {
+				DisplayName: Dysk lokalizatora
+				Tooltip:
+					'''
+					<right> na serce jednostki magazynującej, aby zapisać jej lokalizację
+					<right> na bezprzewodowe okno dostępu aby je ustawić
+					Nie niszczy się po użyciu
+					'''
+			}
+
+			StorageConnector: {
+				DisplayName: Łącznik
+			}
+
+			CreativeStorageUnit: {
+				DisplayName: Kreatywna Jednostka Magazynująca
+			}
+
+			StorageHeart: {
+				DisplayName: Serce Jednostki Magazynującej
+			}
+
+			StorageUnit: {
+				DisplayName: Jednostka magazynująca
+			}
+
+			StorageComponent: {
+				DisplayName: Komponent Magazynu
+			}
+
+			StorageAccess: {
+				DisplayName: Okno dostępu do magazynu
+			}
+
+			Locator: {
+				DisplayName: Lokalizator
+				Tooltip:
+					'''
+					<right> na serce jednostki magazynującej, aby zapisać jej lokalizację
+					<right> na bezprzewodowe okno dostępu aby je ustawić
+					'''
+			}
+		}
+
+		Common: {
+			/* CraftingStations: Crafting Stations */
+			/* DepositAll: Deposit All */
+			/* FilterAll: Filter All */
+			/* FilterEquips: Filter Equipment */
+			/* FilterMisc: Filter Misc */
+			/* FilterPotions: Filter Potions */
+			/* FilterTiles: Filter Placeables */
+			/* FilterTools: Filter Tools */
+			/* FilterWeapons: Filter Weapons */
+			/* Ingredients: Ingredients */
+			/* RecipeAll: Show all recipes */
+			/* RecipeAvailable: Show available recipes */
+			/* Recipes: Recipes */
+			/* Search: Search */
+			/* SearchMod: Search Mod */
+			/* SearchName: Search Name */
+			/* SelectedRecipe: Selected Recipe */
+			SetTo: Ustawione na: X={0}, Y={1}
+			/* SnowBiomeBlock: Snow Biome Block */
+			/* SortDefault: Default Sorting */
+			/* SortID: Sort by ID */
+			/* SortName: Sort by Name */
+			/* SortStack: Sort by Stacks */
+			/* StoredItems: Stored Ingredients */
+		}
+
+		Tiles: {
+			CraftingAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			CreativeStorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+
+			RemoteAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageAccess: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageComponent: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageConnector: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageHeart: {
+				/* MapEntry: Magic Storage */
+			}
+
+			StorageUnit: {
+				/* MapEntry: Magic Storage */
+			}
+		}
+	}
+}

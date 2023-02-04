@@ -1,8 +1,6 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
 namespace MagicStorage.Items
 {
@@ -11,30 +9,27 @@ namespace MagicStorage.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 12;
-			item.height = 12;
-			item.maxStack = 99;
-			item.rare = 11;
-			item.value = Item.sellPrice(0, 10, 0, 0);
+			Item.width = 12;
+			Item.height = 12;
+			Item.maxStack = 99;
+			Item.rare = 11;
+			Item.value = Item.sellPrice(0, 10, 0, 0);
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Diamond, 3);
-			recipe.AddIngredient(ItemID.Ruby, 7);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+				.AddIngredient(ItemID.Diamond, 3)
+				.AddIngredient(ItemID.Ruby, 7)
+				.AddTile(TileID.LunarCraftingStation)
+				.Register();
 
-			Mod calamityMod = ModLoader.GetMod("CalamityMod");
-			if (calamityMod != null)
+			if (ModLoader.TryGetMod("CalamityMod", out var calamityMod))
 			{
-				recipe = new ModRecipe(mod);
-				recipe.AddIngredient(calamityMod, "CosmiliteBar", 20);
-				recipe.AddTile(TileID.LunarCraftingStation);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
+				CreateRecipe()
+					.AddIngredient(calamityMod, "CosmiliteBar", 20)
+					.AddTile(TileID.LunarCraftingStation)
+					.Register();
 			}
 		}
 	}

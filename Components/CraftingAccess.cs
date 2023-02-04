@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.ID;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
-using MagicStorage.Items;
+using Terraria;
 
 namespace MagicStorage.Components
 {
@@ -15,15 +9,15 @@ namespace MagicStorage.Components
 	{
 		public override ModTileEntity GetTileEntity()
 		{
-			return mod.GetTileEntity("TECraftingAccess");
+			return ModContent.GetInstance<TECraftingAccess>();
 		}
 
 		public override int ItemType(int frameX, int frameY)
 		{
-			return mod.ItemType("CraftingAccess");
+			return ModContent.ItemType<Items.CraftingAccess>();
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -45,11 +39,11 @@ namespace MagicStorage.Components
 
 		public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 		{
-			if (Main.tile[i, j].frameX > 0)
+			if (Main.tile[i, j].TileFrameX > 0)
 			{
 				i--;
 			}
-			if (Main.tile[i, j].frameY > 0)
+			if (Main.tile[i, j].TileFrameY > 0)
 			{
 				j--;
 			}

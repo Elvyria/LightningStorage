@@ -7,7 +7,7 @@ using ReLogic.Graphics;
 using Terraria;
 using Terraria.Localization;
 using Terraria.GameInput;
-using Terraria.ModLoader;
+using Terraria.GameContent;
 using Terraria.UI;
 
 namespace MagicStorage.UI
@@ -132,7 +132,7 @@ namespace MagicStorage.UI
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
-			Texture2D texture = ModContent.GetTexture("MagicStorage/Assets/SearchBar");
+			Texture2D texture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SearchBar").Value;
 			CalculatedStyle dim = GetDimensions();
 			int innerWidth = (int)dim.Width - 2 * padding;
 			int innerHeight = (int)dim.Height - 2 * padding;
@@ -153,7 +153,7 @@ namespace MagicStorage.UI
 			if (text.Length == 0)
 				drawText = focused ? string.Empty : defaultText.Value;
 
-			DynamicSpriteFont font = Main.fontMouseText;
+			DynamicSpriteFont font = FontAssets.MouseText.Value;
 			float scale = innerHeight / font.MeasureString(drawText).Y;
 			Color color = focused ? Color.Black : Color.Black * 0.75f;
 

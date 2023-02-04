@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.ID;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
+using Terraria;
+
 using MagicStorage.Items;
 
 namespace MagicStorage.Components
@@ -15,15 +11,15 @@ namespace MagicStorage.Components
 	{
 		public override ModTileEntity GetTileEntity()
 		{
-			return mod.GetTileEntity("TEStorageHeart");
+			return ModContent.GetInstance<TEStorageHeart>();
 		}
 
 		public override int ItemType(int frameX, int frameY)
 		{
-			return mod.ItemType("StorageHeart");
+			return ModContent.ItemType<Items.StorageHeart>();
 		}
 
-		public override bool HasSmartInteract()
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 		{
 			return true;
 		}
@@ -33,32 +29,32 @@ namespace MagicStorage.Components
 			return (TEStorageHeart)TileEntity.ByPosition[new Point16(i, j)];
 		}
 
-		public override bool NewRightClick(int i, int j)
+		public override bool RightClick(int i, int j)
 		{
 			Player player = Main.player[Main.myPlayer];
 			Item item = player.inventory[player.selectedItem];
-			if (item.type == mod.ItemType("Locator") || item.type == mod.ItemType("LocatorDisk") || item.type == mod.ItemType("PortableAccess"))
+			if (item.type == ModContent.ItemType<Locator>() || item.type == ModContent.ItemType<LocatorDisk>() || item.type == ModContent.ItemType<PortableAccess>())
 			{
-				if (Main.tile[i, j].frameX % 36 == 18)
+				if (Main.tile[i, j].TileFrameX % 36 == 18)
 				{
 					i--;
 				}
-				if (Main.tile[i, j].frameY % 36 == 18)
+				if (Main.tile[i, j].TileFrameY % 36 == 18)
 				{
 					j--;
 				}
-				Locator locator = (Locator)item.modItem;
+				Locator locator = (Locator)item.ModItem;
 				locator.location = new Point16(i, j);
 				if (player.selectedItem == 58)
 				{
 					Main.mouseItem = item.Clone();
 				}
 				Main.NewText("Locator successfully set to: X=" + i + ", Y=" + j);
-                return true;
+				return true;
 			}
 			else
 			{
-				return base.NewRightClick(i, j);
+				return base.RightClick(i, j);
 			}
 		}
 	}

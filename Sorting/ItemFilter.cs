@@ -1,5 +1,6 @@
 using System;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace MagicStorage.Sorting
 {
@@ -15,7 +16,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return item.melee && item.pick == 0 && item.axe == 0 && item.hammer == 0;
+			return item.CountsAsClass(DamageClass.Melee) && item.pick == 0 && item.axe == 0 && item.hammer == 0;
 		}
 	}
 
@@ -23,7 +24,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return item.ranged;
+			return item.CountsAsClass(DamageClass.Ranged);
 		}
 	}
 
@@ -31,7 +32,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return item.magic;
+			return item.CountsAsClass(DamageClass.Magic);
 		}
 	}
 
@@ -39,7 +40,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return item.summon;
+			return item.CountsAsClass(DamageClass.Summon);
 		}
 	}
 
@@ -47,7 +48,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return item.thrown;
+			return item.CountsAsClass(DamageClass.Throwing);
 		}
 	}
 
@@ -55,7 +56,7 @@ namespace MagicStorage.Sorting
 	{
 		public static bool Passes(Item item)
 		{
-			return !item.melee && !item.ranged && !item.magic && !item.summon && !item.thrown && item.damage > 0;
+			return !item.CountsAsClass(DamageClass.Melee) && !item.CountsAsClass(DamageClass.Ranged) && !item.CountsAsClass(DamageClass.Magic) && !item.CountsAsClass(DamageClass.Summon) && !item.CountsAsClass(DamageClass.Throwing) && item.damage > 0;
 		}
 	}
 
@@ -127,10 +128,10 @@ namespace MagicStorage.Sorting
 	{
 		private static Func<Item, bool>[] blacklist = new Func<Item, bool>[] {
 			FilterWeapon.Passes,
-			FilterTool.Passes,
-			FilterEquipment.Passes,
-			FilterPotion.Passes,
-			FilterPlaceable.Passes
+				FilterTool.Passes,
+				FilterEquipment.Passes,
+				FilterPotion.Passes,
+				FilterPlaceable.Passes
 		};
 
 		public static bool Passes(Item item)

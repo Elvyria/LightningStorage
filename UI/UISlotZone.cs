@@ -7,6 +7,7 @@ using ReLogic.Graphics;
 
 using Terraria;
 using Terraria.UI;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 
 namespace MagicStorage.UI
@@ -23,7 +24,7 @@ namespace MagicStorage.UI
 		private Func<int, Item> getItem;
 		private Func<int, Color> getColor;
 
-		private float inventoryScale;
+		private float scale;
 		private float slotHeight;
 		private float slotWidth;
 
@@ -34,9 +35,9 @@ namespace MagicStorage.UI
 			this.getItem = getItem;
 			this.getColor = (_) => Color.White;
 
-			this.inventoryScale = scale;
-			this.slotHeight = Main.inventoryBackTexture.Height * inventoryScale;
-			this.slotWidth = Main.inventoryBackTexture.Width * inventoryScale;
+			this.scale = scale;
+			this.slotHeight = TextureAssets.InventoryBack.Height() * scale;
+			this.slotWidth = TextureAssets.InventoryBack.Width() * scale;
 
 			this.Width.Set(slotWidth, 0);
 			this.Height.Set(slotHeight, 0);
@@ -47,9 +48,9 @@ namespace MagicStorage.UI
 			this.getItem = getItem;
 			this.getColor = getColor;
 
-			this.inventoryScale = scale;
-			this.slotHeight = Main.inventoryBackTexture.Height * inventoryScale;
-			this.slotWidth = Main.inventoryBackTexture.Width * inventoryScale;
+			this.scale = scale;
+			this.slotHeight = TextureAssets.InventoryBack.Height() * scale;
+			this.slotWidth = TextureAssets.InventoryBack.Width() * scale;
 		}
 
 		public void SetDimensions(int columns, int rows)
@@ -132,39 +133,43 @@ namespace MagicStorage.UI
 			{
 				int slot = k + increment;
 				Vector2 drawPos = origin + new Vector2((slotWidth + padding) * (k % columns), (slotHeight + padding) * (k / columns));
-				DrawSlot(spriteBatch, getItem(slot) ?? UISlotZone.Air, getColor(slot), drawPos);
+				DrawSlot(spriteBatch, getItem(slot), getColor(slot), drawPos);
 			}
 		}
 
-		private void DrawSlot(SpriteBatch spriteBatch, Item item, Color slotColor, Vector2 drawPos) {
+		private void DrawSlot(SpriteBatch spriteBatch, Item item, Color slotColor, Vector2 drawPos)
+		{
 			// Draw item slot background
-			spriteBatch.Draw(Main.inventoryBack9Texture, drawPos, null, slotColor, 0f, Vector2.Zero, inventoryScale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(TextureAssets.InventoryBack9.Value, drawPos, null, slotColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
 			if (!item.IsAir)
 			{
-				Texture2D texture2D = Main.itemTexture[item.type];
+				Main.instance.LoadItem(item.type);
+				Texture2D texture2D = TextureAssets.Item[item.type].Value;
 				Rectangle rectangle2 = Main.itemAnimations[item.type] != null ? Main.itemAnimations[item.type].GetFrame(texture2D) : texture2D.Frame();
+
 				float num = 1f;
-				float num2 = (float)Main.inventoryBack9Texture.Width * inventoryScale * 0.6f;
-				if ((float)rectangle2.Width > num2 || (float)rectangle2.Height > num2)
+				float num2 = TextureAssets.InventoryBack9.Width() * scale * 0.6f;
+				if (rectangle2.Width > num2 || rectangle2.Height > num2)
 				{
-					num = rectangle2.Width > rectangle2.Height ? num2 / (float)rectangle2.Width : num2 / (float)rectangle2.Height;
+					num = num2 / (rectangle2.Width > rectangle2.Height ? rectangle2.Width : rectangle2.Height);
 				}
+
 				Vector2 drawPosition = drawPos;
-				drawPosition.X += (float)Main.inventoryBack9Texture.Width * inventoryScale / 2f - (float)rectangle2.Width * num / 2f;
-				drawPosition.Y += (float)Main.inventoryBack9Texture.Height * inventoryScale / 2f - (float)rectangle2.Height * num / 2f;
+				drawPosition.X += TextureAssets.InventoryBack9.Width() * scale / 2f - rectangle2.Width * num / 2f;
+				drawPosition.Y += TextureAssets.InventoryBack9.Height() * scale / 2f - rectangle2.Height * num / 2f;
 
 				// Draw item
-				spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), item.GetAlpha(Color.White), 0f, Vector2.Zero, num, SpriteEffects.None, 0f);
+				spriteBatch.Draw(texture2D, drawPosition, rectangle2, item.GetAlpha(Color.White), 0, Vector2.Zero, num, SpriteEffects.None, 0f);
 				if (item.color != Color.Transparent)
 				{
-					spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), item.GetColor(Color.White), 0f, Vector2.Zero, num, SpriteEffects.None, 0f);
+					spriteBatch.Draw(texture2D, drawPosition, rectangle2, item.GetColor(Color.White), 0, Vector2.Zero, num, SpriteEffects.None, 0f);
 				}
 
 				// Draw stack size
 				if (item.stack > 1)
 				{
-					spriteBatch.DrawString(Main.fontItemStack, item.stack.ToString(), new Vector2(drawPos.X + 10f * inventoryScale, drawPos.Y + 26f * inventoryScale), Color.White, 0f, Vector2.Zero, inventoryScale, SpriteEffects.None, 0f);
+					spriteBatch.DrawString(FontAssets.ItemStack.Value, item.stack.ToString(), new Vector2(drawPos.X + 10f * scale, drawPos.Y + 26f * scale), Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 				}
 			}
 		}
@@ -180,7 +185,6 @@ namespace MagicStorage.UI
 					Main.HoverItem = item.Clone();
 				}
 			}
-
 		}
 	}
 }

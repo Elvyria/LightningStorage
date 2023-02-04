@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Collections.Generic;
 using Terraria;
@@ -65,7 +64,7 @@ namespace MagicStorage
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
-				NetMessage.SendTileRange(Main.myPlayer, i, j, 2, 2);
+				NetMessage.SendTileSquare(Main.myPlayer, i, j, 2, 2);
 				NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, type);
 			}
 		}
@@ -406,7 +405,7 @@ namespace MagicStorage
 				}
 			}
 			Point16 pos = access.Position;
-			StorageAccess modTile = TileLoader.GetTile(Main.tile[pos.X, pos.Y].type) as StorageAccess;
+			StorageAccess modTile = TileLoader.GetTile(Main.tile[pos.X, pos.Y].TileType) as StorageAccess;
 			if (modTile != null)
 			{
 				TEStorageHeart heart = modTile.GetHeart(pos.X, pos.Y);
@@ -423,9 +422,10 @@ namespace MagicStorage
 			{
 				return;
 			}
-			Player player = Main.player[Main.myPlayer];
+
 			byte op = reader.ReadByte();
 			Item item = ItemIO.Receive(reader, true);
+
 			if (op == 2 && Main.playerInventory && Main.mouseItem.IsAir)
 			{
 				Main.mouseItem = item;
@@ -442,12 +442,16 @@ namespace MagicStorage
 				Main.mouseItem.stack = total;
 				item.stack -= total;
 			}
+
+			StoragePlayer storagePlayer = StoragePlayer.LocalPlayer;
 			if (item.stack > 0)
 			{
-				item = player.GetItem(Main.myPlayer, item, false, true);
+				item = storagePlayer.Player.GetItem(Main.myPlayer, item, GetItemSettings.InventoryUIToInventorySettings);
 				if (!item.IsAir)
 				{
-					player.QuickSpawnClonedItem(item, item.stack);
+					Point16 access = storagePlayer.ViewingStorage();
+					storagePlayer.Player.QuickSpawnClonedItem(new EntitySource_TileEntity(TileEntity.ByPosition[access]), item, item.stack);
+					// EntitySource_TileInteraction source = new EntitySource_TileInteraction(TileEntity.ByPosition[access], access.X, access.Y);
 				}
 			}
 		}
@@ -511,7 +515,7 @@ namespace MagicStorage
 				toWithdraw.Add(ItemIO.Receive(reader, true));
 			}
 			Item result = ItemIO.Receive(reader, true);
-			List<Item> items = MagicStorage.Instance.CraftingUI.DoCraft(heart, toWithdraw, result);
+			List<Item> items = ModContent.GetInstance<MagicStorageSystem>().CraftingUI.DoCraft(heart, toWithdraw, result);
 			if (items.Count > 0)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
@@ -528,12 +532,18 @@ namespace MagicStorage
 
 		public static void ReceiveCraftResult(BinaryReader reader)
 		{
-			Player player = Main.player[Main.myPlayer];
 			int count = reader.ReadInt32();
+
+			StoragePlayer storagePlayer = StoragePlayer.LocalPlayer;
+			Player player = Main.LocalPlayer;
+
+			Point16 access = storagePlayer.ViewingStorage();
+			EntitySource_TileEntity source = new EntitySource_TileEntity(TileEntity.ByPosition[access]);
+
 			for (int k = 0; k < count; k++)
 			{
 				Item item = ItemIO.Receive(reader, true);
-				player.QuickSpawnClonedItem(item, item.stack);
+				player.QuickSpawnClonedItem(source, item, item.stack);
 			}
 		}
 	}

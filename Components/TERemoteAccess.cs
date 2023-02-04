@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -17,7 +12,7 @@ namespace MagicStorage.Components
 
 		public override bool ValidTile(Tile tile)
 		{
-			return tile.type == mod.TileType("RemoteAccess") && tile.frameX == 0 && tile.frameY == 0;
+			return tile.TileType == ModContent.TileType<RemoteAccess>() && tile.TileFrameX == 0 && tile.TileFrameY == 0;
 		}
 
 		public override TEStorageHeart GetHeart()
@@ -56,33 +51,34 @@ namespace MagicStorage.Components
 			}
 		}
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = base.Save();
+			base.SaveData(tag);
+
 			TagCompound tagLocator = new TagCompound();
 			tagLocator.Set("X", locator.X);
 			tagLocator.Set("Y", locator.Y);
+
 			tag.Set("Locator", tagLocator);
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
-			base.Load(tag);
+			base.LoadData(tag);
 			TagCompound tagLocator = tag.GetCompound("Locator");
 			locator = new Point16(tagLocator.GetShort("X"), tagLocator.GetShort("Y"));
 		}
 
-		public override void NetSend(BinaryWriter writer, bool lightSend)
+		public override void NetSend(BinaryWriter writer)
 		{
-			base.NetSend(writer, lightSend);
+			base.NetSend(writer);
 			writer.Write(locator.X);
 			writer.Write(locator.Y);
 		}
 
-		public override void NetReceive(BinaryReader reader, bool lightReceive)
+		public override void NetReceive(BinaryReader reader)
 		{
-			base.NetReceive(reader, lightReceive);
+			base.NetReceive(reader);
 			locator = new Point16(reader.ReadInt16(), reader.ReadInt16());
 		}
 	}

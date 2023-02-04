@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -9,15 +8,15 @@ namespace MagicStorage.Components
 {
 	public abstract class TEStorageComponent : ModTileEntity
 	{
-		public override bool ValidTile(int i, int j)
+		public override bool IsTileValidForEntity(int i, int j)
 		{
 			Tile tile = Main.tile[i, j];
-			return tile.active() && ValidTile(tile);
+			return tile.HasTile && ValidTile(tile);
 		}
 
 		public abstract bool ValidTile(Tile tile);
 
-		public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
+		public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternative)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
@@ -29,11 +28,11 @@ namespace MagicStorage.Components
 			return id;
 		}
 
-		public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction)
+		public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternative)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
-				NetMessage.SendTileRange(Main.myPlayer, i - 1, j - 1, 2, 2);
+				NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
 				NetHelper.SendSearchAndRefresh(i - 1, j - 1);
 				return 0;
 			}
@@ -86,23 +85,23 @@ namespace MagicStorage.Components
 		public static IEnumerable<Point16> AdjacentComponents(Point16 point)
 		{
 			List<Point16> points = new List<Point16>();
-			bool isConnector = Main.tile[point.X, point.Y].type == MagicStorage.Instance.TileType("StorageConnector");
+			bool isConnector = Main.tile[point.X, point.Y].TileType == ModContent.TileType<StorageConnector>();
 			foreach (Point16 add in (isConnector ? checkNeighbors1x1 : checkNeighbors))
 			{
 				int checkX = point.X + add.X;
 				int checkY = point.Y + add.Y;
 				Tile tile = Main.tile[checkX, checkY];
-				if (!tile.active())
+				if (!tile.HasTile)
 				{
 					continue;
 				}
-				if (TileLoader.GetTile(tile.type) is StorageComponent)
+				if (TileLoader.GetTile(tile.TileType) is StorageComponent)
 				{
-					if (tile.frameX % 36 == 18)
+					if (tile.TileFrameX % 36 == 18)
 					{
 						checkX--;
 					}
-					if (tile.frameY % 36 == 18)
+					if (tile.TileFrameY % 36 == 18)
 					{
 						checkY--;
 					}
@@ -112,7 +111,7 @@ namespace MagicStorage.Components
 						points.Add(check);
 					}
 				}
-				else if (tile.type == MagicStorage.Instance.TileType("StorageConnector"))
+				else if (tile.TileType == ModContent.TileType<StorageConnector>())
 				{
 					Point16 check = new Point16(checkX, checkY);
 					if (!points.Contains(check))

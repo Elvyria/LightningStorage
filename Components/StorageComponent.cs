@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -16,7 +15,7 @@ namespace MagicStorage.Components
 		// Use StorageComponent_Highlight as the default highlight mask for subclasses
 		public override string HighlightTexture { get { return typeof(StorageComponent).FullName.Replace('.', '/') + "_Highlight"; } }
 
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileSolidTop[Type] = true;
 			Main.tileFrameImportant[Type] = true;
@@ -26,7 +25,7 @@ namespace MagicStorage.Components
 			TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
 			TileObjectData.newTile.CoordinateWidth = 16;
 			TileObjectData.newTile.CoordinatePadding = 2;
-			TileObjectData.newTile.HookCheck = new PlacementHook(CanPlace, -1, 0, true);
+			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(CanPlace, -1, 0, true);
 			TileObjectData.newTile.UsesCustomCanPlace = true;
 			ModifyObjectData();
 			ModTileEntity tileEntity = GetTileEntity();
@@ -42,9 +41,9 @@ namespace MagicStorage.Components
 			ModTranslation text = CreateMapEntryName();
 			text.SetDefault("Magic Storage");
 			AddMapEntry(new Color(153, 107, 61), text);
-			dustType = 7;
-			disableSmartCursor = true;
-			TileID.Sets.HasOutlines[Type] = HasSmartInteract();
+			DustType = 7;
+			TileID.Sets.DisableSmartCursor[Type] = true;
+			TileID.Sets.HasOutlines[Type] = true;
 		}
 
 		public virtual void ModifyObjectData()
@@ -58,16 +57,16 @@ namespace MagicStorage.Components
 
 		public virtual int ItemType(int frameX, int frameY)
 		{
-			return mod.ItemType("StorageComponent");
+			return ModContent.ItemType<Items.StorageComponent>();
 		}
 
 		public static bool IsStorageComponent(Point16 point)
 		{
 			Tile tile = Main.tile[point.X, point.Y];
-			return tile.active() && TileLoader.GetTile(tile.type) is StorageComponent;
+			return tile.HasTile && TileLoader.GetTile(tile.TileType) is StorageComponent;
 		}
 
-		public int CanPlace(int i, int j, int type, int style, int direction)
+		public int CanPlace(int i, int j, int type, int style, int direction, int alternative)
 		{
 			int count = 0;
 			if (GetTileEntity() != null && GetTileEntity() is TEStorageCenter)
@@ -109,7 +108,7 @@ namespace MagicStorage.Components
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
 			killTile = new Point16(i, j);
 			ModTileEntity tileEntity = GetTileEntity();
 			if (tileEntity != null)
