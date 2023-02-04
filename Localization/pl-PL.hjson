@@ -139,10 +139,6 @@ Mods: {
 				DisplayName: Łącznik
 			}
 
-			CreativeStorageUnit: {
-				DisplayName: Kreatywna Jednostka Magazynująca
-			}
-
 			StorageHeart: {
 				DisplayName: Serce Jednostki Magazynującej
 			}
@@ -198,10 +194,6 @@ Mods: {
 
 		Tiles: {
 			CraftingAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			CreativeStorageUnit: {
 				/* MapEntry: Magic Storage */
 			}
 

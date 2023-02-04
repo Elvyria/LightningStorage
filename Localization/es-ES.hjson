@@ -139,10 +139,6 @@ Mods: {
 				DisplayName: Conector de Almacenamiento
 			}
 
-			CreativeStorageUnit: {
-				DisplayName: Unidad de Almacenamiento Creativa
-			}
-
 			StorageHeart: {
 				DisplayName: Corazón de Almacenamiento
 			}
@@ -199,10 +195,6 @@ Mods: {
 
 		Tiles: {
 			CraftingAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			CreativeStorageUnit: {
 				/* MapEntry: Magic Storage */
 			}
 

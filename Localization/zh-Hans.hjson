@@ -139,10 +139,6 @@ Mods: {
 				DisplayName: 存储连接器
 			}
 
-			CreativeStorageUnit: {
-				DisplayName: 创造储存单元
-			}
-
 			StorageHeart: {
 				DisplayName: 存储核心
 			}
@@ -198,10 +194,6 @@ Mods: {
 
 		Tiles: {
 			CraftingAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			CreativeStorageUnit: {
 				/* MapEntry: Magic Storage */
 			}
 
