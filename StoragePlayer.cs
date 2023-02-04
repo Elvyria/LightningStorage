@@ -22,7 +22,7 @@ namespace MagicStorage
 		{
 			if (storageAccess.X != -1)
 			{
-				MagicStorageSystem system = ModContent.GetInstance<MagicStorageSystem>();
+				UISystem system = ModContent.GetInstance<UISystem>();
 				TileEntity tile = TileEntity.ByPosition[storageAccess];
 				if (tile is TECraftingAccess)
 				{
@@ -83,7 +83,7 @@ namespace MagicStorage
 		{
 			storageAccess = point;
 			remoteAccess = remote;
-			MagicStorageSystem system = ModContent.GetInstance<MagicStorageSystem>();
+			UISystem system = ModContent.GetInstance<UISystem>();
 			TileEntity tile = TileEntity.ByPosition[storageAccess];
 			if (tile is TECraftingAccess)
 			{
@@ -97,7 +97,7 @@ namespace MagicStorage
 
 		public void CloseStorage()
 		{
-			MagicStorageSystem system = ModContent.GetInstance<MagicStorageSystem>();
+			UISystem system = ModContent.GetInstance<UISystem>();
 			system.UI.SetState(null);
 
 			storageAccess = new Point16(-1, -1);

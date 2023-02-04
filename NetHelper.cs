@@ -515,7 +515,7 @@ namespace MagicStorage
 				toWithdraw.Add(ItemIO.Receive(reader, true));
 			}
 			Item result = ItemIO.Receive(reader, true);
-			List<Item> items = ModContent.GetInstance<MagicStorageSystem>().CraftingUI.DoCraft(heart, toWithdraw, result);
+			List<Item> items = ModContent.GetInstance<UISystem>().CraftingUI.DoCraft(heart, toWithdraw, result);
 			if (items.Count > 0)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();
