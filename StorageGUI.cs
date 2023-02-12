@@ -27,7 +27,7 @@ namespace MagicStorage
 	{
 		private bool isMouseHovering;
 
-		private const float inventoryScale = 0.85f;
+		private const float inventoryScale = 0.8f;
 
 		private const int padding = 4;
 		private const int columns = 10;
@@ -39,34 +39,41 @@ namespace MagicStorage
 		private TEStorageHeart heart;
 		private List<Item> items = new List<Item>();
 
+		private UIPanel panel;
+
 		private UISlotZone slotZone;
+
 		private UIText capacityText;
+
 		private UISearchBar searchBar;
 		private UISearchBar searchBar2;
+
 		private UIButtonChoice sortButtons;
 		private UIButtonChoice filterButtons;
 
-		private SortMode sortMode = SortMode.Default;
-		private FilterMode filterMode = FilterMode.All;
+		private IComparer<Item> sortMode = SortMode.Default;
+		private IFilter<Item> filterMode = FilterMode.All;
 		private String nameFilter = string.Empty;
 		private String modFilter = string.Empty;
 
-		private Color lightBlue = new Color(73, 94, 171);
-		private Color blue = new Color(63, 82, 151) * 0.7f;
+		private static readonly Color lightBlue = new Color(73, 94, 171);
+		private static readonly Color blue = new Color(63, 82, 151) * 0.7f;
 
 		public override void OnInitialize()
 		{
-			float slotWidth = TextureAssets.InventoryBack.Value.Width * inventoryScale;
-			float slotHeight = TextureAssets.InventoryBack.Value.Height * inventoryScale;
+			float slotWidth = TextureAssets.InventoryBack9.Width() * inventoryScale;
+			float slotHeight = TextureAssets.InventoryBack9.Height() * inventoryScale;
 
 			float panelTop = Main.instance.invBottom + 60;
-			float panelLeft = 20f;
+			const float panelLeft = 20f;
 
-			UIPanel panel = new UIPanel();
+			panel = new UIPanel();
+
 			float innerPanelLeft = panelLeft + panel.PaddingLeft;
 			float innerPanelWidth = columns * (slotWidth + padding) + 20f + padding;
 			float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
-			float panelHeight = Main.screenHeight - panelTop - 40f;
+			float panelHeight = Main.screenHeight - panelTop - 20f;
+
 			panel.Left.Set(panelLeft, 0f);
 			panel.Top.Set(panelTop, 0f);
 			panel.Width.Set(panelWidth, 0f);
@@ -94,9 +101,10 @@ namespace MagicStorage
 					});
 
 			sortButtons.OnClick += (a, b) => {
-				if ((SortMode)sortButtons.choice != sortMode)
+				IComparer<Item> newSort = SortMode.from(sortButtons.choice);
+				if (newSort != sortMode)
 				{
-					sortMode = (SortMode)sortButtons.choice;
+					sortMode = newSort;
 					RefreshItems();
 				}
 			};
@@ -152,9 +160,10 @@ namespace MagicStorage
 					});
 
 			filterButtons.OnClick += (a, b) => {
-				if ((FilterMode)filterButtons.choice != filterMode)
+				IFilter<Item> newFilter = FilterMode.from(filterButtons.choice);
+				if (newFilter != filterMode)
 				{
-					filterMode = (FilterMode)filterButtons.choice;
+					filterMode = newFilter;
 					RefreshItems();
 				}
 			};
@@ -214,8 +223,10 @@ namespace MagicStorage
 
 			sortMode = SortMode.Default;
 			filterMode = FilterMode.All;
-			sortButtons.choice = 0;
-			filterButtons.choice = 0;
+
+			sortButtons.choice = SortMode.Default.into();
+			filterButtons.choice = FilterMode.All.index();
+
 			nameFilter = string.Empty;
 			modFilter = string.Empty;
 		}
@@ -224,18 +235,17 @@ namespace MagicStorage
 		{
 			base.Update(gameTime);
 
+			Main.hidePlayerCraftingMenu = true;
+
 			// TODO: Check access and heart changes
 
-			Main.hidePlayerCraftingMenu = true;
-			foreach (UIElement element in Elements)
+			isMouseHovering = false;
+			foreach (UIElement e in Elements)
 			{
-				if (element.IsMouseHovering) {
-					isMouseHovering = true;
-					Main.LocalPlayer.mouseInterface = true;
-
-					break;
-				}
+				isMouseHovering |= e.IsMouseHovering;
 			}
+
+			Main.LocalPlayer.mouseInterface |= isMouseHovering;
 
 			UpdateStackTimer();
 			UpdateStackSplit();
@@ -269,9 +279,9 @@ namespace MagicStorage
 			}
 			else
 			{
-				stackCounter++;
-				int num = (stackDelay == 6) ? 25 : ((stackDelay == 5) ? 20 : ((stackDelay == 4) ? 15 : ((stackDelay != 3) ? 5 : 10)));
-				if (stackCounter >= num)
+				ReadOnlySpan<int> delays = stackalloc int[] { 5, 5, 5, 10, 15, 20, 25, 5 };
+
+				if (++stackCounter >= delays[stackDelay])
 				{
 					if (--stackDelay < 2)
 					{
@@ -285,8 +295,7 @@ namespace MagicStorage
 			{
 				stackSplit = 0;
 			}
-
-			if (stackSplit > 0)
+			else if (stackSplit > 0)
 			{
 				stackSplit--;
 			}
@@ -314,9 +323,7 @@ namespace MagicStorage
 
 		private Item GetItem(int slot)
 		{
-			Item item = slot >= 0 && slot < items.Count ? items[slot] : UISlotZone.Air;
-
-			return item;
+			return slot >= 0 && slot < items.Count ? items[slot] : UISlotZone.Air;
 		}
 
 		public void RefreshItems()
@@ -355,7 +362,7 @@ namespace MagicStorage
 					item.stack = item.maxStack;
 				}
 
-				Main.mouseItem = DoWithdraw(item, ItemSlot.ShiftInUse);
+				Main.mouseItem = Withdraw(item, ItemSlot.ShiftInUse);
 
 				if (ItemSlot.ShiftInUse)
 				{
@@ -398,12 +405,12 @@ namespace MagicStorage
 
 				if (Main.mouseItem.IsAir)
 				{
-					Main.mouseItem = DoWithdraw(item);
+					Main.mouseItem = Withdraw(item);
 					changed = true;
 				}
 				else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < item.maxStack)
 				{
-					DoWithdraw(item);
+					Withdraw(item);
 					Main.mouseItem.stack += 1;
 					changed = true;
 				}
@@ -419,11 +426,11 @@ namespace MagicStorage
 		private bool TryDeposit(Item item)
 		{
 			int oldStack = item.stack;
-			DoDeposit(item);
+			Deposit(item);
 			return oldStack != item.stack;
 		}
 
-		private void DoDeposit(Item item)
+		private void Deposit(Item item)
 		{
 			if (Main.netMode == NetmodeID.SinglePlayer)
 			{
@@ -438,7 +445,7 @@ namespace MagicStorage
 
 		private bool TryDepositAll()
 		{
-			Player player = Main.player[Main.myPlayer];
+			Player player = Main.LocalPlayer;
 			bool changed = false;
 			if (Main.netMode == NetmodeID.SinglePlayer)
 			{
@@ -475,7 +482,7 @@ namespace MagicStorage
 			return changed;
 		}
 
-		private Item DoWithdraw(Item item, bool toInventory = false)
+		private Item Withdraw(Item item, bool toInventory = false)
 		{
 			if (Main.netMode == NetmodeID.SinglePlayer)
 			{

@@ -396,7 +396,7 @@ namespace MagicStorage
 			{
 				Item item = ItemIO.Receive(reader, true);
 				int slot = reader.ReadByte();
-				item = access.DoStationSwap(item, slot);
+				item = access.SwapStations(item, slot);
 				if (!item.IsAir)
 				{
 					ModPacket packet = PrepareStationResult(op);
@@ -515,7 +515,7 @@ namespace MagicStorage
 				toWithdraw.Add(ItemIO.Receive(reader, true));
 			}
 			Item result = ItemIO.Receive(reader, true);
-			List<Item> items = ModContent.GetInstance<UISystem>().CraftingUI.DoCraft(heart, toWithdraw, result);
+			List<Item> items = ModContent.GetInstance<UISystem>().CraftingUI.Craft(heart, toWithdraw, result);
 			if (items.Count > 0)
 			{
 				ModPacket packet = MagicStorage.Instance.GetPacket();

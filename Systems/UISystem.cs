@@ -29,6 +29,11 @@ namespace MagicStorage
 			}
 		}
 
+		// public override void OnWorldLoad() {
+			// StorageUI.Initialize();
+			// CraftingUI.Initialize();
+		// }
+
 		public override void Unload()
 		{
 			StorageUI = null;
@@ -51,11 +56,10 @@ namespace MagicStorage
 							"MagicStorage: StorageAccess",
 							delegate
 							{
-							if (_lastUpdateUiGameTime != null && UI?.CurrentState != null) {
-							UI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
-							}
-
-							return true;
+								if (_lastUpdateUiGameTime != null && UI?.CurrentState != null) {
+									UI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+								}
+								return true;
 							},
 							InterfaceScaleType.UI));
 			}

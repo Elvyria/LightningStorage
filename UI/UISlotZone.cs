@@ -53,6 +53,12 @@ namespace MagicStorage.UI
 			this.slotWidth = TextureAssets.InventoryBack.Width() * scale;
 		}
 
+		public void SetScale(float scale) {
+			this.scale = scale;
+			this.slotHeight = TextureAssets.InventoryBack.Height() * scale;
+			this.slotWidth = TextureAssets.InventoryBack.Width() * scale;
+		}
+
 		public void SetDimensions(int columns, int rows)
 		{
 			if (this.rows != rows)
@@ -140,30 +146,35 @@ namespace MagicStorage.UI
 		private void DrawSlot(SpriteBatch spriteBatch, Item item, Color slotColor, Vector2 drawPos)
 		{
 			// Draw item slot background
-			spriteBatch.Draw(TextureAssets.InventoryBack9.Value, drawPos, null, slotColor, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(TextureAssets.InventoryBack9.Value, drawPos, null, slotColor, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
 			if (!item.IsAir)
 			{
-				Main.instance.LoadItem(item.type);
-				Texture2D texture2D = TextureAssets.Item[item.type].Value;
-				Rectangle rectangle2 = Main.itemAnimations[item.type] != null ? Main.itemAnimations[item.type].GetFrame(texture2D) : texture2D.Frame();
+				float lightScale = 1f;
+				Color color = Color.White;
+				ItemSlot.GetItemLight(ref color, ref lightScale, item);
 
-				float num = 1f;
-				float num2 = TextureAssets.InventoryBack9.Width() * scale * 0.6f;
-				if (rectangle2.Width > num2 || rectangle2.Height > num2)
+				Main.instance.LoadItem(item.type);
+				Texture2D itemTexture = TextureAssets.Item[item.type].Value;
+				Rectangle rectangle2 = Main.itemAnimations[item.type] == null ? itemTexture.Frame() : Main.itemAnimations[item.type].GetFrame(itemTexture);
+
+				float itemScale = 1f;
+				if (rectangle2.Width > 32 || rectangle2.Height > 32)
 				{
-					num = num2 / (rectangle2.Width > rectangle2.Height ? rectangle2.Width : rectangle2.Height);
+					itemScale = 32f / Math.Max(rectangle2.Width, rectangle2.Height);
 				}
+				itemScale *= scale;
 
 				Vector2 drawPosition = drawPos;
-				drawPosition.X += TextureAssets.InventoryBack9.Width() * scale / 2f - rectangle2.Width * num / 2f;
-				drawPosition.Y += TextureAssets.InventoryBack9.Height() * scale / 2f - rectangle2.Height * num / 2f;
+				drawPosition.X += (TextureAssets.InventoryBack9.Width() * scale - rectangle2.Width * itemScale) / 2;
+				drawPosition.Y += (TextureAssets.InventoryBack9.Height() * scale - rectangle2.Height * itemScale) / 2;
 
-				// Draw item
-				spriteBatch.Draw(texture2D, drawPosition, rectangle2, item.GetAlpha(Color.White), 0, Vector2.Zero, num, SpriteEffects.None, 0f);
+				Vector2 origin = rectangle2.Size() * (lightScale / 2f - 0.5f);
+
+				spriteBatch.Draw(itemTexture, drawPosition, rectangle2, item.GetAlpha(Color.White), 0, Vector2.Zero, itemScale, SpriteEffects.None, 0f);
 				if (item.color != Color.Transparent)
 				{
-					spriteBatch.Draw(texture2D, drawPosition, rectangle2, item.GetColor(Color.White), 0, Vector2.Zero, num, SpriteEffects.None, 0f);
+					spriteBatch.Draw(itemTexture, drawPosition, rectangle2, item.GetColor(Color.White), 0, Vector2.Zero, itemScale, SpriteEffects.None, 0f);
 				}
 
 				// Draw stack size

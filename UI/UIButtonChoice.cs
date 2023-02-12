@@ -48,7 +48,6 @@ namespace MagicStorage.UI
 			{
 				this.choice = choice;
 			}
-
 		}
 
 		public int MouseButton()
@@ -75,10 +74,11 @@ namespace MagicStorage.UI
 			CalculatedStyle dim = GetDimensions();
 			for (int k = 0; k < textures.Length; k++)
 			{
-				Texture2D texture = k == choice ? backTextureActive.Value : backTexture.Value;
+				Asset<Texture2D> texture = k == choice ? backTextureActive : backTexture;
 				Vector2 drawPos = new Vector2(dim.X + k * (size + padding), dim.Y);
 				Color color = hoverButton != -1 && hoverButton == k ? Color.Silver : Color.White;
-				Main.spriteBatch.Draw(texture, drawPos, color);
+
+				Main.spriteBatch.Draw(texture.Value, drawPos, color);
 				Main.spriteBatch.Draw(textures[k].Value, drawPos + new Vector2(1f), Color.White);
 			}
 		}

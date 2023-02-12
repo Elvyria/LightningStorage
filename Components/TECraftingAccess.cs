@@ -79,7 +79,7 @@ namespace MagicStorage.Components
 			return new Item();
 		}
 
-		public Item DoStationSwap(Item item, int slot)
+		public Item SwapStations(Item item, int slot)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{

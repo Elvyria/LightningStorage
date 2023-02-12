@@ -55,26 +55,29 @@ namespace MagicStorage
 				Main.playerInventory = true;
 				timeSinceOpen++;
 			}
-			if (storageAccess.X >= 0 && storageAccess.Y >= 0 && (Player.chest != -1 || !Main.playerInventory || Player.sign > -1 || Player.talkNPC > -1))
+			if (storageAccess.X >= 0 && storageAccess.Y >= 0)
 			{
-				CloseStorage();
-				Recipe.FindRecipes();
-			}
-			else if (storageAccess.X >= 0 && storageAccess.Y >= 0)
-			{
-				int playerX = (int)(Player.Center.X / 16f);
-				int playerY = (int)(Player.Center.Y / 16f);
-				if (!remoteAccess && (playerX < storageAccess.X - Player.tileRangeX || playerX > storageAccess.X + Player.tileRangeX + 1 || playerY < storageAccess.Y - Player.tileRangeY || playerY > storageAccess.Y + Player.tileRangeY + 1))
+				if (Player.chest != -1 || !Main.playerInventory || Player.sign > -1 || Player.talkNPC > -1)
 				{
-					SoundEngine.PlaySound(SoundID.MenuClose);
 					CloseStorage();
 					Recipe.FindRecipes();
 				}
-				else if (!(TileLoader.GetTile(Main.tile[storageAccess.X, storageAccess.Y].TileType) is StorageAccess))
+				else
 				{
-					SoundEngine.PlaySound(SoundID.MenuClose);
-					CloseStorage();
-					Recipe.FindRecipes();
+					int playerX = (int)(Player.Center.X / 16f);
+					int playerY = (int)(Player.Center.Y / 16f);
+					if (!remoteAccess && (playerX < storageAccess.X - Player.tileRangeX || playerX > storageAccess.X + Player.tileRangeX + 1 || playerY < storageAccess.Y - Player.tileRangeY || playerY > storageAccess.Y + Player.tileRangeY + 1))
+					{
+						SoundEngine.PlaySound(SoundID.MenuClose);
+						CloseStorage();
+						Recipe.FindRecipes();
+					}
+					else if (!(TileLoader.GetTile(Main.tile[storageAccess.X, storageAccess.Y].TileType) is StorageAccess))
+					{
+						SoundEngine.PlaySound(SoundID.MenuClose);
+						CloseStorage();
+						Recipe.FindRecipes();
+					}
 				}
 			}
 		}

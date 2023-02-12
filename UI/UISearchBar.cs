@@ -15,13 +15,7 @@ namespace MagicStorage.UI
 	public class UISearchBar : UIElement
 	{
 		private bool focused = false;
-		public bool Focused
-		{
-			get
-			{
-				return focused;
-			}
-		}
+		private bool Focused { get { return focused; } }
 
 		private const int padding = 4;
 		private LocalizedText defaultText = Language.GetText("Mods.MagicStorage.Common.Search");
