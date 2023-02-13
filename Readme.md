@@ -1,6 +1,6 @@
-# Magic Storage
+# Magic Storage: Alpha Testing
 
-## Multiplayer is currently not supported.
+### Multiplayer is currently not available.
 
 ### Changes
 * Full UI rewrite.
