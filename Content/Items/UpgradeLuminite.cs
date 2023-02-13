@@ -6,14 +6,13 @@ namespace MagicStorage.Content.Items
 {
     public class UpgradeLuminite : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 12;
             Item.height = 12;
             Item.maxStack = 99;
-            Item.rare = 10;
-            Item.value = Item.sellPrice(0, 1, 50, 0);
+            Item.rare = ItemRarityID.Red;
+            Item.value = Item.sellPrice(gold: 1, silver: 50);
         }
 
         public override void AddRecipes()

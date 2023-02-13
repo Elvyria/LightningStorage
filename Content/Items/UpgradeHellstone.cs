@@ -6,14 +6,13 @@ namespace MagicStorage.Content.Items
 {
     public class UpgradeHellstone : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 12;
             Item.height = 12;
             Item.maxStack = 99;
-            Item.rare = 2;
-            Item.value = Item.sellPrice(0, 0, 40, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.sellPrice(silver: 40);
         }
 
         public override void AddRecipes()

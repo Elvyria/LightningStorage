@@ -6,14 +6,13 @@ namespace MagicStorage.Content.Items
 {
     public class UpgradeBlueChlorophyte : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 12;
             Item.height = 12;
             Item.maxStack = 99;
-            Item.rare = 7;
-            Item.value = Item.sellPrice(0, 1, 0, 0);
+            Item.rare = ItemRarityID.Lime;
+            Item.value = Item.sellPrice(gold: 1);
         }
 
         public override void AddRecipes()

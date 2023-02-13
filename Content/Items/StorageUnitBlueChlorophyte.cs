@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MagicStorage.Content.Items
@@ -14,10 +15,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 7;
-            Item.value = Item.sellPrice(0, 1, 60, 0);
+            Item.rare = ItemRarityID.Lime;
+            Item.value = Item.sellPrice(gold: 1, silver: 60);
             Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
             Item.placeStyle = 5;
         }
@@ -25,8 +26,8 @@ namespace MagicStorage.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageUnitHallowed>())
-                .AddIngredient(ModContent.ItemType<Items.UpgradeBlueChlorophyte>())
+                .AddIngredient<Items.StorageUnitHallowed>()
+                .AddIngredient<Items.UpgradeBlueChlorophyte>()
                 .Register();
         }
     }

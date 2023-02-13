@@ -6,7 +6,6 @@ namespace MagicStorage.Content.Items
 {
     public class StorageHeart : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -16,17 +15,17 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 1;
-            Item.value = Item.sellPrice(0, 1, 35, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(gold: 1, silver: 35);
             Item.createTile = ModContent.TileType<Tiles.StorageHeart>();
         }
 
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(null, "StorageComponent")
+                .AddIngredient<Items.StorageComponent>()
                 .AddIngredient(ItemID.Diamond, 3)
                 .AddIngredient(ItemID.Emerald, 7)
                 .AddTile(TileID.WorkBenches)

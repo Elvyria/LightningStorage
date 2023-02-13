@@ -1,11 +1,11 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MagicStorage.Content.Items
 {
     public class StorageUnitHellstone : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -15,10 +15,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 2;
-            Item.value = Item.sellPrice(0, 0, 50, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.sellPrice(silver: 50);
             Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
             Item.placeStyle = 3;
         }
@@ -26,13 +26,13 @@ namespace MagicStorage.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageUnitDemonite>())
-                .AddIngredient(ModContent.ItemType<Items.UpgradeHellstone>())
+                .AddIngredient<Items.StorageUnitDemonite>()
+                .AddIngredient<Items.UpgradeHellstone>()
                 .Register();
 
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageUnitCrimtane>())
-                .AddIngredient(ModContent.ItemType<Items.UpgradeHellstone>())
+                .AddIngredient<Items.StorageUnitCrimtane>()
+                .AddIngredient<Items.UpgradeHellstone>()
                 .Register();
         }
     }

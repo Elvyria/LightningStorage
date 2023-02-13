@@ -1,11 +1,11 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MagicStorage.Content.Items
 {
     public class StorageUnitTiny : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -15,10 +15,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 0;
-            Item.value = Item.sellPrice(0, 0, 6, 0);
+            Item.rare = ItemRarityID.White;
+            Item.value = Item.sellPrice(silver: 6);
             Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
             Item.placeStyle = 8;
         }

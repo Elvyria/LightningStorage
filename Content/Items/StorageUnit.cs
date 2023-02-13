@@ -15,24 +15,24 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 0;
-            Item.value = Item.sellPrice(0, 0, 6, 0);
+            Item.rare = ItemRarityID.White;
+            Item.value = Item.sellPrice(silver: 6);
             Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
         }
 
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageComponent>())
+                .AddIngredient<Items.StorageComponent>()
                 .AddRecipeGroup("MagicStorage:AnyChest")
                 .AddIngredient(ItemID.SilverBar, 10)
                 .AddTile(TileID.WorkBenches)
                 .Register();
 
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageComponent>())
+                .AddIngredient<Items.StorageComponent>()
                 .AddRecipeGroup("MagicStorage:AnyChest")
                 .AddIngredient(ItemID.TungstenBar, 10)
                 .AddTile(TileID.WorkBenches)

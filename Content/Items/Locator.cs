@@ -25,8 +25,8 @@ namespace MagicStorage.Content.Items
             Item.width = 28;
             Item.height = 28;
             Item.maxStack = 1;
-            Item.rare = 1;
-            Item.value = Item.sellPrice(0, 1, 0, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(gold: 1);
         }
 
         public override void ModifyTooltips(List<TooltipLine> lines)

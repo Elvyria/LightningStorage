@@ -8,7 +8,6 @@ namespace MagicStorage.Content.Items
 {
     public class StorageDeactivator : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 24;
@@ -17,10 +16,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.tileBoost = 20;
-            Item.rare = 1;
-            Item.value = Item.sellPrice(0, 0, 40, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(silver: 40);
         }
 
         public override bool? UseItem(Player player)
@@ -58,7 +57,7 @@ namespace MagicStorage.Content.Items
         {
             CreateRecipe()
                 .AddIngredient(ItemID.ActuationRod)
-                .AddIngredient(null, "StorageComponent")
+                .AddIngredient<Items.StorageComponent>()
                 .AddTile(TileID.Anvils)
                 .Register();
         }

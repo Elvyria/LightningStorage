@@ -9,7 +9,7 @@ namespace MagicStorage.Content.Items
         {
             Item.width = 30;
             Item.height = 30;
-            Item.rare = 1;
+            Item.rare = ItemRarityID.Blue;
         }
 
         public override void AddRecipes()

@@ -11,17 +11,16 @@ namespace MagicStorage.Content.Items
 {
     public class PortableAccess : Locator
     {
-
         public override void SetDefaults()
         {
             Item.width = 28;
             Item.height = 28;
             Item.maxStack = 1;
-            Item.rare = 11;
-            Item.useStyle = 1;
+            Item.rare = ItemRarityID.Purple;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useAnimation = 28;
             Item.useTime = 28;
-            Item.value = Item.sellPrice(0, 10, 0, 0);
+            Item.value = Item.sellPrice(gold: 10);
         }
 
         public override bool? UseItem(Player player)

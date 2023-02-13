@@ -6,14 +6,13 @@ namespace MagicStorage.Content.Items
 {
     public class UpgradeTerra : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 12;
             Item.height = 12;
             Item.maxStack = 99;
-            Item.rare = 11;
-            Item.value = Item.sellPrice(0, 10, 0, 0);
+            Item.rare = ItemRarityID.Purple;
+            Item.value = Item.sellPrice(gold: 10);
         }
 
         public override void AddRecipes()

@@ -1,11 +1,11 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MagicStorage.Content.Items
 {
     public class StorageUnitDemonite : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 26;
@@ -15,10 +15,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 1;
-            Item.value = Item.sellPrice(0, 0, 32, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(silver: 32);
             Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
             Item.placeStyle = 1;
         }
@@ -26,8 +26,8 @@ namespace MagicStorage.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<Items.StorageUnit>())
-                .AddIngredient(ModContent.ItemType<Items.UpgradeDemonite>())
+                .AddIngredient<Items.StorageUnit>()
+                .AddIngredient<Items.UpgradeDemonite>()
                 .Register();
         }
     }

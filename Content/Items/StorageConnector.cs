@@ -6,7 +6,6 @@ namespace MagicStorage.Content.Items
 {
     public class StorageConnector : ModItem
     {
-
         public override void SetDefaults()
         {
             Item.width = 12;
@@ -16,10 +15,10 @@ namespace MagicStorage.Content.Items
             Item.autoReuse = true;
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = 0;
-            Item.value = Item.sellPrice(0, 0, 0, 10);
+            Item.rare = ItemRarityID.White;
+            Item.value = Item.sellPrice(copper: 10);
             Item.createTile = ModContent.TileType<Tiles.StorageConnector>();
         }
 
