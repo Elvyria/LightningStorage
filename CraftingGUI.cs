@@ -683,13 +683,13 @@ namespace MagicStorage
 					continue;
 				}
 
-				if (itemCounts.ContainsKey(item.netID))
+				if (itemCounts.ContainsKey(item.type))
 				{
-					itemCounts[item.netID] += item.stack;
+					itemCounts[item.type] += item.stack;
 				}
 				else
 				{
-					itemCounts[item.netID] = item.stack;
+					itemCounts[item.type] = item.stack;
 				}
 
 				foreach (var (id, recipeGroup) in RecipeGroup.recipeGroups)
@@ -786,7 +786,7 @@ namespace MagicStorage
 
 			foreach (Item ingredient in recipe.requiredItem)
 			{
-				if (itemCounts.ContainsKey(ingredient.netID) && itemCounts[ingredient.netID] >= ingredient.stack) {
+				if (itemCounts.ContainsKey(ingredient.type) && itemCounts[ingredient.type] >= ingredient.stack) {
 					continue;
 				}
 

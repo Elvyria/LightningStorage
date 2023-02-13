@@ -16,7 +16,7 @@ namespace MagicStorage
 
 		public ItemData(Item item)
 		{
-			this.Type = item.netID;
+			this.Type = item.type;
 			this.Prefix = item.prefix;
 		}
 
@@ -37,7 +37,7 @@ namespace MagicStorage
 
 		public static bool Matches(Item item1, Item item2)
 		{
-			return item1.netID == item2.netID && item1.prefix == item2.prefix;
+			return item1.type == item2.type && item1.prefix == item2.prefix;
 		}
 
 		public static bool Matches(ItemData data1, ItemData data2)
