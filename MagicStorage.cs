@@ -20,7 +20,6 @@ namespace MagicStorage
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
-			NetHelper.HandlePacket(reader, whoAmI);
 		}
 	}
 }

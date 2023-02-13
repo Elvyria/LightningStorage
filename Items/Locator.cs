@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -65,17 +64,6 @@ namespace MagicStorage.Items
 		public override void LoadData(TagCompound tag)
 		{
 			location = new Point16(tag.GetShort("X"), tag.GetShort("Y"));
-		}
-
-		public override void NetSend(BinaryWriter writer)
-		{
-			writer.Write(location.X);
-			writer.Write(location.Y);
-		}
-
-		public override void NetReceive(BinaryReader reader)
-		{
-			location = new Point16(reader.ReadInt16(), reader.ReadInt16());
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -71,12 +70,6 @@ namespace MagicStorage.Components
 
 		public static int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternative)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, 1);
-				NetHelper.SendSearchAndRefresh(i, j);
-				return 0;
-			}
 			TEStorageComponent.SearchAndRefreshNetwork(new Point16(i, j));
 			return 0;
 		}
@@ -113,14 +106,7 @@ namespace MagicStorage.Components
 				return;
 			}
 			StorageComponent.killTile = new Point16(i, j);
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetHelper.SendSearchAndRefresh(StorageComponent.killTile.X, StorageComponent.killTile.Y);
-			}
-			else
-			{
-				TEStorageComponent.SearchAndRefreshNetwork(StorageComponent.killTile);
-			}
+			TEStorageComponent.SearchAndRefreshNetwork(StorageComponent.killTile);
 			StorageComponent.killTile = new Point16(-1, -1);
 		}
 	}

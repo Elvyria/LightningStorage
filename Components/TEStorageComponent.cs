@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MagicStorage.Components
@@ -18,11 +17,6 @@ namespace MagicStorage.Components
 
 		public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternative)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetHelper.SendComponentPlace(i - 1, j - 1, Type);
-				return -1;
-			}
 			int id = Place(i - 1, j - 1);
 			((TEStorageComponent)TileEntity.ByID[id]).OnPlace();
 			return id;
@@ -30,12 +24,6 @@ namespace MagicStorage.Components
 
 		public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternative)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
-				NetHelper.SendSearchAndRefresh(i - 1, j - 1);
-				return 0;
-			}
 			SearchAndRefreshNetwork(new Point16(i - 1, j - 1));
 			return 0;
 		}
@@ -47,14 +35,7 @@ namespace MagicStorage.Components
 
 		public override void OnKill()
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetHelper.SendSearchAndRefresh(Position.X, Position.Y);
-			}
-			else
-			{
-				TEStorageComponent.SearchAndRefreshNetwork(Position);
-			}
+			TEStorageComponent.SearchAndRefreshNetwork(Position);
 		}
 
 		private static IEnumerable<Point16> checkNeighbors = new Point16[]
@@ -155,7 +136,6 @@ namespace MagicStorage.Components
 		public override void OnNetPlace()
 		{
 			OnPlace();
-			NetHelper.SendTEUpdate(ID, Position);
 		}
 
 		public static void SearchAndRefreshNetwork(Point16 position)

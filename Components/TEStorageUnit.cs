@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -13,7 +9,6 @@ namespace MagicStorage.Components
 	public class TEStorageUnit : TEAbstractStorageUnit
 	{
 		private IList<Item> items = new List<Item>();
-		private Queue<UnitOperation> netQueue = new Queue<UnitOperation>();
 		private bool receiving = false;
 
 		//metadata
@@ -79,49 +74,20 @@ namespace MagicStorage.Components
 			return tile.TileType == ModContent.TileType<StorageUnit>() && tile.TileFrameX % 36 == 0 && tile.TileFrameY % 36 == 0;
 		}
 
-		public override bool HasSpaceInStackFor(Item check, bool locked = false)
+		public override bool HasSpaceInStackFor(Item check)
 		{
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().EnterReadLock();
-			}
-			try
-			{
-				ItemData data = new ItemData(check);
-				return hasSpaceInStack.Contains(data);
-			}
-			finally
-			{
-				if (Main.netMode == NetmodeID.Server && !locked)
-				{
-					GetHeart().ExitReadLock();
-				}
-			}
+			ItemData data = new ItemData(check);
+			return hasSpaceInStack.Contains(data);
 		}
 
-		public bool HasSpaceFor(Item check, bool locked = false)
+		public bool HasSpaceFor(Item check)
 		{
-			return !IsFull || HasSpaceInStackFor(check, locked);
+			return !IsFull || HasSpaceInStackFor(check);
 		}
 
-		public override bool HasItem(Item check, bool locked = false)
+		public override bool HasItem(Item item)
 		{
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().EnterReadLock();
-			}
-			try
-			{
-				ItemData data = new ItemData(check);
-				return hasItem.Contains(data);
-			}
-			finally
-			{
-				if (Main.netMode == NetmodeID.Server && !locked)
-				{
-					GetHeart().ExitReadLock();
-				}
-			}
+			return hasItem.Contains(new ItemData(item));
 		}
 
 		public override IEnumerable<Item> GetItems()
@@ -129,145 +95,87 @@ namespace MagicStorage.Components
 			return items;
 		}
 
-		public override void DepositItem(Item toDeposit, bool locked = false)
+		public override void DepositItem(Item toDeposit)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
+			Item original = toDeposit.Clone();
+			bool finished = false;
+			bool hasChange = false;
+			foreach (Item item in items)
 			{
-				return;
-			}
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().EnterWriteLock();
-			}
-			try
-			{
-				Item original = toDeposit.Clone();
-				bool finished = false;
-				bool hasChange = false;
-				foreach (Item item in items)
+				if (ItemData.Matches(toDeposit, item) && item.stack < item.maxStack)
 				{
-					if (ItemData.Matches(toDeposit, item) && item.stack < item.maxStack)
+					int total = item.stack + toDeposit.stack;
+					int newStack = total;
+					if (newStack > item.maxStack)
 					{
-						int total = item.stack + toDeposit.stack;
-						int newStack = total;
-						if (newStack > item.maxStack)
-						{
-							newStack = item.maxStack;
-						}
-						item.stack = newStack;
-						hasChange = true;
-						toDeposit.stack = total - newStack;
-						if (toDeposit.stack <= 0)
-						{
-							toDeposit.SetDefaults(0, true);
-							finished = true;
-							break;
-						}
+						newStack = item.maxStack;
 					}
-				}
-				if (!finished && !IsFull)
-				{
-					Item item = toDeposit.Clone();
-					item.newAndShiny = false;
-					item.favorited = false;
-					items.Add(item);
-					toDeposit.SetDefaults(0, true);
+					item.stack = newStack;
 					hasChange = true;
-					finished = true;
-				}
-				if (hasChange && Main.netMode != NetmodeID.MultiplayerClient)
-				{
-					if (Main.netMode == NetmodeID.Server)
+					toDeposit.stack = total - newStack;
+					if (toDeposit.stack <= 0)
 					{
-						netQueue.Enqueue(UnitOperation.Deposit.Create(original));
+						toDeposit.SetDefaults(0, true);
+						finished = true;
+						break;
 					}
-					PostChangeContents();
 				}
 			}
-			finally
+			if (!finished && !IsFull)
 			{
-				if (Main.netMode == NetmodeID.Server && !locked)
-				{
-					GetHeart().ExitWriteLock();
-				}
+				Item item = toDeposit.Clone();
+				item.newAndShiny = false;
+				item.favorited = false;
+				items.Add(item);
+				toDeposit.SetDefaults(0, true);
+				hasChange = true;
+				finished = true;
+			}
+			if (hasChange)
+			{
+				PostChangeContents();
 			}
 		}
 
-		public override Item TryWithdraw(Item lookFor, bool locked = false)
+		public override Item TryWithdraw(Item lookFor)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
+			Item original = lookFor.Clone();
+			Item result = lookFor.Clone();
+			result.stack = 0;
+			for (int k = 0; k < items.Count; k++)
+			{
+				Item item = items[k];
+				if (ItemData.Matches(lookFor, item))
+				{
+					int withdraw = Math.Min(lookFor.stack, item.stack);
+					item.stack -= withdraw;
+					if (item.stack <= 0)
+					{
+						items.RemoveAt(k);
+						k--;
+					}
+					result.stack += withdraw;
+					lookFor.stack -= withdraw;
+					if (lookFor.stack <= 0)
+					{
+						PostChangeContents();
+						return result;
+					}
+				}
+			}
+			if (result.stack == 0)
 			{
 				return new Item();
 			}
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().EnterWriteLock();
-			}
-			try
-			{
-				Item original = lookFor.Clone();
-				Item result = lookFor.Clone();
-				result.stack = 0;
-				for (int k = 0; k < items.Count; k++)
-				{
-					Item item = items[k];
-					if (ItemData.Matches(lookFor, item))
-					{
-						int withdraw = Math.Min(lookFor.stack, item.stack);
-						item.stack -= withdraw;
-						if (item.stack <= 0)
-						{
-							items.RemoveAt(k);
-							k--;
-						}
-						result.stack += withdraw;
-						lookFor.stack -= withdraw;
-						if (lookFor.stack <= 0)
-						{
-							if (Main.netMode != NetmodeID.MultiplayerClient)
-							{
-								if (Main.netMode == NetmodeID.Server)
-								{
-									netQueue.Enqueue(UnitOperation.Withdraw.Create(original));
-								}
-								PostChangeContents();
-							}
-							return result;
-						}
-					}
-				}
-				if (result.stack == 0)
-				{
-					return new Item();
-				}
-				if (Main.netMode != NetmodeID.MultiplayerClient)
-				{
-					if (Main.netMode == NetmodeID.Server)
-					{
-						netQueue.Enqueue(UnitOperation.Withdraw.Create(original));
-					}
-					PostChangeContents();
-				}
-				return result;
-			}
-			finally
-			{
-				if (Main.netMode == NetmodeID.Server && !locked)
-				{
-					GetHeart().ExitWriteLock();
-				}
-			}
+			PostChangeContents();
+			return result;
 		}
 
-		public bool UpdateTileFrame(bool locked = false)
+		public bool UpdateTileFrame()
 		{
 			Tile topLeft = Main.tile[Position.X, Position.Y];
 			int oldFrame = topLeft.TileFrameX;
 			int style;
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().EnterReadLock();
-			}
 			if (IsEmpty)
 			{
 				style = 0;	
@@ -279,10 +187,6 @@ namespace MagicStorage.Components
 			else
 			{
 				style = 1;
-			}
-			if (Main.netMode == NetmodeID.Server && !locked)
-			{
-				GetHeart().ExitReadLock();
 			}
 			if (Inactive)
 			{
@@ -296,15 +200,6 @@ namespace MagicStorage.Components
 			return oldFrame != style;
 		}
 
-		public void UpdateTileFrameWithNetSend(bool locked = false)
-		{
-			if (UpdateTileFrame(locked))
-			{
-				NetMessage.SendTileSquare(-1, Position.X, Position.Y, 2, 2);
-			}
-		}
-
-		//precondition: lock is already taken
 		internal static void SwapItems(TEStorageUnit unit1, TEStorageUnit unit2)
 		{
 			IList<Item> items = unit1.items;
@@ -316,34 +211,16 @@ namespace MagicStorage.Components
 			dict = unit1.hasItem;
 			unit1.hasItem = unit2.hasItem;
 			unit2.hasItem = dict;
-			if (Main.netMode == NetmodeID.Server)
-			{
-				unit1.netQueue.Clear();
-				unit2.netQueue.Clear();
-				unit1.netQueue.Enqueue(UnitOperation.FullSync.Create());
-				unit2.netQueue.Enqueue(UnitOperation.FullSync.Create());
-			}
+
 			unit1.PostChangeContents();
 			unit2.PostChangeContents();
 		}
 
-		//precondition: lock is already taken
 		internal Item WithdrawStack()
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && !receiving)
-			{
-				return new Item();
-			}
 			Item item = items[items.Count - 1];
 			items.RemoveAt(items.Count - 1);
-			if (Main.netMode != NetmodeID.MultiplayerClient)
-			{
-				if (Main.netMode == NetmodeID.Server)
-				{
-					netQueue.Enqueue(UnitOperation.WithdrawStack.Create());
-				}
-				PostChangeContents();
-			}
+			PostChangeContents();
 			return item;
 		}
 
@@ -375,84 +252,6 @@ namespace MagicStorage.Components
 				}
 				hasItem.Add(data);
 			}
-			if (Main.netMode == NetmodeID.Server)
-			{
-				netQueue.Enqueue(UnitOperation.FullSync.Create());
-			}
-		}
-
-		public override void NetSend(BinaryWriter trueWriter)
-		{
-			/* Recreate a BinaryWriter writer */
-			MemoryStream buffer = new MemoryStream(65536);
-			DeflateStream compressor = new DeflateStream(buffer, CompressionMode.Compress, true);
-			BufferedStream writerBuffer = new BufferedStream(compressor, 65536);
-			BinaryWriter writer = new BinaryWriter(writerBuffer);
-
-			/* Original code */
-			base.NetSend(writer);
-			if (netQueue.Count > Capacity / 2)
-			{
-				netQueue.Clear();
-				netQueue.Enqueue(UnitOperation.FullSync.Create());
-			}
-			writer.Write((ushort)netQueue.Count);
-			while (netQueue.Count > 0)
-			{
-				netQueue.Dequeue().Send(writer, this);
-			}
-
-			/* Forces data to be flushed into the compressed buffer */
-			writerBuffer.Flush(); compressor.Close();
-
-			/* Sends the buffer through the network */
-			trueWriter.Write((ushort)buffer.Length);
-			trueWriter.Write(buffer.ToArray());
-
-			/* Dispose all objects */
-			writer.Dispose(); writerBuffer.Dispose(); compressor.Dispose(); buffer.Dispose();
-		}
-
-		public override void NetReceive(BinaryReader trueReader)
-		{
-			/* Reads the buffer off the network */
-			MemoryStream buffer = new MemoryStream(65536);
-			BinaryWriter bufferWriter = new BinaryWriter(buffer);
-
-			bufferWriter.Write(trueReader.ReadBytes(trueReader.ReadUInt16()));
-			buffer.Position = 0;
-
-			/* Recreate the BinaryReader reader */
-			DeflateStream decompressor = new DeflateStream(buffer, CompressionMode.Decompress, true);
-			BinaryReader reader = new BinaryReader(decompressor);
-
-			/* Original code */
-			base.NetReceive(reader);
-			if (TileEntity.ByPosition.ContainsKey(Position) && TileEntity.ByPosition[Position] is TEStorageUnit)
-			{
-				TEStorageUnit other = (TEStorageUnit)TileEntity.ByPosition[Position];
-				items = other.items;
-				hasSpaceInStack = other.hasSpaceInStack;
-				hasItem = other.hasItem;
-			}
-			receiving = true;
-			int count = reader.ReadUInt16();
-			bool flag = false;
-			for (int k = 0; k < count; k++)
-			{
-				if (UnitOperation.Receive(reader, this))
-				{
-					flag = true;
-				}
-			}
-			if (flag)
-			{
-				RepairMetadata();
-			}
-			receiving = false;
-
-			/* Dispose all objects */
-			reader.Dispose(); decompressor.Dispose(); bufferWriter.Dispose(); buffer.Dispose();
 		}
 
 		private void ClearItemsData()
@@ -480,135 +279,7 @@ namespace MagicStorage.Components
 		private void PostChangeContents()
 		{
 			RepairMetadata();
-			UpdateTileFrameWithNetSend(true);
-			NetHelper.SendTEUpdate(ID, Position);
-		}
-
-		abstract class UnitOperation
-		{
-			public static readonly UnitOperation FullSync = new FullSync();
-			public static readonly UnitOperation Deposit = new DepositOperation();
-			public static readonly UnitOperation Withdraw = new WithdrawOperation();
-			public static readonly UnitOperation WithdrawStack = new WithdrawStackOperation();
-			private static List<UnitOperation> types = new List<UnitOperation>();
-
-			static UnitOperation()
-			{
-				types.Add(FullSync);
-				types.Add(Deposit);
-				types.Add(Withdraw);
-				types.Add(WithdrawStack);
-				for (int k = 0; k < types.Count; k++)
-				{
-					types[k].id = (byte)k;
-				}
-			}
-
-			protected byte id;
-			protected Item data;
-
-			public UnitOperation Create()
-			{
-				return (UnitOperation)MemberwiseClone();
-			}
-
-			public UnitOperation Create(Item item)
-			{
-				UnitOperation clone = Create();
-				clone.data = item;
-				return clone;
-			}
-
-			public void Send(BinaryWriter writer, TEStorageUnit unit)
-			{
-				writer.Write(id);
-				SendData(writer, unit);
-			}
-
-			protected abstract void SendData(BinaryWriter writer, TEStorageUnit unit);
-
-			public static bool Receive(BinaryReader reader, TEStorageUnit unit)
-			{
-				byte id = reader.ReadByte();
-				if (id >= 0 && id < types.Count)
-				{
-					return types[id].ReceiveData(reader, unit);
-				}
-				return false;
-			}
-
-			protected abstract bool ReceiveData(BinaryReader reader, TEStorageUnit unit);
-		}
-
-		class FullSync : UnitOperation
-		{
-			protected override void SendData(BinaryWriter writer, TEStorageUnit unit)
-			{
-				writer.Write(unit.items.Count);
-				foreach (Item item in unit.items)
-				{
-					ItemIO.Send(item, writer, true, false);
-				}
-			}
-
-			protected override bool ReceiveData(BinaryReader reader, TEStorageUnit unit)
-			{
-				unit.ClearItemsData();
-				int count = reader.ReadInt32();
-				for (int k = 0; k < count; k++)
-				{
-					Item item = ItemIO.Receive(reader, true, false);
-					unit.items.Add(item);
-					ItemData data = new ItemData(item);
-					if (item.stack < item.maxStack)
-					{
-						unit.hasSpaceInStack.Add(data);
-					}
-					unit.hasItem.Add(data);
-				}
-				return false;
-			}
-		}
-
-		class DepositOperation : UnitOperation
-		{
-			protected override void SendData(BinaryWriter writer, TEStorageUnit unit)
-			{
-				ItemIO.Send(data, writer, true, false);
-			}
-
-			protected override bool ReceiveData(BinaryReader reader, TEStorageUnit unit)
-			{
-				unit.DepositItem(ItemIO.Receive(reader, true, false));
-				return true;
-			}
-		}
-
-		class WithdrawOperation : UnitOperation
-		{
-			protected override void SendData(BinaryWriter writer, TEStorageUnit unit)
-			{
-				ItemIO.Send(data, writer, true, false);
-			}
-
-			protected override bool ReceiveData(BinaryReader reader, TEStorageUnit unit)
-			{
-				unit.TryWithdraw(ItemIO.Receive(reader, true, false));
-				return true;
-			}
-		}
-
-		class WithdrawStackOperation : UnitOperation
-		{
-			protected override void SendData(BinaryWriter writer, TEStorageUnit unit)
-			{
-			}
-
-			protected override bool ReceiveData(BinaryReader reader, TEStorageUnit unit)
-			{
-				unit.WithdrawStack();
-				return true;
-			}
+			UpdateTileFrame();
 		}
 	}
 }

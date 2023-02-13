@@ -1,5 +1,4 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -145,18 +144,10 @@ namespace MagicStorage.Components
 			{
 				TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
 				storageUnit.UpdateTileFrame();
-				NetMessage.SendTileSquare(Main.myPlayer, i, j, 2, 2);
 				TEStorageHeart heart = storageUnit.GetHeart();
 				if (heart != null)
 				{
-					if (Main.netMode == NetmodeID.SinglePlayer)
-					{
-						heart.ResetCompactStage();
-					}
-					else if (Main.netMode == NetmodeID.MultiplayerClient)
-					{
-						NetHelper.SendResetCompactStage(heart.ID);
-					}
+					heart.ResetCompactStage();
 				}
 				item.stack--;
 				if (item.stack <= 0)

@@ -1,4 +1,3 @@
-using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -38,7 +37,6 @@ namespace MagicStorage.Components
 			}
 			message = "Success!";
 			locator = toLocate;
-			NetHelper.ClientSendTEUpdate(ID);
 			return true;
 		}
 
@@ -69,17 +67,5 @@ namespace MagicStorage.Components
 			locator = new Point16(tagLocator.GetShort("X"), tagLocator.GetShort("Y"));
 		}
 
-		public override void NetSend(BinaryWriter writer)
-		{
-			base.NetSend(writer);
-			writer.Write(locator.X);
-			writer.Write(locator.Y);
-		}
-
-		public override void NetReceive(BinaryReader reader)
-		{
-			base.NetReceive(reader);
-			locator = new Point16(reader.ReadInt16(), reader.ReadInt16());
-		}
 	}
 }

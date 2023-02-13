@@ -432,65 +432,31 @@ namespace MagicStorage
 
 		private void Deposit(Item item)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				heart.DepositItem(item);
-			}
-			else
-			{
-				NetHelper.SendDeposit(heart.ID, item);
-				item.SetDefaults(0, true);
-			}
+			heart.DepositItem(item);
 		}
 
 		private bool TryDepositAll()
 		{
 			Player player = Main.LocalPlayer;
 			bool changed = false;
-			if (Main.netMode == NetmodeID.SinglePlayer)
+			for (int k = 10; k < 50; k++)
 			{
-				for (int k = 10; k < 50; k++)
+				if (!player.inventory[k].IsAir && !player.inventory[k].favorited)
 				{
-					if (!player.inventory[k].IsAir && !player.inventory[k].favorited)
+					int oldStack = player.inventory[k].stack;
+					heart.DepositItem(player.inventory[k]);
+					if (oldStack != player.inventory[k].stack)
 					{
-						int oldStack = player.inventory[k].stack;
-						heart.DepositItem(player.inventory[k]);
-						if (oldStack != player.inventory[k].stack)
-						{
-							changed = true;
-						}
+						changed = true;
 					}
 				}
-			}
-			else
-			{
-				List<Item> items = new List<Item>(40);
-				for (int k = 10; k < 50; k++)
-				{
-					if (!player.inventory[k].IsAir && !player.inventory[k].favorited)
-					{
-						items.Add(player.inventory[k]);
-					}
-				}
-				NetHelper.SendDepositAll(heart.ID, items);
-				foreach (Item item in items)
-				{
-					item.SetDefaults(0, true);
-				}
-				changed = true;
 			}
 			return changed;
 		}
 
 		private Item Withdraw(Item item, bool toInventory = false)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				return heart.TryWithdraw(item);
-			}
-
-			NetHelper.SendWithdraw(heart.ID, item, toInventory);
-			return new Item();
+			return heart.TryWithdraw(item);
 		}
 	}
 }

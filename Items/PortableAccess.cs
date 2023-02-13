@@ -65,7 +65,6 @@ namespace MagicStorage.Items
 			}
 			if (player.editedChestName)
 			{
-				NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
 				player.editedChestName = false;
 			}
 			if (player.talkNPC > -1)

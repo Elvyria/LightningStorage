@@ -1,9 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -30,11 +28,6 @@ namespace MagicStorage.Components
 
 		public void TryDepositStation(Item item)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				return;
-			}
-
 			foreach (Item station in stations)
 			{
 				if (station.type == item.type)
@@ -54,7 +47,6 @@ namespace MagicStorage.Components
 					{
 						item.SetDefaults(0);
 					}
-					NetHelper.SendTEUpdate(ID, Position);
 					return;
 				}
 			}
@@ -62,16 +54,10 @@ namespace MagicStorage.Components
 
 		public Item TryWithdrawStation(int slot)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				return new Item();
-			}
-
 			if (!stations[slot].IsAir)
 			{
 				Item item = stations[slot];
 				stations[slot] = new Item();
-				NetHelper.SendTEUpdate(ID, Position);
 
 				return item;
 			}
@@ -81,11 +67,6 @@ namespace MagicStorage.Components
 
 		public Item SwapStations(Item item, int slot)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				return new Item();
-			}
-
 			if (!item.IsAir)
 			{
 				for (int k = 0; k < stations.Length; k++)
@@ -102,7 +83,6 @@ namespace MagicStorage.Components
 				Item temp = item;
 				item = stations[slot];
 				stations[slot] = temp;
-				NetHelper.SendTEUpdate(ID, Position);
 				return item;
 			}
 			else if (!item.IsAir && stations[slot].IsAir)
@@ -114,7 +94,6 @@ namespace MagicStorage.Components
 				{
 					item.SetDefaults(0);
 				}
-				NetHelper.SendTEUpdate(ID, Position);
 				return item;
 			}
 
@@ -132,22 +111,6 @@ namespace MagicStorage.Components
 			if (listStations != null && listStations.Any())
 			{
 				stations = listStations.Select(item => ItemIO.Load(item)).ToArray();
-			}
-		}
-
-		public override void NetSend(BinaryWriter writer)
-		{
-			foreach (Item item in stations)
-			{
-				ItemIO.Send(item, writer, true, false);
-			}
-		}
-
-		public override void NetReceive(BinaryReader reader)
-		{
-			for (int k = 0; k < stations.Length; k++)
-			{
-				stations[k] = ItemIO.Receive(reader, true, false);
 			}
 		}
 	}

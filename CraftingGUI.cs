@@ -1018,24 +1018,12 @@ namespace MagicStorage
 
 		private Item WithdrawStation(int slot)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				return access.TryWithdrawStation(slot);
-			}
-
-			NetHelper.SendWithdrawStation(access.ID, slot);
-			return new Item();
+			return access.TryWithdrawStation(slot);
 		}
 
 		private Item SwapStations(Item item, int slot)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				return access.SwapStations(item, slot);
-			}
-
-			NetHelper.SendStationSlotClick(access.ID, item, slot);
-			return new Item();
+			return access.SwapStations(item, slot);
 		}
 
 		private void TryCraft()
@@ -1085,16 +1073,9 @@ namespace MagicStorage
 
 			RecipeLoader.OnCraft(resultItem, selectedRecipe, toWithdraw);
 
-			if (Main.netMode == NetmodeID.SinglePlayer)
+			foreach (Item item in Craft(heart, toWithdraw, resultItem))
 			{
-				foreach (Item item in Craft(heart, toWithdraw, resultItem))
-				{
-					Main.player[Main.myPlayer].QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
-				}
-			}
-			else if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetHelper.SendCraftRequest(heart.ID, toWithdraw, resultItem);
+				Main.player[Main.myPlayer].QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
 			}
 		}
 
@@ -1143,26 +1124,12 @@ namespace MagicStorage
 
 		private void DepositItem(Item item)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				heart.DepositItem(item);
-			}
-			else
-			{
-				NetHelper.SendDeposit(heart.ID, item);
-				item.SetDefaults(0, true);
-			}
+			heart.DepositItem(item);
 		}
 
 		private Item WithdrawItem(Item item, bool toInventory = false)
 		{
-			if (Main.netMode == NetmodeID.SinglePlayer)
-			{
-				return heart.TryWithdraw(item);
-			}
-
-			NetHelper.SendWithdraw(heart.ID, item, toInventory);
-			return new Item();
+			return heart.TryWithdraw(item);
 		}
 	}
 }

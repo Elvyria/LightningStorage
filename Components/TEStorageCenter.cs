@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -34,7 +33,6 @@ namespace MagicStorage.Components
 						TEAbstractStorageUnit storageUnit = (TEAbstractStorageUnit)TileEntity.ByPosition[explore];
 						if (storageUnit.Link(Position))
 						{
-							NetHelper.SendTEUpdate(storageUnit.ID, storageUnit.Position);
 							changed = true;
 						}
 						storageUnits.Add(explore);
@@ -55,7 +53,6 @@ namespace MagicStorage.Components
 					{
 						TileEntity storageUnit = TileEntity.ByPosition[oldStorageUnit];
 						((TEAbstractStorageUnit)storageUnit).Unlink();
-						NetHelper.SendTEUpdate(storageUnit.ID, storageUnit.Position);
 					}
 					changed = true;
 				}
@@ -68,7 +65,6 @@ namespace MagicStorage.Components
 				{
 					heart.ResetCompactStage();
 				}
-				NetHelper.SendTEUpdate(ID, Position);
 			}
 		}
 
@@ -83,7 +79,6 @@ namespace MagicStorage.Components
 			{
 				TEAbstractStorageUnit unit = (TEAbstractStorageUnit)TileEntity.ByPosition[storageUnit];
 				unit.Unlink();
-				NetHelper.SendTEUpdate(unit.ID, unit.Position);
 			}
 		}
 
@@ -113,25 +108,6 @@ namespace MagicStorage.Components
 			foreach (TagCompound tagUnit in tag.GetList<TagCompound>("StorageUnits"))
 			{
 				storageUnits.Add(new Point16(tagUnit.GetShort("X"), tagUnit.GetShort("Y")));
-			}
-		}
-
-		public override void NetSend(BinaryWriter writer)
-		{
-			writer.Write((short)storageUnits.Count);
-			foreach (Point16 storageUnit in storageUnits)
-			{
-				writer.Write(storageUnit.X);
-				writer.Write(storageUnit.Y);
-			}
-		}
-
-		public override void NetReceive(BinaryReader reader)
-		{
-			int count = reader.ReadInt16();
-			for (int k = 0; k < count; k++)
-			{
-				storageUnits.Add(new Point16(reader.ReadInt16(), reader.ReadInt16()));
 			}
 		}
 	}

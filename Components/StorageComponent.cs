@@ -117,14 +117,7 @@ namespace MagicStorage.Components
 			}
 			else
 			{
-				if (Main.netMode == NetmodeID.MultiplayerClient)
-				{
-					NetHelper.SendSearchAndRefresh(killTile.X, killTile.Y);
-				}
-				else
-				{
-					TEStorageComponent.SearchAndRefreshNetwork(killTile);
-				}
+				TEStorageComponent.SearchAndRefreshNetwork(killTile);
 			}
 			killTile = new Point16(-1, -1);
 		}

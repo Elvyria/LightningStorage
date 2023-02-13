@@ -45,14 +45,10 @@ namespace MagicStorage.Items
 					storageUnit.Inactive = !storageUnit.Inactive;
 					string activeText = storageUnit.Inactive ? "Deactivated" : "Activated";
 					Main.NewText("Storage Unit has been " + activeText);
-					NetHelper.ClientSendTEUpdate(storageUnit.ID);
 					if (storageUnit is TEStorageUnit)
 					{
-						((TEStorageUnit)storageUnit).UpdateTileFrameWithNetSend();
-						if (Main.netMode == NetmodeID.SinglePlayer)
-						{
-							storageUnit.GetHeart().ResetCompactStage();
-						}
+						((TEStorageUnit)storageUnit).UpdateTileFrame();
+						storageUnit.GetHeart().ResetCompactStage();
 					}
 				}
 			}

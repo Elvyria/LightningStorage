@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -12,7 +9,6 @@ namespace MagicStorage.Components
 {
 	public class TEStorageHeart : TEStorageCenter
 	{
-		private ReaderWriterLockSlim itemsLock = new ReaderWriterLockSlim();
 		public List<Point16> remoteAccesses = new List<Point16>();
 		private int updateTimer = 60;
 		private int compactStage = 0;
@@ -41,26 +37,6 @@ namespace MagicStorage.Components
 			return GetStorageUnits().SelectMany(storageUnit => storageUnit.GetItems());
 		}
 
-		public void EnterReadLock()
-		{
-			itemsLock.EnterReadLock();
-		}
-
-		public void ExitReadLock()
-		{
-			itemsLock.ExitReadLock();
-		}
-
-		public void EnterWriteLock()
-		{
-			itemsLock.EnterWriteLock();
-		}
-
-		public void ExitWriteLock()
-		{
-			itemsLock.ExitWriteLock();
-		}
-
 		public override void Update()
 		{
 			for (int k = 0; k < remoteAccesses.Count; k++)
@@ -71,32 +47,14 @@ namespace MagicStorage.Components
 					k--;
 				}
 			}
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				return;
-			}
 			updateTimer++;
 			if (updateTimer >= 60)
 			{
 				updateTimer = 0;
-				if (Main.netMode != NetmodeID.Server || itemsLock.TryEnterWriteLock(2))
-				{
-					try
-					{
-						CompactOne();
-					}
-					finally
-					{
-						if (Main.netMode == NetmodeID.Server)
-						{
-							itemsLock.ExitWriteLock();
-						}
-					}
-				}
+				CompactOne();
 			}
 		}
 
-		//precondition: lock is already taken
 		public void CompactOne()
 		{
 			if (compactStage == 0)
@@ -113,7 +71,6 @@ namespace MagicStorage.Components
 			}
 		}
 
-		//precondition: lock is already taken
 		public bool EmptyInactive()
 		{
 			TEStorageUnit inactiveUnit = null;
@@ -144,12 +101,10 @@ namespace MagicStorage.Components
 				if (storageUnit.IsEmpty && inactiveUnit.NumItems <= storageUnit.Capacity)
 				{
 					TEStorageUnit.SwapItems(inactiveUnit, storageUnit);
-					NetHelper.SendRefreshNetworkItems(ID);
 					return true;
 				}
 			}
 			bool hasChange = false;
-			NetHelper.StartUpdateQueue();
 			Item tryMove = inactiveUnit.WithdrawStack();
 			foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
 			{
@@ -158,9 +113,9 @@ namespace MagicStorage.Components
 					continue;
 				}
 				TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
-				while (storageUnit.HasSpaceFor(tryMove, true) && !tryMove.IsAir)
+				while (storageUnit.HasSpaceFor(tryMove) && !tryMove.IsAir)
 				{
-					storageUnit.DepositItem(tryMove, true);
+					storageUnit.DepositItem(tryMove);
 					if (tryMove.IsAir && !inactiveUnit.IsEmpty)
 					{
 						tryMove = inactiveUnit.WithdrawStack();
@@ -170,21 +125,15 @@ namespace MagicStorage.Components
 			}
 			if (!tryMove.IsAir)
 			{
-				inactiveUnit.DepositItem(tryMove, true);
+				inactiveUnit.DepositItem(tryMove);
 			}
-			NetHelper.ProcessUpdateQueue();
-			if (hasChange)
-			{
-				NetHelper.SendRefreshNetworkItems(ID);
-			}
-			else
+			if (!hasChange)
 			{
 				compactStage++;
 			}
 			return hasChange;
 		}
 
-		//precondition: lock is already taken
 		public bool Defragment()
 		{
 			TEStorageUnit emptyUnit = null;
@@ -202,7 +151,6 @@ namespace MagicStorage.Components
 				else if (emptyUnit != null && !storageUnit.IsEmpty && storageUnit.NumItems <= emptyUnit.Capacity)
 				{
 					TEStorageUnit.SwapItems(emptyUnit, storageUnit);
-					NetHelper.SendRefreshNetworkItems(ID);
 					return true;
 				}
 			}
@@ -210,7 +158,6 @@ namespace MagicStorage.Components
 			return false;
 		}
 
-		//precondition: lock is already taken
 		public bool PackItems()
 		{
 			TEStorageUnit unitWithSpace = null;
@@ -227,18 +174,15 @@ namespace MagicStorage.Components
 				}
 				else if (unitWithSpace != null && !storageUnit.IsEmpty)
 				{
-					NetHelper.StartUpdateQueue();
 					while (!unitWithSpace.IsFull && !storageUnit.IsEmpty)
 					{
 						Item item = storageUnit.WithdrawStack();
-						unitWithSpace.DepositItem(item, true);
+						unitWithSpace.DepositItem(item);
 						if (!item.IsAir)
 						{
-							storageUnit.DepositItem(item, true);
+							storageUnit.DepositItem(item);
 						}
 					}
-					NetHelper.ProcessUpdateQueue();
-					NetHelper.SendRefreshNetworkItems(ID);
 					return true;
 				}
 			}
@@ -256,98 +200,67 @@ namespace MagicStorage.Components
 
 		public void DepositItem(Item toDeposit)
 		{
-			if (Main.netMode == NetmodeID.Server)
-			{
-				EnterWriteLock();
-			}
 			int oldStack = toDeposit.stack;
-			try
+			foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
 			{
-				foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
+				if (!storageUnit.Inactive && storageUnit.HasSpaceInStackFor(toDeposit))
 				{
-					if (!storageUnit.Inactive && storageUnit.HasSpaceInStackFor(toDeposit, true))
+					storageUnit.DepositItem(toDeposit);
+					if (toDeposit.IsAir)
 					{
-						storageUnit.DepositItem(toDeposit, true);
-						if (toDeposit.IsAir)
-						{
-							return;
-						}
-					}
-				}
-				foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
-				{
-					if (!storageUnit.Inactive && !storageUnit.IsFull)
-					{
-						storageUnit.DepositItem(toDeposit, true);
-						if (toDeposit.IsAir)
-						{
-							return;
-						}
+						return;
 					}
 				}
 			}
-			finally
+			foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
 			{
-				if (oldStack != toDeposit.stack)
+				if (!storageUnit.Inactive && !storageUnit.IsFull)
 				{
-					ResetCompactStage();
+					storageUnit.DepositItem(toDeposit);
+					if (toDeposit.IsAir)
+					{
+						return;
+					}
 				}
-				if (Main.netMode == NetmodeID.Server)
-				{
-					ExitWriteLock();
-				}
+			}
+
+			if (oldStack != toDeposit.stack)
+			{
+				ResetCompactStage();
 			}
 		}
 
 		public Item TryWithdraw(Item lookFor)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
+			Item result = new Item();
+			foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
 			{
-				return new Item();
-			}
-			if (Main.netMode == NetmodeID.Server)
-			{
-				EnterWriteLock();
-			}
-			try
-			{
-				Item result = new Item();
-				foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
+				if (storageUnit.HasItem(lookFor))
 				{
-					if (storageUnit.HasItem(lookFor, true))
+					Item withdrawn = storageUnit.TryWithdraw(lookFor);
+					if (!withdrawn.IsAir)
 					{
-						Item withdrawn = storageUnit.TryWithdraw(lookFor, true);
-						if (!withdrawn.IsAir)
+						if (result.IsAir)
 						{
-							if (result.IsAir)
-							{
-								result = withdrawn;
-							}
-							else
-							{
-								result.stack += withdrawn.stack;
-							}
-							if (lookFor.stack <= 0)
-							{
-								ResetCompactStage();
-								return result;
-							}
+							result = withdrawn;
+						}
+						else
+						{
+							result.stack += withdrawn.stack;
+						}
+						if (lookFor.stack <= 0)
+						{
+							ResetCompactStage();
+							return result;
 						}
 					}
 				}
-				if (result.stack > 0)
-				{
-					ResetCompactStage();
-				}
-				return result;
 			}
-			finally
+			if (result.stack > 0)
 			{
-				if (Main.netMode == NetmodeID.Server)
-				{
-					ExitWriteLock();
-				}
+				ResetCompactStage();
 			}
+			return result;
 		}
 
 		public override void SaveData(TagCompound tag)
@@ -373,27 +286,6 @@ namespace MagicStorage.Components
 			foreach (TagCompound tagRemote in tag.GetList<TagCompound>("RemoteAccesses"))
 			{
 				remoteAccesses.Add(new Point16(tagRemote.GetShort("X"), tagRemote.GetShort("Y")));
-			}
-		}
-
-		public override void NetSend(BinaryWriter writer)
-		{
-			base.NetSend(writer);
-			writer.Write((short)remoteAccesses.Count);
-			foreach (Point16 remoteAccess in remoteAccesses)
-			{
-				writer.Write(remoteAccess.X);
-				writer.Write(remoteAccess.Y);
-			}
-		}
-
-		public override void NetReceive(BinaryReader reader)
-		{
-			base.NetReceive(reader);
-			int count = reader.ReadInt16();
-			for (int k = 0; k < count; k++)
-			{
-				remoteAccesses.Add(new Point16(reader.ReadInt16(), reader.ReadInt16()));
 			}
 		}
 	}
