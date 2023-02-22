@@ -1,8 +1,7 @@
-namespace MagicStorage.Common.Sorting
+namespace MagicStorage.Common.Sorting;
+
+public enum RecipeMode
 {
-    public enum RecipeMode
-    {
-        Available,
-        All,
-    }
+	Available,
+	All,
 }

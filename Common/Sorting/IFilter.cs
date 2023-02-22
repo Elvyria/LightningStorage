@@ -1,8 +1,7 @@
-namespace MagicStorage.Common.Sorting
+namespace MagicStorage.Common.Sorting;
+
+public interface IFilter<in T>
 {
-    public interface IFilter<in T>
-    {
-        bool Passes(T x);
-    }
+	bool Passes(T x);
 }
 

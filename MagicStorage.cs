@@ -9,25 +9,23 @@ global using Terraria.UI;
 
 using System.IO;
 
-namespace MagicStorage
+namespace MagicStorage;
+
+public class MagicStorage : Mod
 {
-	public class MagicStorage : Mod
+	public static MagicStorage Instance;
+
+	public override void Load()
 	{
-		public static MagicStorage Instance;
+		Instance = this;
+	}
 
-		public override void Load()
-		{
-			Instance = this;
-		}
+	public override void Unload()
+	{
+		Instance = null;
+	}
 
-		public override void Unload()
-		{
-			Instance = null;
-		}
-
-		public override void HandlePacket(BinaryReader reader, int whoAmI)
-		{
-		}
+	public override void HandlePacket(BinaryReader reader, int whoAmI)
+	{
 	}
 }
-
