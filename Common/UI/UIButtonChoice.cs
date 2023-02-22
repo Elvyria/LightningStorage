@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using Terraria;
 using Terraria.Localization;
-using Terraria.UI;
 
 namespace MagicStorage.Common.UI
 {
@@ -15,13 +13,21 @@ namespace MagicStorage.Common.UI
         private const int padding = 8;
         private int hoverButton = -1;
 
-        private static readonly Asset<Texture2D> backTexture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackground");
-        private static readonly Asset<Texture2D> backTextureActive = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackgroundActive");
+        private Asset<Texture2D> backTexture;
+        private Asset<Texture2D> backTextureActive;
 
         private Asset<Texture2D>[] textures;
         private LocalizedText[] labels;
 
         public int choice = 0;
+
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+
+			backTexture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackground");
+			backTextureActive = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackgroundActive");
+        }
 
         public UIButtonChoice(Asset<Texture2D>[] textures, LocalizedText[] labels)
         {

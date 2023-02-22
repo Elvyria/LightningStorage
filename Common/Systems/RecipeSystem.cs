@@ -1,6 +1,3 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.Localization;
 
 namespace MagicStorage.Common.Systems
@@ -14,6 +11,11 @@ namespace MagicStorage.Common.Systems
             foreach (Recipe recipe in Main.recipe)
             {
                 if (recipe.Mod is null) continue;
+
+				if (recipe.createItem.IsAir)
+				{
+					logger.WarnFormat("{0}: `{1}` recipe creates item that counts as air, this is not supported", recipe.Mod, recipe.createItem.Name);
+				}
 
                 foreach (Item item in recipe.requiredItem)
                 {

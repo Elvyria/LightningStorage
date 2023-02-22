@@ -1,7 +1,3 @@
-using System;
-using Terraria;
-using Terraria.ModLoader;
-
 namespace MagicStorage.Common.Sorting
 {
     public static class FilterMode
@@ -90,12 +86,12 @@ namespace MagicStorage.Common.Sorting
         {
             bool IFilter<Item>.Passes(Item item)
             {
-                return !item.CountsAsClass(DamageClass.Melee)
+                return item.damage > 0
+					&& !item.CountsAsClass(DamageClass.Melee)
                     && !item.CountsAsClass(DamageClass.Ranged)
                     && !item.CountsAsClass(DamageClass.Magic)
                     && !item.CountsAsClass(DamageClass.Summon)
-                    && !item.CountsAsClass(DamageClass.Throwing)
-                    && item.damage > 0;
+                    && !item.CountsAsClass(DamageClass.Throwing);
             }
         }
 

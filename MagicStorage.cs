@@ -1,6 +1,13 @@
-﻿using System.IO;
+﻿global using System;
+global using System.Collections.Generic;
 
-using Terraria.ModLoader;
+global using Terraria;
+global using Terraria.ID;
+global using Terraria.Audio;
+global using Terraria.ModLoader;
+global using Terraria.UI;
+
+using System.IO;
 
 namespace MagicStorage
 {

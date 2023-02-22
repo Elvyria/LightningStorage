@@ -1,7 +1,3 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace MagicStorage.Content.Items
 {
     public class StorageUnitTerra : ModItem

@@ -1,8 +1,5 @@
 using System.Linq;
-using System.Collections.Generic;
 
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using MagicStorage.Content.Tiles;
 
@@ -20,22 +17,16 @@ namespace MagicStorage.Content.TileEntities
             }
         }
 
-        public override bool ValidTile(Tile tile)
+        public override bool IsTileValidForEntity(int i, int j)
         {
-            return tile.TileType == ModContent.TileType<CraftingAccess>()
-                && tile.TileFrameX == 0
-                && tile.TileFrameY == 0;
+			Tile tile = Main.tile[i, j];
+            return tile.HasTile && tile.TileType == ModContent.TileType<CraftingAccess>();
         }
 
         public void TryDepositStation(Item item)
         {
-            foreach (Item station in stations)
-            {
-                if (station.type == item.type)
-                {
-                    return;
-                }
-            }
+			if (Array.Exists(stations, s => s.type == item.type))
+				return;
 
             for (int k = 0; k < stations.Length; k++)
             {
@@ -53,7 +44,7 @@ namespace MagicStorage.Content.TileEntities
             }
         }
 
-        public Item TryWithdrawStation(int slot)
+        public Item WithdrawStation(int slot)
         {
             if (!stations[slot].IsAir)
             {
@@ -108,10 +99,10 @@ namespace MagicStorage.Content.TileEntities
 
         public override void LoadData(TagCompound tag)
         {
-            IList<TagCompound> listStations = tag.GetList<TagCompound>("Stations");
-            if (listStations != null && listStations.Any())
+            IList<TagCompound> stations = tag.GetList<TagCompound>("Stations");
+            if (stations != null && stations.Any())
             {
-                stations = listStations.Select(item => ItemIO.Load(item)).ToArray();
+                this.stations = stations.Select(item => ItemIO.Load(item)).ToArray();
             }
         }
     }

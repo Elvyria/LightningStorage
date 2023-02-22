@@ -1,6 +1,4 @@
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using MagicStorage.Content.Tiles;
 
@@ -8,11 +6,12 @@ namespace MagicStorage.Content.TileEntities
 {
     public class TERemoteAccess : TEStorageCenter
     {
-        private Point16 locator = new Point16(-1, -1);
+        private Point16 locator = Point16.NegativeOne;
 
-        public override bool ValidTile(Tile tile)
+        public override bool IsTileValidForEntity(int i, int j)
         {
-            return tile.TileType == ModContent.TileType<RemoteAccess>() && tile.TileFrameX == 0 && tile.TileFrameY == 0;
+			Tile tile = Main.tile[i, j];
+            return tile.HasTile && tile.TileType == ModContent.TileType<RemoteAccess>();
         }
 
         public override TEStorageHeart GetHeart()

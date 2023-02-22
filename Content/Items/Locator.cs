@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.Localization;
 
@@ -10,7 +6,7 @@ namespace MagicStorage.Content.Items
 {
     public class Locator : ModItem
     {
-        public Point16 location = new Point16(-1, -1);
+        public Point16 location = Point16.NegativeOne;
 
         protected override bool CloneNewInstances
         {

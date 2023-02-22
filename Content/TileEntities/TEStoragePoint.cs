@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using MagicStorage.Content.Tiles;
 
 namespace MagicStorage.Content.TileEntities
 {
@@ -12,11 +9,9 @@ namespace MagicStorage.Content.TileEntities
 
         public void ResetAndSearch()
         {
-            Point16 oldCenter = center;
-            center = new Point16(-1, -1);
+            center = Point16.NegativeOne;
 
-            HashSet<Point16> explored = new HashSet<Point16>();
-            explored.Add(Position);
+            HashSet<Point16> explored = new HashSet<Point16>() { Position };
             Queue<Point16> toExplore = new Queue<Point16>();
             foreach (Point16 point in AdjacentComponents())
             {
@@ -26,14 +21,15 @@ namespace MagicStorage.Content.TileEntities
             while (toExplore.Count > 0)
             {
                 Point16 explore = toExplore.Dequeue();
-                if (!explored.Contains(explore) && explore != StorageComponent.killTile)
+                if (!explored.Contains(explore))
                 {
                     explored.Add(explore);
-                    if (TEStorageCenter.IsStorageCenter(explore))
+                    if (TileEntity.ByPosition.ContainsKey(explore) && TileEntity.ByPosition[explore] is TEStorageCenter)
                     {
                         center = explore;
                         break;
                     }
+
                     foreach (Point16 point in AdjacentComponents(explore))
                     {
                         toExplore.Enqueue(point);
@@ -56,12 +52,12 @@ namespace MagicStorage.Content.TileEntities
 
         public bool Unlink()
         {
-            return Link(new Point16(-1, -1));
+            return Link(Point16.NegativeOne);
         }
 
         public TEStorageHeart GetHeart()
         {
-            if (center != new Point16(-1, -1))
+            if (center != Point16.NegativeOne)
             {
                 return ((TEStorageCenter)ByPosition[center]).GetHeart();
             }

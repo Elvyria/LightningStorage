@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.DataStructures;
 using Terraria.Localization;
 using MagicStorage.Common.Players;
 
@@ -82,7 +77,6 @@ namespace MagicStorage.Content.Items
             {
                 modPlayer.CloseStorage();
                 SoundEngine.PlaySound(SoundID.MenuClose);
-                Recipe.FindRecipes();
             }
             else
             {
@@ -92,7 +86,6 @@ namespace MagicStorage.Content.Items
                 Main.playerInventory = true;
                 Main.recBigList = false;
                 SoundEngine.PlaySound(hadChestOpen || hadOtherOpen ? SoundID.MenuTick : SoundID.MenuOpen);
-                Recipe.FindRecipes();
             }
         }
 

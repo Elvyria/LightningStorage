@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Terraria;
+using ReLogic.Content;
+
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 using MagicStorage.Content.TileEntities;
 
@@ -11,6 +11,14 @@ namespace MagicStorage.Content.Tiles
 {
     public class StorageUnit : StorageComponent
     {
+		private Asset<Texture2D> glowTexture;
+
+        public override void Load()
+        {
+            base.Load();
+			glowTexture = Mod.Assets.Request<Texture2D>("Content/Tiles/StorageUnit_Glow");
+        }
+
         public override void ModifyObjectData()
         {
             TileObjectData.newTile.StyleHorizontal = true;
@@ -65,17 +73,22 @@ namespace MagicStorage.Content.Tiles
             return type;
         }
 
-        public override bool CanKillTile(int i, int j, ref bool blockDamage)
-        {
-            return Main.tile[i, j].TileFrameX / 36 % 3 == 0;
-        }
-
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (Main.tile[i, j].TileFrameX / 36 % 3 != 0)
-            {
-                fail = true;
-            }
+			if (Main.tile[i, j].TileFrameX % 36 == 18)
+			{
+				i--;
+			}
+			if (Main.tile[i, j].TileFrameY % 36 == 18)
+			{
+				j--;
+			}
+
+            Point16 pos = new Point16(i, j);
+			if (TileEntity.ByPosition.ContainsKey(pos) && TileEntity.ByPosition[pos] is TEStorageUnit unitEntity)
+			{
+				fail = !unitEntity.IsEmpty;
+			}
         }
 
         public override bool RightClick(int i, int j)
@@ -94,7 +107,7 @@ namespace MagicStorage.Content.Tiles
             }
             TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
             Main.player[Main.myPlayer].tileInteractionHappened = true;
-            string activeString = storageUnit.Inactive ? "Inactive" : "Active";
+            string activeString = storageUnit.active ? "Active" : "Inactive";
             string fullnessString = storageUnit.NumItems + " / " + storageUnit.Capacity + " Items";
             Main.NewText(activeString + ", " + fullnessString);
             return base.RightClick(i, j);
@@ -166,8 +179,8 @@ namespace MagicStorage.Content.Tiles
         private void SetStyle(int i, int j, int style)
         {
             Main.tile[i, j].TileFrameY = (short)(36 * style);
-            Main.tile[i + 1, j].TileFrameY = (short)(36 * style);
             Main.tile[i, j + 1].TileFrameY = (short)(36 * style + 18);
+            Main.tile[i + 1, j].TileFrameY = (short)(36 * style);
             Main.tile[i + 1, j + 1].TileFrameY = (short)(36 * style + 18);
         }
 
@@ -179,7 +192,7 @@ namespace MagicStorage.Content.Tiles
             Rectangle frame = new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16);
             Color lightColor = Lighting.GetColor(i, j, Color.White);
             Color color = Color.Lerp(Color.White, lightColor, 0.5f);
-            spriteBatch.Draw(Mod.Assets.Request<Texture2D>("Content/Tiles/StorageUnit_Glow").Value, drawPos, frame, color);
+            spriteBatch.Draw(glowTexture.Value, drawPos, frame, color);
         }
     }
 }

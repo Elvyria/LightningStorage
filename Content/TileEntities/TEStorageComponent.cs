@@ -1,45 +1,34 @@
-using System.Collections.Generic;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using MagicStorage.Content.Tiles;
 
 namespace MagicStorage.Content.TileEntities
 {
     public abstract class TEStorageComponent : ModTileEntity
     {
-        public override bool IsTileValidForEntity(int i, int j)
+        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
-            Tile tile = Main.tile[i, j];
-            return tile.HasTile && ValidTile(tile);
-        }
-
-        public abstract bool ValidTile(Tile tile);
-
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternative)
-        {
-            int id = Place(i - 1, j - 1);
+            int id = Place(i, j - 1);
             ((TEStorageComponent)ByID[id]).OnPlace();
             return id;
         }
 
-        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternative)
+        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate)
         {
-            SearchAndRefreshNetwork(new Point16(i - 1, j - 1));
+            RefreshNetwork(new Point16(i, j - 1));
             return 0;
         }
 
         public virtual void OnPlace()
         {
-            SearchAndRefreshNetwork(Position);
+            RefreshNetwork(Position);
         }
 
         public override void OnKill()
         {
-            SearchAndRefreshNetwork(Position);
+            RefreshNetwork(Position);
         }
 
-        private static IEnumerable<Point16> checkNeighbors = new Point16[]
+        private static readonly Point16[] checkNeighbors = new Point16[]
         {
             new Point16(-1, 0),
             new Point16(0, -1),
@@ -51,7 +40,7 @@ namespace MagicStorage.Content.TileEntities
             new Point16(-1, 1)
         };
 
-        private static IEnumerable<Point16> checkNeighbors1x1 = new Point16[]
+        private static readonly Point16[] checkNeighbors1x1 = new Point16[]
         {
             new Point16(-1, 0),
             new Point16(0, -1),
@@ -66,7 +55,7 @@ namespace MagicStorage.Content.TileEntities
 
         public static IEnumerable<Point16> AdjacentComponents(Point16 point)
         {
-            List<Point16> points = new List<Point16>();
+            List<Point16> points = new List<Point16>(4);
             bool isConnector = Main.tile[point.X, point.Y].TileType == ModContent.TileType<StorageConnector>();
             foreach (Point16 add in isConnector ? checkNeighbors1x1 : checkNeighbors)
             {
@@ -77,25 +66,31 @@ namespace MagicStorage.Content.TileEntities
                 {
                     continue;
                 }
-                if (TileLoader.GetTile(tile.TileType) is StorageComponent)
+
+                if (tile.TileType == ModContent.TileType<StorageConnector>())
                 {
-                    if (tile.TileFrameX % 36 == 18)
-                    {
-                        checkX--;
-                    }
-                    if (tile.TileFrameY % 36 == 18)
-                    {
-                        checkY--;
-                    }
-                    Point16 check = new Point16(checkX, checkY);
+					Point16 check = new Point16(checkX, checkY);
                     if (!points.Contains(check))
                     {
                         points.Add(check);
                     }
+
+					continue;
                 }
-                else if (tile.TileType == ModContent.TileType<StorageConnector>())
+
+                if (TileLoader.GetTile(tile.TileType) is StorageComponent)
                 {
-                    Point16 check = new Point16(checkX, checkY);
+                    if (tile.TileFrameX % 36 == 18)
+                    {
+						checkX--;
+                    }
+					
+                    if (tile.TileFrameY % 36 == 18)
+                    {
+						checkY--;
+                    }
+
+					Point16 check = new Point16(checkX, checkY);
                     if (!points.Contains(check))
                     {
                         points.Add(check);
@@ -107,9 +102,9 @@ namespace MagicStorage.Content.TileEntities
 
         public static Point16 FindStorageCenter(Point16 startSearch)
         {
-            HashSet<Point16> explored = new HashSet<Point16>();
-            explored.Add(startSearch);
-            Queue<Point16> toExplore = new Queue<Point16>();
+            HashSet<Point16> explored = new HashSet<Point16>(8){ startSearch };
+            Queue<Point16> toExplore = new Queue<Point16>(8);
+
             foreach (Point16 point in AdjacentComponents(startSearch))
             {
                 toExplore.Enqueue(point);
@@ -118,29 +113,32 @@ namespace MagicStorage.Content.TileEntities
             while (toExplore.Count > 0)
             {
                 Point16 explore = toExplore.Dequeue();
-                if (!explored.Contains(explore) && explore != StorageComponent.killTile)
+                if (!explored.Contains(explore))
                 {
                     explored.Add(explore);
-                    if (TEStorageCenter.IsStorageCenter(explore))
+
+                    if (TileEntity.ByPosition.ContainsKey(explore) && TileEntity.ByPosition[explore] is TEStorageCenter)
                     {
                         return explore;
                     }
+
                     foreach (Point16 point in AdjacentComponents(explore))
                     {
                         toExplore.Enqueue(point);
                     }
                 }
             }
-            return new Point16(-1, -1);
+
+            return Point16.NegativeOne;
         }
 
-        public static void SearchAndRefreshNetwork(Point16 position)
+        public static void RefreshNetwork(Point16 position)
         {
-            Point16 center = FindStorageCenter(position);
-            if (center.X >= 0 && center.Y >= 0)
+            Point16 pos = FindStorageCenter(position);
+            if (pos != Point16.NegativeOne)
             {
-                TEStorageCenter centerEnt = (TEStorageCenter)ByPosition[center];
-                centerEnt.ResetAndSearch();
+                TEStorageCenter center = ((TEStorageCenter) TileEntity.ByPosition[pos]);
+                center.ResetAndSearch();
             }
         }
     }

@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
+﻿using Terraria.DataStructures;
 using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Content.Items
@@ -37,11 +34,10 @@ namespace MagicStorage.Content.Items
                     j--;
                 }
                 Point16 point = new Point16(i, j);
-                if (TileEntity.ByPosition.ContainsKey(point) && TileEntity.ByPosition[point] is TEAbstractStorageUnit)
+                if (TileEntity.ByPosition.ContainsKey(point) && TileEntity.ByPosition[point] is TEStorageUnit storageUnit)
                 {
-                    TEAbstractStorageUnit storageUnit = (TEAbstractStorageUnit)TileEntity.ByPosition[point];
-                    storageUnit.Inactive = !storageUnit.Inactive;
-                    string activeText = storageUnit.Inactive ? "Deactivated" : "Activated";
+                    storageUnit.active = !storageUnit.active;
+                    string activeText = storageUnit.active ? "Activated" : "Deactivated" ;
                     Main.NewText("Storage Unit has been " + activeText);
                     if (storageUnit is TEStorageUnit)
                     {

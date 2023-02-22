@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace MagicStorage.Content.Items
+﻿namespace MagicStorage.Content.Items
 {
     public class SnowBiomeEmulator : ModItem
     {

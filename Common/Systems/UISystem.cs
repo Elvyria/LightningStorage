@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-
 using Microsoft.Xna.Framework;
 
-using Terraria;
-using Terraria.UI;
-using Terraria.ModLoader;
+
+using MagicStorage.Common.Players;
 using MagicStorage.Common.UI;
 
 namespace MagicStorage.Common.Systems
@@ -36,6 +33,10 @@ namespace MagicStorage.Common.Systems
             CraftingUI = null;
         }
 
+		public override void PreSaveAndQuit() {
+			StoragePlayer.LocalPlayer.CloseStorage();
+		}
+
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUiGameTime = gameTime;
@@ -50,12 +51,13 @@ namespace MagicStorage.Common.Systems
             int invIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
             if (invIndex != -1)
             {
-                layers.Insert(invIndex, new LegacyGameInterfaceLayer(
+                layers.Insert(invIndex + 1, new LegacyGameInterfaceLayer(
                             "MagicStorage: StorageAccess",
                             delegate
                             {
                                 if (_lastUpdateUiGameTime != null && UI?.CurrentState != null)
                                 {
+									Main.hidePlayerCraftingMenu = true;
                                     UI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                                 }
                                 return true;

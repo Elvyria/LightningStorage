@@ -1,17 +1,19 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 
-using Terraria;
-using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
+
 using MagicStorage.Common;
 using MagicStorage.Content.Tiles;
 
 namespace MagicStorage.Content.TileEntities
 {
-    public class TEStorageUnit : TEAbstractStorageUnit
+    public class TEStorageUnit : TEStorageComponent
     {
-        private IList<Item> items = new List<Item>();
+        public bool active = true;
+        private Point16 center;
+
+        private List<Item> items = new List<Item>();
         private bool receiving = false;
 
         private HashSet<ItemData> hasSpaceInStack = new HashSet<ItemData>();
@@ -47,36 +49,49 @@ namespace MagicStorage.Content.TileEntities
             }
         }
 
-        public override bool IsFull
+        public TEStorageHeart GetHeart()
         {
-            get
+            if (center != Point16.NegativeOne && ByPosition.ContainsKey(center) && ByPosition[center] is TEStorageCenter)
             {
-                return items.Count >= Capacity;
+                return ((TEStorageCenter)ByPosition[center]).GetHeart();
             }
+            return null;
+        }
+
+        public bool Link(Point16 pos)
+        {
+            bool changed = pos != center;
+            center = pos;
+            return changed;
+        }
+
+        public bool Unlink()
+        {
+            return Link(Point16.NegativeOne);
+        }
+
+        public bool IsFull
+        {
+            get => items.Count >= Capacity;
         }
 
         public bool IsEmpty
         {
-            get
-            {
-                return items.Count == 0;
-            }
+            get => items.Count == 0;
         }
 
         public int NumItems
         {
-            get
-            {
-                return items.Count;
-            }
+            get => items.Count;
         }
 
-        public override bool ValidTile(Tile tile)
+        public override bool IsTileValidForEntity(int i, int j)
         {
-            return tile.TileType == ModContent.TileType<StorageUnit>() && tile.TileFrameX % 36 == 0 && tile.TileFrameY % 36 == 0;
+			Tile tile = Main.tile[i, j];
+            return tile.HasTile && tile.TileType == ModContent.TileType<StorageUnit>();
         }
 
-        public override bool HasSpaceInStackFor(Item check)
+        public bool HasSpaceInStackFor(Item check)
         {
             ItemData data = new ItemData(check);
             return hasSpaceInStack.Contains(data);
@@ -87,21 +102,23 @@ namespace MagicStorage.Content.TileEntities
             return !IsFull || HasSpaceInStackFor(check);
         }
 
-        public override bool HasItem(Item item)
+        public bool HasItem(Item item)
         {
             return hasItem.Contains(new ItemData(item));
         }
 
-        public override IEnumerable<Item> GetItems()
+        public IEnumerable<Item> GetItems()
         {
             return items;
         }
 
-        public override void DepositItem(Item toDeposit)
+        public void Deposit(Item toDeposit)
         {
             Item original = toDeposit.Clone();
+
             bool finished = false;
             bool hasChange = false;
+
             foreach (Item item in items)
             {
                 if (ItemData.Matches(toDeposit, item) && item.stack < item.maxStack)
@@ -123,6 +140,7 @@ namespace MagicStorage.Content.TileEntities
                     }
                 }
             }
+
             if (!finished && !IsFull)
             {
                 Item item = toDeposit.Clone();
@@ -133,43 +151,50 @@ namespace MagicStorage.Content.TileEntities
                 hasChange = true;
                 finished = true;
             }
+
             if (hasChange)
             {
-                PostChangeContents();
+                RepairMetadata();
             }
         }
 
-        public override Item TryWithdraw(Item lookFor)
+        public Item Withdraw(Item lookFor)
         {
-            Item original = lookFor.Clone();
-            Item result = lookFor.Clone();
-            result.stack = 0;
+			int amount = lookFor.stack;
+
             for (int k = 0; k < items.Count; k++)
             {
                 Item item = items[k];
                 if (ItemData.Matches(lookFor, item))
                 {
-                    int withdraw = Math.Min(lookFor.stack, item.stack);
-                    item.stack -= withdraw;
-                    if (item.stack <= 0)
+					if (item.stack > amount)
+					{
+						item.stack -= amount;
+						amount = 0;
+					}
+					else
+					{
+                        items.RemoveAt(k--);
+						amount -= item.stack;
+					}
+
+                    if (amount == 0)
                     {
-                        items.RemoveAt(k);
-                        k--;
-                    }
-                    result.stack += withdraw;
-                    lookFor.stack -= withdraw;
-                    if (lookFor.stack <= 0)
-                    {
-                        PostChangeContents();
-                        return result;
+						break;
                     }
                 }
             }
-            if (result.stack == 0)
+
+            if (amount == lookFor.stack)
             {
                 return new Item();
             }
-            PostChangeContents();
+
+            RepairMetadata();
+
+			Item result = lookFor.Clone();
+			result.stack = lookFor.stack - amount;
+
             return result;
         }
 
@@ -190,7 +215,7 @@ namespace MagicStorage.Content.TileEntities
             {
                 style = 1;
             }
-            if (Inactive)
+            if (!active)
             {
                 style += 3;
             }
@@ -205,55 +230,66 @@ namespace MagicStorage.Content.TileEntities
 
         internal static void SwapItems(TEStorageUnit unit1, TEStorageUnit unit2)
         {
-            IList<Item> items = unit1.items;
-            unit1.items = unit2.items;
-            unit2.items = items;
-            HashSet<ItemData> dict = unit1.hasSpaceInStack;
-            unit1.hasSpaceInStack = unit2.hasSpaceInStack;
-            unit2.hasSpaceInStack = dict;
-            dict = unit1.hasItem;
-            unit1.hasItem = unit2.hasItem;
-            unit2.hasItem = dict;
+			(unit1.items, unit2.items)
+				= (unit2.items, unit1.items);
 
-            unit1.PostChangeContents();
-            unit2.PostChangeContents();
+			(unit1.hasSpaceInStack, unit2.hasSpaceInStack)
+				= (unit2.hasSpaceInStack, unit1.hasSpaceInStack);
+
+			(unit1.hasItem, unit2.hasItem)
+				= (unit2.hasItem, unit1.hasItem);
+
+            unit1.UpdateTileFrame();
+            unit2.UpdateTileFrame();
         }
 
         internal Item WithdrawStack()
         {
             Item item = items[items.Count - 1];
             items.RemoveAt(items.Count - 1);
-            PostChangeContents();
+            RepairMetadata();
             return item;
         }
 
         public override void SaveData(TagCompound tag)
         {
-            base.SaveData(tag);
+            TagCompound tagCenter = new TagCompound()
+			{
+				{ "X", center.X },
+				{ "Y", center.Y }
+			};
 
-            List<TagCompound> tagItems = new List<TagCompound>(items.Count);
-            foreach (Item item in items)
-            {
-                tagItems.Add(ItemIO.Save(item));
-            }
+			List<TagCompound> tagItems = items
+				.Where(item => !item.IsAir && item.stack > 0)
+				.Select(ItemIO.Save)
+				.ToList<TagCompound>();
 
-            tag.Set("Items", tagItems);
+            tag.Set("Active", active);
+            tag.Set("Center", tagCenter);
+            tag.Set("Items",  tagItems);
         }
 
         public override void LoadData(TagCompound tag)
         {
-            base.LoadData(tag);
+            active = tag.GetBool("Active");
+
+			TagCompound tagCenter = tag.GetCompound("Center");
+			center = new Point16(tagCenter.GetShort("X"), tagCenter.GetShort("Y"));
+
             ClearItemsData();
+			items.Capacity = Capacity;
             foreach (TagCompound tagItem in tag.GetList<TagCompound>("Items"))
             {
                 Item item = ItemIO.Load(tagItem);
-                items.Add(item);
-                ItemData data = new ItemData(item);
-                if (item.stack < item.maxStack)
-                {
-                    hasSpaceInStack.Add(data);
-                }
-                hasItem.Add(data);
+				if (!item.IsAir && item.stack > 0) {
+					items.Add(item);
+					ItemData data = new ItemData(item);
+					if (item.stack < item.maxStack)
+					{
+						hasSpaceInStack.Add(data);
+					}
+					hasItem.Add(data);
+				}
             }
         }
 
@@ -268,6 +304,7 @@ namespace MagicStorage.Content.TileEntities
         {
             hasSpaceInStack.Clear();
             hasItem.Clear();
+
             foreach (Item item in items)
             {
                 ItemData data = new ItemData(item);
@@ -277,12 +314,6 @@ namespace MagicStorage.Content.TileEntities
                 }
                 hasItem.Add(data);
             }
-        }
-
-        private void PostChangeContents()
-        {
-            RepairMetadata();
-            UpdateTileFrame();
         }
     }
 }

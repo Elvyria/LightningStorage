@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using Terraria;
-using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
-using Terraria.UI;
 
 using MagicStorage.Common.Players;
 using MagicStorage.Common.Sorting;
@@ -34,6 +27,7 @@ namespace MagicStorage.Common.UI
         private int stackDelay = 7;
         private int stackCounter = 0;
 
+		private Player player;
         private TEStorageHeart heart;
         private List<Item> items = new List<Item>();
 
@@ -85,17 +79,17 @@ namespace MagicStorage.Common.UI
 
             sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
                     {
-                    TextureAssets.InventorySort[0],
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortNumber")
+						TextureAssets.InventorySort[0],
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortNumber")
                     },
                     new LocalizedText[]
                     {
-                    Language.GetText("Mods.MagicStorage.Common.SortDefault"),
-                    Language.GetText("Mods.MagicStorage.Common.SortID"),
-                    Language.GetText("Mods.MagicStorage.Common.SortName"),
-                    Language.GetText("Mods.MagicStorage.Common.SortStack")
+						Language.GetText("Mods.MagicStorage.Common.SortDefault"),
+						Language.GetText("Mods.MagicStorage.Common.SortID"),
+						Language.GetText("Mods.MagicStorage.Common.SortName"),
+						Language.GetText("Mods.MagicStorage.Common.SortStack")
                     });
 
             sortButtons.OnClick += (a, b) =>
@@ -139,23 +133,23 @@ namespace MagicStorage.Common.UI
 
             filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
                     {
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
                     },
                     new LocalizedText[]
                     {
-                    Language.GetText("Mods.MagicStorage.Common.FilterAll"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterTools"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterMisc")
+						Language.GetText("Mods.MagicStorage.Common.FilterAll"),
+						Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
+						Language.GetText("Mods.MagicStorage.Common.FilterTools"),
+						Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
+						Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
+						Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
+						Language.GetText("Mods.MagicStorage.Common.FilterMisc")
                     });
 
             filterButtons.OnClick += (a, b) =>
@@ -205,6 +199,7 @@ namespace MagicStorage.Common.UI
 
         public override void OnActivate()
         {
+			player = Main.LocalPlayer;
             heart = StoragePlayer.LocalPlayer.GetStorageHeart();
 
             if (heart == null)
@@ -218,6 +213,7 @@ namespace MagicStorage.Common.UI
 
         public override void OnDeactivate()
         {
+			player = null;
             heart = null;
             items = null;
 
@@ -235,8 +231,6 @@ namespace MagicStorage.Common.UI
         {
             base.Update(gameTime);
 
-            Main.hidePlayerCraftingMenu = true;
-
             // TODO: Check access and heart changes
 
             isMouseHovering = false;
@@ -245,7 +239,7 @@ namespace MagicStorage.Common.UI
                 isMouseHovering |= e.IsMouseHovering;
             }
 
-            Main.LocalPlayer.mouseInterface |= isMouseHovering;
+            player.mouseInterface |= isMouseHovering;
 
             UpdateStackTimer();
             UpdateStackSplit();
@@ -306,13 +300,10 @@ namespace MagicStorage.Common.UI
             int numItems = 0;
             int capacity = 0;
 
-            foreach (TEAbstractStorageUnit abstractStorageUnit in heart.GetStorageUnits())
+            foreach (TEStorageUnit unit in heart.GetStorageUnits())
             {
-                if (abstractStorageUnit is TEStorageUnit storageUnit)
-                {
-                    numItems += storageUnit.NumItems;
-                    capacity += storageUnit.Capacity;
-                }
+				numItems += unit.NumItems;
+				capacity += unit.Capacity;
             }
 
             int len = capacityText.Text.Length;
@@ -352,7 +343,9 @@ namespace MagicStorage.Common.UI
 
             if (!Main.mouseItem.IsAir)
             {
-                changed = TryDeposit(Main.mouseItem);
+				int oldStack = Main.mouseItem.stack;
+				heart.DepositItem(Main.mouseItem);
+                changed = oldStack != Main.mouseItem.stack;
             }
             else if (slot >= 0 && slot < items.Count && !items[slot].IsAir)
             {
@@ -363,12 +356,18 @@ namespace MagicStorage.Common.UI
                     item.stack = item.maxStack;
                 }
 
-                Main.mouseItem = Withdraw(item, ItemSlot.ShiftInUse);
+                Main.mouseItem = heart.TryWithdraw(item);
 
                 if (ItemSlot.ShiftInUse)
                 {
-                    Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryUIToInventorySettings);
+                    Main.mouseItem = player.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryUIToInventorySettings);
                 }
+
+				if (ItemSlot.ControlInUse)
+				{
+					player.trashItem = Main.mouseItem;
+					Main.mouseItem = new Item();
+				}
 
                 changed = true;
             }
@@ -406,12 +405,12 @@ namespace MagicStorage.Common.UI
 
                 if (Main.mouseItem.IsAir)
                 {
-                    Main.mouseItem = Withdraw(item);
+                    Main.mouseItem = heart.TryWithdraw(item);
                     changed = true;
                 }
                 else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < item.maxStack)
                 {
-                    Withdraw(item);
+                    heart.TryWithdraw(item);
                     Main.mouseItem.stack += 1;
                     changed = true;
                 }
@@ -424,40 +423,20 @@ namespace MagicStorage.Common.UI
             }
         }
 
-        private bool TryDeposit(Item item)
-        {
-            int oldStack = item.stack;
-            Deposit(item);
-            return oldStack != item.stack;
-        }
-
-        private void Deposit(Item item)
-        {
-            heart.DepositItem(item);
-        }
-
         private bool TryDepositAll()
         {
-            Player player = Main.LocalPlayer;
             bool changed = false;
             for (int k = 10; k < 50; k++)
             {
-                if (!player.inventory[k].IsAir && !player.inventory[k].favorited)
+				Item item = player.inventory[k];
+                if (!item.IsAir && item.stack > 0 && !item.favorited)
                 {
-                    int oldStack = player.inventory[k].stack;
-                    heart.DepositItem(player.inventory[k]);
-                    if (oldStack != player.inventory[k].stack)
-                    {
-                        changed = true;
-                    }
+                    int oldStack = item.stack;
+                    heart.DepositItem(item);
+					changed |= oldStack != item.stack;
                 }
             }
             return changed;
-        }
-
-        private Item Withdraw(Item item, bool toInventory = false)
-        {
-            return heart.TryWithdraw(item);
         }
     }
 }

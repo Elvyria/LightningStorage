@@ -1,7 +1,5 @@
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ModLoader;
-using Terraria;
 using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Content.Tiles
@@ -31,7 +29,7 @@ namespace MagicStorage.Content.Tiles
                 return null;
             }
             TileEntity heart = TileEntity.ByPosition[point];
-            if (!(heart is TEStorageCenter))
+            if (heart is not TEStorageCenter)
             {
                 return null;
             }
@@ -40,29 +38,21 @@ namespace MagicStorage.Content.Tiles
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            if (Main.tile[i, j].TileFrameX > 0)
+            if (Main.tile[i, j].TileFrameX % 36 == 18)
             {
                 i--;
             }
-            if (Main.tile[i, j].TileFrameY > 0)
+            if (Main.tile[i, j].TileFrameY % 36 == 18)
             {
                 j--;
             }
+
             Point16 pos = new Point16(i, j);
-            if (!TileEntity.ByPosition.ContainsKey(pos))
-            {
-                return;
-            }
-            TECraftingAccess access = TileEntity.ByPosition[new Point16(i, j)] as TECraftingAccess;
-            if (access != null)
+            if (TileEntity.ByPosition.ContainsKey(pos) && TileEntity.ByPosition[pos] is TECraftingAccess access)
             {
                 foreach (Item item in access.stations)
                 {
-                    if (!item.IsAir)
-                    {
-                        fail = true;
-                        break;
-                    }
+					fail |= !item.IsAir;
                 }
             }
         }

@@ -1,25 +1,19 @@
-using System;
-using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Linq;
-using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.Map;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 using MagicStorage.Common.Players;
 using MagicStorage.Common.Sorting;
@@ -64,10 +58,11 @@ namespace MagicStorage.Common.UI
 
         private Dictionary<int, int> itemCounts = new Dictionary<int, int>();
         private Dictionary<int, int> recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
-        private HashSet<Recipe.Condition> conditions = new HashSet<Recipe.Condition>();
+        private List<Recipe.Condition> conditions = new List<Recipe.Condition>(3);
 
         private Item resultItem = UISlotZone.Air;
 
+		private Player player;
         private TEStorageHeart heart;
         private TECraftingAccess access;
 
@@ -100,7 +95,7 @@ namespace MagicStorage.Common.UI
         private static readonly Color lightBlue = new Color(73, 94, 171);
         private static readonly Color blue = new Color(63, 82, 151) * 0.7f;
         private static readonly Color darkBlue = new Color(30, 40, 100) * 0.7f;
-        private static readonly Color deepBlue = new Color(163, 104, 176);
+        private static readonly Color deepBlue = new Color(163, 104, 176) * 1.15f;
 
         public override void OnInitialize()
         {
@@ -141,15 +136,15 @@ namespace MagicStorage.Common.UI
 
             sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
                     {
-                    TextureAssets.InventorySort[0],
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName")
+						TextureAssets.InventorySort[0],
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName")
                     },
                     new LocalizedText[]
                     {
-                    Language.GetText("Mods.MagicStorage.Common.SortDefault"),
-                    Language.GetText("Mods.MagicStorage.Common.SortID"),
-                    Language.GetText("Mods.MagicStorage.Common.SortName")
+						Language.GetText("Mods.MagicStorage.Common.SortDefault"),
+						Language.GetText("Mods.MagicStorage.Common.SortID"),
+						Language.GetText("Mods.MagicStorage.Common.SortName")
                     });
 
             sortButtons.OnClick += ClickSortButtons;
@@ -160,13 +155,13 @@ namespace MagicStorage.Common.UI
 
             recipeButtons = new UIButtonChoice(new Asset<Texture2D>[]
                     {
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAvailable"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAll")
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAvailable"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAll")
                     },
                     new LocalizedText[]
                     {
-                    Language.GetText("Mods.MagicStorage.Common.RecipeAvailable"),
-                    Language.GetText("Mods.MagicStorage.Common.RecipeAll")
+						Language.GetText("Mods.MagicStorage.Common.RecipeAvailable"),
+						Language.GetText("Mods.MagicStorage.Common.RecipeAll")
                     });
 
             recipeButtons.OnClick += ClickRecipeButtons;
@@ -189,23 +184,23 @@ namespace MagicStorage.Common.UI
 
             filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
                     {
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
-                    MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
+						MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
                     },
                     new LocalizedText[]
                     {
-                    Language.GetText("Mods.MagicStorage.Common.FilterAll"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterTools"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
-                    Language.GetText("Mods.MagicStorage.Common.FilterMisc")
+						Language.GetText("Mods.MagicStorage.Common.FilterAll"),
+						Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
+						Language.GetText("Mods.MagicStorage.Common.FilterTools"),
+						Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
+						Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
+						Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
+						Language.GetText("Mods.MagicStorage.Common.FilterMisc")
                     });
 
             filterButtons.OnClick += ClickFilterButtons;
@@ -323,6 +318,7 @@ namespace MagicStorage.Common.UI
 
         public override void OnActivate()
         {
+			player = Main.LocalPlayer;
             heart = StoragePlayer.LocalPlayer.GetStorageHeart();
             access = StoragePlayer.LocalPlayer.GetCraftingAccess();
 
@@ -332,14 +328,12 @@ namespace MagicStorage.Common.UI
                 return;
             }
 
-            Main.NewText("CraftingGUI: Activate Refresh");
             Refresh();
         }
 
         public override void OnDeactivate()
         {
-            Main.hidePlayerCraftingMenu = false;
-
+			player = null;
             heart = null;
             access = null;
             recipes = null;
@@ -351,7 +345,7 @@ namespace MagicStorage.Common.UI
 
             filterButtons.choice = FilterMode.All.index();
             sortButtons.choice = SortMode.Default.index();
-            recipeButtons.choice = (int)RecipeMode.Available;
+            recipeButtons.choice = (int) RecipeMode.Available;
 
             modFilter = string.Empty;
             nameFilter = string.Empty;
@@ -360,8 +354,6 @@ namespace MagicStorage.Common.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            Main.hidePlayerCraftingMenu = true;
 
             // TODO: Check access and heart changes
 
@@ -469,11 +461,11 @@ namespace MagicStorage.Common.UI
 
                 if (Main.mouseItem.IsAir)
                 {
-                    Main.mouseItem = WithdrawItem(withdraw);
+                    Main.mouseItem = heart.TryWithdraw(withdraw);
                 }
                 else if (Main.mouseItem.type == resultItem.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
                 {
-                    WithdrawItem(withdraw);
+                    heart.TryWithdraw(withdraw);
                     Main.mouseItem.stack += 1;
                 }
                 else return;
@@ -553,23 +545,15 @@ namespace MagicStorage.Common.UI
         {
             if (slot < recipes.Count)
             {
-                if (recipeButtons.choice == 0)
+                if (recipes[slot] == selectedRecipe)
                 {
-                    if (recipes[slot] == selectedRecipe)
-                        return Color.Lime;
-
-                    return Color.White;
+					return Color.Lime;
                 }
-                else
-                {
-                    if (recipes[slot] == selectedRecipe)
-                        return Color.Lime;
 
-                    if (recipeAvailable[slot])
-                        return Color.White;
-
+				if (!recipeAvailable[slot])
+				{
                     return deepBlue;
-                }
+				}
             }
 
             return Color.White;
@@ -597,8 +581,7 @@ namespace MagicStorage.Common.UI
 
         private void UpdateRecipeText()
         {
-            bool isEmpty = true;
-            StringBuilder builder = new StringBuilder("");
+            StringBuilder builder = new StringBuilder();
 
             for (int k = 0; k < selectedRecipe.requiredTile.Count; k++)
             {
@@ -607,45 +590,40 @@ namespace MagicStorage.Common.UI
                     break;
                 }
 
-                if (!isEmpty) builder.Append(", ");
+                if (builder.Length != 0) builder.Append(", ");
 
                 builder.Append(Lang.GetMapObjectName(MapHelper.TileToLookup(selectedRecipe.requiredTile[k], 0)));
-                isEmpty = false;
             }
 
             if (selectedRecipe.HasCondition(Recipe.Condition.NearWater))
             {
-                if (!isEmpty) builder.Append(", ");
+                if (builder.Length != 0) builder.Append(", ");
 
                 builder.Append(Language.GetTextValue("LegacyInterface.53"));
-                isEmpty = false;
             }
 
             if (selectedRecipe.HasCondition(Recipe.Condition.NearHoney))
             {
-                if (!isEmpty) builder.Append(", ");
+                if (builder.Length != 0) builder.Append(", ");
 
                 builder.Append(Language.GetTextValue("LegacyInterface.58"));
-                isEmpty = false;
             }
 
             if (selectedRecipe.HasCondition(Recipe.Condition.NearLava))
             {
-                if (!isEmpty) builder.Append(", ");
+                if (builder.Length != 0) builder.Append(", ");
 
                 builder.Append(Language.GetTextValue("LegacyInterface.56"));
-                isEmpty = false;
             }
 
             if (selectedRecipe.HasCondition(Recipe.Condition.InSnow))
             {
-                if (!isEmpty) builder.Append(", ");
+                if (builder.Length != 0) builder.Append(", ");
 
                 builder.Append(Language.GetTextValue("LegacyInterface.123"));
-                isEmpty = false;
             }
 
-            if (isEmpty)
+            if (builder.Length == 0)
             {
                 reqObjText2.SetText(Language.GetTextValue("LegacyInterface.23"));
             }
@@ -705,39 +683,30 @@ namespace MagicStorage.Common.UI
         {
             Recipe[] temp = ItemSorter.SortAndFilter(Main.recipe, sortMode, filterMode, modFilter, nameFilter);
 
-            var watch = new Stopwatch();
-            watch.Start();
-            if (recipeButtons.choice == 0)
+            if (recipeMode == RecipeMode.Available)
             {
                 recipes = temp.AsParallel().AsOrdered().Where(recipe => IsAvailable(recipe)).ToList();
                 recipeAvailable = temp.Select(recipe => true).ToList();
             }
-            else
+            else if (recipeMode == RecipeMode.All)
             {
                 recipes = temp.ToList();
                 recipeAvailable = temp.AsParallel().AsOrdered().Select(recipe => IsAvailable(recipe)).ToList();
             }
-
-            watch.Stop();
-            Main.NewText(watch.Elapsed);
 
             recipeZone.UpdateScrollBar((recipes.Count + columns - 1) / columns);
         }
 
         private void RefreshStations()
         {
-            Player player = Main.LocalPlayer;
-
-            if (adjTiles.Length != player.adjTile.Length)
+            if (adjTiles.Length < player.adjTile.Length)
             {
-                adjTiles = new bool[player.adjTile.Length];
-            }
-            else
-            {
-                Array.Clear(adjTiles, 0, adjTiles.Length);
+				Array.Resize(ref adjTiles, player.adjTile.Length);
             }
 
+			Array.Clear(adjTiles,   0, adjTiles.Length);
             Array.Clear(adjLiquids, 0, adjLiquids.Length);
+			conditions.Clear();
 
             foreach (Item item in access.stations)
             {
@@ -752,28 +721,32 @@ namespace MagicStorage.Common.UI
                         }
                     }
 
-                    if (TileID.Sets.CountsAsWaterSource[item.createTile])
-                        conditions.Add(Recipe.Condition.NearWater);
+					adjLiquids[LiquidID.Water] |= TileID.Sets.CountsAsWaterSource[item.createTile];
+					adjLiquids[LiquidID.Lava]  |= TileID.Sets.CountsAsLavaSource[item.createTile];
+					adjLiquids[LiquidID.Honey] |= TileID.Sets.CountsAsHoneySource[item.createTile];
 
-                    if (TileID.Sets.CountsAsLavaSource[item.createTile])
-                        conditions.Add(Recipe.Condition.NearLava);
-
-                    if (TileID.Sets.CountsAsHoneySource[item.createTile])
-                        conditions.Add(Recipe.Condition.NearHoney);
-
-                    adjTiles[TileID.Bottles] |= item.createTile == TileID.AlchemyTable;
-                    adjTiles[TileID.Tables] |= item.createTile == TileID.BewitchingTable || item.createTile == TileID.AlchemyTable || item.createTile == TileID.Tables2;
-                    adjTiles[TileID.Anvils] |= item.createTile == TileID.MythrilAnvil;
-                    adjTiles[TileID.Furnaces] |= item.createTile == TileID.Hellforge || item.createTile == TileID.Hellforge || item.createTile == TileID.GlassKiln;
+                    adjTiles[TileID.Bottles]   |= item.createTile == TileID.AlchemyTable;
+                    adjTiles[TileID.Tables]    |= item.createTile == TileID.BewitchingTable || item.createTile == TileID.AlchemyTable || item.createTile == TileID.Tables2;
+                    adjTiles[TileID.Anvils]    |= item.createTile == TileID.MythrilAnvil;
+                    adjTiles[TileID.Furnaces]  |= item.createTile == TileID.Hellforge || item.createTile == TileID.Hellforge || item.createTile == TileID.GlassKiln;
                     adjTiles[TileID.Hellforge] |= item.createTile == TileID.AdamantiteForge;
 
                     adjTiles[item.createTile] = true;
                 }
 
                 adjLiquids[LiquidID.Water] |= item.type == ItemID.WaterBucket || item.type == ItemID.BottomlessBucket;
-                adjLiquids[LiquidID.Lava] |= item.type == ItemID.LavaBucket;
+                adjLiquids[LiquidID.Lava]  |= item.type == ItemID.LavaBucket;
                 adjLiquids[LiquidID.Honey] |= item.type == ItemID.HoneyBucket;
             }
+
+			if (adjLiquids[LiquidID.Water])
+				conditions.Add(Recipe.Condition.NearWater);
+
+			if (adjLiquids[LiquidID.Lava])
+				conditions.Add(Recipe.Condition.NearLava);
+
+			if (adjLiquids[LiquidID.Honey])
+				conditions.Add(Recipe.Condition.NearHoney);
         }
 
         private bool IsAvailable(Recipe recipe)
@@ -838,7 +811,7 @@ namespace MagicStorage.Common.UI
                         }
                         if (item.type == ingredient.type || RecipeGroupMatch(selectedRecipe, ingredient.type, item.type))
                         {
-                            storageItems.Add(item);
+                            storageItems.Add(item.Clone());
                         }
                     }
                 }
@@ -877,9 +850,10 @@ namespace MagicStorage.Common.UI
 
         private void ClickRecipeButtons(UIEvent _event, UIElement _element)
         {
-            if ((RecipeMode)recipeButtons.choice != recipeMode)
+			RecipeMode newMode = (RecipeMode) recipeButtons.choice;
+            if (newMode != recipeMode)
             {
-                recipeMode = (RecipeMode)recipeButtons.choice;
+                recipeMode = newMode;
                 SoundEngine.PlaySound(SoundID.MenuTick);
 
                 RefreshRecipes();
@@ -929,35 +903,38 @@ namespace MagicStorage.Common.UI
         {
             int slot = stationZone.MouseSlot();
 
-            if (slot < 0 || slot >= access.stations.Length || !ItemSlot.ShiftInUse && Main.mouseItem.IsAir && access.stations[slot].IsAir)
+            if (slot < 0 || slot >= access.stations.Length || access.stations[slot].IsAir && Main.mouseItem.IsAir)
             {
                 return;
             }
 
-            Player player = Main.LocalPlayer;
+			int oldType = access.stations[slot].type;
 
             if (ItemSlot.ShiftInUse)
             {
-                Item station = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-                if (!station.IsAir)
+                Item station = player.GetItem(Main.myPlayer, access.stations[slot], GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                if (station.IsAir)
                 {
-                    player.QuickSpawnItem(new EntitySource_TileEntity(heart), station, station.stack);
+					access.WithdrawStation(slot);
                 }
             }
             else if (Main.mouseItem.type == access.stations[slot].type && Main.mouseItem.stack < Main.mouseItem.maxStack)
             {
-                WithdrawStation(slot);
+                access.WithdrawStation(slot);
                 Main.mouseItem.stack += 1;
             }
             else
             {
-                Main.mouseItem = SwapStations(Main.mouseItem, slot);
+                Main.mouseItem = access.SwapStations(Main.mouseItem, slot);
             }
 
-            RefreshStations();
-            RefreshRecipes();
+			if (access.stations[slot].type != oldType)
+			{
+				RefreshStations();
+				RefreshRecipes();
 
-            SoundEngine.PlaySound(SoundID.Grab);
+				SoundEngine.PlaySound(SoundID.Grab);
+			}
         }
 
         private void PressResult(UIEvent _event, UIElement _element)
@@ -969,7 +946,7 @@ namespace MagicStorage.Common.UI
 
             if (!Main.mouseItem.IsAir && selectedRecipe.createItem.type == Main.mouseItem.type)
             {
-                TryDepositResult(Main.mouseItem);
+                heart.DepositItem(Main.mouseItem);
             }
             else if (Main.mouseItem.IsAir && !resultItem.IsAir)
             {
@@ -979,11 +956,11 @@ namespace MagicStorage.Common.UI
                     withdraw.stack = withdraw.maxStack;
                 }
 
-                Main.mouseItem = WithdrawItem(withdraw);
+                Main.mouseItem = heart.TryWithdraw(withdraw);
 
                 if (ItemSlot.ShiftInUse)
                 {
-                    Main.mouseItem = Main.LocalPlayer.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                    Main.mouseItem = player.GetItem(Main.myPlayer, Main.mouseItem, GetItemSettings.InventoryEntityToPlayerInventorySettings);
                 }
             }
 
@@ -1017,19 +994,9 @@ namespace MagicStorage.Common.UI
             }
         }
 
-        private Item WithdrawStation(int slot)
-        {
-            return access.TryWithdrawStation(slot);
-        }
-
-        private Item SwapStations(Item item, int slot)
-        {
-            return access.SwapStations(item, slot);
-        }
-
         private void TryCraft()
         {
-            List<Item> availableItems = new List<Item>(storageItems);
+            List<Item> availableItems = storageItems.Select(item => item.Clone()).ToList();
             List<Item> toWithdraw = new List<Item>(selectedRecipe.requiredItem.Count);
 
             foreach (Item requiredItem in selectedRecipe.requiredItem)
@@ -1072,17 +1039,30 @@ namespace MagicStorage.Common.UI
             Item resultItem = selectedRecipe.createItem.Clone();
             resultItem.Prefix(-1);
 
+			Vector.BitwiseOr(
+						new Vector<byte>(Unsafe.As<byte[]>(player.adjTile)),
+						new Vector<byte>(Unsafe.As<byte[]>(adjTiles)))
+				.CopyTo(Unsafe.As<byte[]>(player.adjTile));
+
+			player.alchemyTable = adjTiles[TileID.AlchemyTable];
+			player.adjWater = adjLiquids[LiquidID.Water];
+			player.adjLava  = adjLiquids[LiquidID.Lava];
+			player.adjHoney = adjLiquids[LiquidID.Honey];
+
+			toWithdraw.ForEach(item => RecipeLoader.ConsumeItem(selectedRecipe, item.type, ref item.stack));
+			toWithdraw = toWithdraw.FindAll(item => item.stack > 0);
+
             RecipeLoader.OnCraft(resultItem, selectedRecipe, toWithdraw);
 
-            foreach (Item item in Craft(heart, toWithdraw, resultItem))
-            {
-                Main.player[Main.myPlayer].QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
-            }
+			foreach (Item item in Craft(heart, toWithdraw, resultItem))
+			{
+				player.QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
+			}
         }
 
         internal List<Item> Craft(TEStorageHeart heart, List<Item> toWithdraw, Item result)
         {
-            List<Item> items = new List<Item>();
+            List<Item> items = new List<Item>(toWithdraw.Count);
             foreach (Item tryWithdraw in toWithdraw)
             {
                 Item withdrawn = heart.TryWithdraw(tryWithdraw);
@@ -1114,23 +1094,6 @@ namespace MagicStorage.Common.UI
             }
 
             return items;
-        }
-
-        private bool TryDepositResult(Item item)
-        {
-            int oldStack = item.stack;
-            DepositItem(item);
-            return oldStack != item.stack;
-        }
-
-        private void DepositItem(Item item)
-        {
-            heart.DepositItem(item);
-        }
-
-        private Item WithdrawItem(Item item, bool toInventory = false)
-        {
-            return heart.TryWithdraw(item);
         }
     }
 }

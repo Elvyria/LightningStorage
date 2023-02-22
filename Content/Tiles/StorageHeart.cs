@@ -1,7 +1,5 @@
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ModLoader;
-using Terraria;
 using MagicStorage.Content.Items;
 using MagicStorage.Content.TileEntities;
 
@@ -26,7 +24,7 @@ namespace MagicStorage.Content.Tiles
 
         public override TEStorageHeart GetHeart(int i, int j)
         {
-            return (TEStorageHeart)TileEntity.ByPosition[new Point16(i, j)];
+            return (TEStorageHeart) TileEntity.ByPosition[new Point16(i, j)];
         }
 
         public override bool RightClick(int i, int j)
@@ -52,10 +50,8 @@ namespace MagicStorage.Content.Tiles
                 Main.NewText("Locator successfully set to: X=" + i + ", Y=" + j);
                 return true;
             }
-            else
-            {
-                return base.RightClick(i, j);
-            }
+
+			return base.RightClick(i, j);
         }
     }
 }

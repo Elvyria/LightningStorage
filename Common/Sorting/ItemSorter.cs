@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Terraria;
 
 namespace MagicStorage.Common.Sorting
 {
@@ -37,7 +34,7 @@ namespace MagicStorage.Common.Sorting
 
         public static Recipe[] SortAndFilter(Recipe[] recipes, IComparer<Item> sortMode, IFilter<Item> filterMode, string modFilter, string nameFilter)
         {
-            Recipe[] result = recipes;
+            Recipe[] result;
 
             if (filterMode != FilterMode.All || modFilter.Length != 0 || nameFilter.Length != 0)
             {

@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace MagicStorage.Common
 {
     public struct ItemData

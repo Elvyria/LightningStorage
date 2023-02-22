@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+
+using MagicStorage.Common.Players;
 using MagicStorage.Content.Tiles;
 
 namespace MagicStorage.Content.TileEntities
@@ -15,9 +14,10 @@ namespace MagicStorage.Content.TileEntities
         private int updateTimer = 60;
         private int compactStage = 0;
 
-        public override bool ValidTile(Tile tile)
+        public override bool IsTileValidForEntity(int i, int j)
         {
-            return tile.TileType == ModContent.TileType<StorageHeart>() && tile.TileFrameX == 0 && tile.TileFrameY == 0;
+			Tile tile = Main.tile[i, j];
+            return tile.TileType == ModContent.TileType<StorageHeart>();
         }
 
         public override TEStorageHeart GetHeart()
@@ -25,13 +25,13 @@ namespace MagicStorage.Content.TileEntities
             return this;
         }
 
-        public IEnumerable<TEAbstractStorageUnit> GetStorageUnits()
+        public IEnumerable<TEStorageUnit> GetStorageUnits()
         {
             return storageUnits
                 .Concat(remoteAccesses.Where(remoteAccess => ByPosition.ContainsKey(remoteAccess) && ByPosition[remoteAccess] is TERemoteAccess)
                 .SelectMany(remoteAccess => ((TERemoteAccess)ByPosition[remoteAccess]).storageUnits))
-                .Where(storageUnit => ByPosition.ContainsKey(storageUnit) && ByPosition[storageUnit] is TEAbstractStorageUnit)
-                .Select(storageUnit => (TEAbstractStorageUnit)ByPosition[storageUnit]);
+                .Where(storageUnit => ByPosition.ContainsKey(storageUnit) && ByPosition[storageUnit] is TEStorageUnit)
+                .Select(storageUnit => (TEStorageUnit)ByPosition[storageUnit]);
         }
 
         public IEnumerable<Item> GetStoredItems()
@@ -49,57 +49,49 @@ namespace MagicStorage.Content.TileEntities
                     k--;
                 }
             }
-            updateTimer++;
-            if (updateTimer >= 60)
+
+			if (updateTimer < 60)
+			{
+				updateTimer++;
+			}
+
+			if (updateTimer == 60 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
             {
                 updateTimer = 0;
-                CompactOne();
+                Compact();
             }
         }
 
-        public void CompactOne()
+        public void Compact()
         {
-            if (compactStage == 0)
-            {
-                EmptyInactive();
-            }
-            else if (compactStage == 1)
-            {
-                Defragment();
-            }
-            else if (compactStage == 2)
-            {
-                PackItems();
-            }
+			switch (compactStage)
+			{
+				case 0: EmptyInactive(); break;
+				case 1: Defragment();    break;
+				case 2: PackItems();     break;
+			}
         }
 
         public bool EmptyInactive()
         {
             TEStorageUnit inactiveUnit = null;
-            foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
+
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!(abstractStorageUnit is TEStorageUnit))
-                {
-                    continue;
-                }
-                TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
-                if (storageUnit.Inactive && !storageUnit.IsEmpty)
+                if (!storageUnit.active && !storageUnit.IsEmpty)
                 {
                     inactiveUnit = storageUnit;
                 }
             }
+
             if (inactiveUnit == null)
             {
                 compactStage++;
                 return false;
             }
-            foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
+
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!(abstractStorageUnit is TEStorageUnit) || abstractStorageUnit.Inactive)
-                {
-                    continue;
-                }
-                TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
                 if (storageUnit.IsEmpty && inactiveUnit.NumItems <= storageUnit.Capacity)
                 {
                     TEStorageUnit.SwapItems(inactiveUnit, storageUnit);
@@ -108,26 +100,24 @@ namespace MagicStorage.Content.TileEntities
             }
             bool hasChange = false;
             Item tryMove = inactiveUnit.WithdrawStack();
-            foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!(abstractStorageUnit is TEStorageUnit) || abstractStorageUnit.Inactive)
+                if (storageUnit.active)
                 {
-                    continue;
-                }
-                TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
-                while (storageUnit.HasSpaceFor(tryMove) && !tryMove.IsAir)
-                {
-                    storageUnit.DepositItem(tryMove);
-                    if (tryMove.IsAir && !inactiveUnit.IsEmpty)
-                    {
-                        tryMove = inactiveUnit.WithdrawStack();
-                    }
-                    hasChange = true;
+					while (storageUnit.HasSpaceFor(tryMove) && !tryMove.IsAir)
+					{
+						storageUnit.Deposit(tryMove);
+						if (tryMove.IsAir && !inactiveUnit.IsEmpty)
+						{
+							tryMove = inactiveUnit.WithdrawStack();
+						}
+						hasChange = true;
+					}
                 }
             }
             if (!tryMove.IsAir)
             {
-                inactiveUnit.DepositItem(tryMove);
+                inactiveUnit.Deposit(tryMove);
             }
             if (!hasChange)
             {
@@ -139,14 +129,9 @@ namespace MagicStorage.Content.TileEntities
         public bool Defragment()
         {
             TEStorageUnit emptyUnit = null;
-            foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!(abstractStorageUnit is TEStorageUnit))
-                {
-                    continue;
-                }
-                TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
-                if (emptyUnit == null && storageUnit.IsEmpty && !storageUnit.Inactive)
+                if (emptyUnit == null && storageUnit.IsEmpty && storageUnit.active)
                 {
                     emptyUnit = storageUnit;
                 }
@@ -163,14 +148,9 @@ namespace MagicStorage.Content.TileEntities
         public bool PackItems()
         {
             TEStorageUnit unitWithSpace = null;
-            foreach (TEAbstractStorageUnit abstractStorageUnit in GetStorageUnits())
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!(abstractStorageUnit is TEStorageUnit))
-                {
-                    continue;
-                }
-                TEStorageUnit storageUnit = (TEStorageUnit)abstractStorageUnit;
-                if (unitWithSpace == null && !storageUnit.IsFull && !storageUnit.Inactive)
+                if (unitWithSpace == null && !storageUnit.IsFull && storageUnit.active)
                 {
                     unitWithSpace = storageUnit;
                 }
@@ -179,10 +159,10 @@ namespace MagicStorage.Content.TileEntities
                     while (!unitWithSpace.IsFull && !storageUnit.IsEmpty)
                     {
                         Item item = storageUnit.WithdrawStack();
-                        unitWithSpace.DepositItem(item);
+                        unitWithSpace.Deposit(item);
                         if (!item.IsAir)
                         {
-                            storageUnit.DepositItem(item);
+                            storageUnit.Deposit(item);
                         }
                     }
                     return true;
@@ -203,22 +183,22 @@ namespace MagicStorage.Content.TileEntities
         public void DepositItem(Item toDeposit)
         {
             int oldStack = toDeposit.stack;
-            foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!storageUnit.Inactive && storageUnit.HasSpaceInStackFor(toDeposit))
+                if (storageUnit.active && storageUnit.HasSpaceInStackFor(toDeposit))
                 {
-                    storageUnit.DepositItem(toDeposit);
+                    storageUnit.Deposit(toDeposit);
                     if (toDeposit.IsAir)
                     {
                         return;
                     }
                 }
             }
-            foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
-                if (!storageUnit.Inactive && !storageUnit.IsFull)
+                if (storageUnit.active && !storageUnit.IsFull)
                 {
-                    storageUnit.DepositItem(toDeposit);
+                    storageUnit.Deposit(toDeposit);
                     if (toDeposit.IsAir)
                     {
                         return;
@@ -235,11 +215,12 @@ namespace MagicStorage.Content.TileEntities
         public Item TryWithdraw(Item lookFor)
         {
             Item result = new Item();
-            foreach (TEAbstractStorageUnit storageUnit in GetStorageUnits())
+
+            foreach (TEStorageUnit storageUnit in GetStorageUnits())
             {
                 if (storageUnit.HasItem(lookFor))
                 {
-                    Item withdrawn = storageUnit.TryWithdraw(lookFor);
+                    Item withdrawn = storageUnit.Withdraw(lookFor);
                     if (!withdrawn.IsAir)
                     {
                         if (result.IsAir)
@@ -250,18 +231,20 @@ namespace MagicStorage.Content.TileEntities
                         {
                             result.stack += withdrawn.stack;
                         }
-                        if (lookFor.stack <= 0)
+
+                        if (result.stack == lookFor.stack)
                         {
-                            ResetCompactStage();
-                            return result;
+							break;
                         }
                     }
                 }
             }
+
             if (result.stack > 0)
             {
                 ResetCompactStage();
             }
+
             return result;
         }
 
@@ -269,13 +252,14 @@ namespace MagicStorage.Content.TileEntities
         {
             base.SaveData(tag);
 
-            List<TagCompound> tagRemotes = new List<TagCompound>();
+            List<TagCompound> tagRemotes = new List<TagCompound>(remoteAccesses.Count);
             foreach (Point16 remoteAccess in remoteAccesses)
             {
-                TagCompound tagRemote = new TagCompound();
-                tagRemote.Set("X", remoteAccess.X);
-                tagRemote.Set("Y", remoteAccess.Y);
-                tagRemotes.Add(tagRemote);
+				tagRemotes.Add(new TagCompound()
+				{
+					{ "X", remoteAccess.X },
+					{ "Y", remoteAccess.Y }
+				});
             }
 
             tag.Set("RemoteAccesses", tagRemotes);

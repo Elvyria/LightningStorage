@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-
 namespace MagicStorage.Common.Sorting
 {
     public static class SortMode

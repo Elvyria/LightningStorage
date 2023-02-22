@@ -1,8 +1,3 @@
-using Terraria;
-using Terraria.Audio;
-using Terraria.UI;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
 using MagicStorage.Common.Systems;
 using MagicStorage.Content.TileEntities;
@@ -17,7 +12,7 @@ namespace MagicStorage.Common.Players
         public int timeSinceOpen = 1;
         public bool remoteAccess = false;
 
-        private Point16 storageAccess = new Point16(-1, -1);
+        private Point16 storageAccess = Point16.NegativeOne;
 
         public void RefreshItems()
         {
@@ -57,7 +52,6 @@ namespace MagicStorage.Common.Players
                 if (Player.chest != -1 || !Main.playerInventory || Player.sign > -1 || Player.talkNPC > -1)
                 {
                     CloseStorage();
-                    Recipe.FindRecipes();
                 }
                 else
                 {
@@ -67,13 +61,11 @@ namespace MagicStorage.Common.Players
                     {
                         SoundEngine.PlaySound(SoundID.MenuClose);
                         CloseStorage();
-                        Recipe.FindRecipes();
                     }
                     else if (!(TileLoader.GetTile(Main.tile[storageAccess.X, storageAccess.Y].TileType) is StorageAccess))
                     {
                         SoundEngine.PlaySound(SoundID.MenuClose);
                         CloseStorage();
-                        Recipe.FindRecipes();
                     }
                 }
             }
@@ -84,12 +76,13 @@ namespace MagicStorage.Common.Players
             storageAccess = point;
             remoteAccess = remote;
             UISystem system = ModContent.GetInstance<UISystem>();
-            TileEntity tile = TileEntity.ByPosition[storageAccess];
-            if (tile is TECraftingAccess)
+			ModTile tile = TileLoader.GetTile(Main.tile[storageAccess.X, storageAccess.Y].TileType);
+
+            if (tile is CraftingAccess)
             {
                 system.UI.SetState(system.CraftingUI);
             }
-            else if (tile is TEStorageHeart)
+            else if (tile is StorageAccess)
             {
                 system.UI.SetState(system.StorageUI);
             }
@@ -100,7 +93,9 @@ namespace MagicStorage.Common.Players
             UISystem system = ModContent.GetInstance<UISystem>();
             system.UI.SetState(null);
 
-            storageAccess = new Point16(-1, -1);
+            storageAccess = Point16.NegativeOne;
+
+			Recipe.FindRecipes();
         }
 
         public Point16 ViewingStorage()

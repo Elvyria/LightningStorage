@@ -1,7 +1,4 @@
 using System.Reflection;
-using System.Collections.Generic;
-
-using Terraria.ModLoader;
 
 namespace MagicStorage.Common.Sorting
 {

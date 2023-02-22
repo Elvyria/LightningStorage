@@ -1,13 +1,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
+using ReLogic.Content;
+
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.GameInput;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
+
 using MagicStorage.Common.Players;
 using MagicStorage.Content.TileEntities;
 
@@ -15,6 +14,14 @@ namespace MagicStorage.Content.Tiles
 {
     public class StorageAccess : StorageComponent
     {
+		private Asset<Texture2D> glowTexture;
+
+        public override void Load()
+        {
+            base.Load();
+			glowTexture = Mod.Assets.Request<Texture2D>("Content/Tiles/" + Name + "_Glow");
+        }
+
         public override int ItemType(int frameX, int frameY)
         {
             return ModContent.ItemType<Items.StorageAccess>();
@@ -55,10 +62,12 @@ namespace MagicStorage.Content.Tiles
             {
                 i--;
             }
+
             if (Main.tile[i, j].TileFrameY % 36 == 18)
             {
                 j--;
             }
+
             if (GetHeart(i, j) == null)
             {
                 Main.NewText("This access is not connected to a Storage Heart!");
@@ -67,11 +76,9 @@ namespace MagicStorage.Content.Tiles
 
             Player player = Main.LocalPlayer;
             StoragePlayer modPlayer = player.GetModPlayer<StoragePlayer>();
-            Main.mouseRightRelease = false;
 
-            if (player.sign > -1)
+            if (Main.editSign)
             {
-                SoundEngine.PlaySound(SoundID.MenuClose);
                 player.sign = -1;
                 Main.editSign = false;
                 Main.npcChatText = string.Empty;
@@ -79,14 +86,8 @@ namespace MagicStorage.Content.Tiles
 
             if (Main.editChest)
             {
-                SoundEngine.PlaySound(SoundID.MenuTick);
                 Main.editChest = false;
                 Main.npcChatText = string.Empty;
-            }
-
-            if (player.editedChestName)
-            {
-                player.editedChestName = false;
             }
 
             if (player.talkNPC > -1)
@@ -98,14 +99,12 @@ namespace MagicStorage.Content.Tiles
 
             bool hadChestOpen = player.chest != -1;
             player.chest = -1;
-            Main.stackSplit = 600;
+
             Point16 toOpen = new Point16(i, j);
             Point16 prevOpen = modPlayer.ViewingStorage();
             if (prevOpen == toOpen)
             {
                 modPlayer.CloseStorage();
-                SoundEngine.PlaySound(SoundID.MenuClose);
-                Recipe.FindRecipes();
             }
             else
             {
@@ -117,8 +116,10 @@ namespace MagicStorage.Content.Tiles
                     PlayerInput.Triggers.JustPressed.Grapple = false;
                 }
                 Main.recBigList = false;
-                SoundEngine.PlaySound(hadChestOpen || hadOtherOpen ? SoundID.MenuTick : SoundID.MenuOpen);
             }
+
+			// SoundEngine.PlaySound(SoundID.MenuClose);
+			// SoundEngine.PlaySound(hadChestOpen || hadOtherOpen ? SoundID.MenuTick : SoundID.MenuOpen);
 
             return true;
         }
@@ -131,7 +132,7 @@ namespace MagicStorage.Content.Tiles
             Rectangle frame = new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16);
             Color lightColor = Lighting.GetColor(i, j, Color.White);
             Color color = Color.Lerp(lightColor, Color.White, Main.essScale);
-            spriteBatch.Draw(Mod.Assets.Request<Texture2D>("Content/Tiles/" + Name + "_Glow").Value, drawPos, frame, color);
+            spriteBatch.Draw(glowTexture.Value, drawPos, frame, color);
         }
     }
 }

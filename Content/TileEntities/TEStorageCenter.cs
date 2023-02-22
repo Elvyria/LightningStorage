@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using MagicStorage.Content.Tiles;
 
 namespace MagicStorage.Content.TileEntities
 {
@@ -26,12 +24,11 @@ namespace MagicStorage.Content.TileEntities
             while (toExplore.Count > 0)
             {
                 Point16 explore = toExplore.Dequeue();
-                if (!explored.Contains(explore) && explore != StorageComponent.killTile)
+                if (!explored.Contains(explore))
                 {
                     explored.Add(explore);
-                    if (ByPosition.ContainsKey(explore) && ByPosition[explore] is TEAbstractStorageUnit)
+                    if (ByPosition.ContainsKey(explore) && ByPosition[explore] is TEStorageUnit storageUnit)
                     {
-                        TEAbstractStorageUnit storageUnit = (TEAbstractStorageUnit)ByPosition[explore];
                         if (storageUnit.Link(Position))
                         {
                             changed = true;
@@ -50,10 +47,9 @@ namespace MagicStorage.Content.TileEntities
             {
                 if (!hashStorageUnits.Contains(oldStorageUnit))
                 {
-                    if (ByPosition.ContainsKey(oldStorageUnit) && ByPosition[oldStorageUnit] is TEAbstractStorageUnit)
+                    if (ByPosition.ContainsKey(oldStorageUnit) && ByPosition[oldStorageUnit] is TEStorageUnit storageUnit)
                     {
-                        TileEntity storageUnit = ByPosition[oldStorageUnit];
-                        ((TEAbstractStorageUnit)storageUnit).Unlink();
+                        storageUnit.Unlink();
                     }
                     changed = true;
                 }
@@ -78,27 +74,23 @@ namespace MagicStorage.Content.TileEntities
         {
             foreach (Point16 storageUnit in storageUnits)
             {
-                TEAbstractStorageUnit unit = (TEAbstractStorageUnit)ByPosition[storageUnit];
+                TEStorageUnit unit = (TEStorageUnit) TileEntity.ByPosition[storageUnit];
                 unit.Unlink();
             }
         }
 
         public abstract TEStorageHeart GetHeart();
 
-        public static bool IsStorageCenter(Point16 point)
-        {
-            return ByPosition.ContainsKey(point) && ByPosition[point] is TEStorageCenter;
-        }
-
         public override void SaveData(TagCompound tag)
         {
-            List<TagCompound> tagUnits = new List<TagCompound>();
+            List<TagCompound> tagUnits = new List<TagCompound>(storageUnits.Count);
             foreach (Point16 storageUnit in storageUnits)
             {
-                TagCompound tagUnit = new TagCompound();
-                tagUnit.Set("X", storageUnit.X);
-                tagUnit.Set("Y", storageUnit.Y);
-                tagUnits.Add(tagUnit);
+				tagUnits.Add(new TagCompound()
+				{
+					{ "X", storageUnit.X },
+					{ "Y", storageUnit.Y }
+				});
             }
 
             tag.Set("StorageUnits", tagUnits);

@@ -1,12 +1,8 @@
-using System;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Graphics;
 
-using Terraria;
-using Terraria.UI;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 
@@ -77,7 +73,6 @@ namespace MagicStorage.Common.UI
                 if (scrollbar != null)
                     scrollbar.Left.Set(Width.Pixels + scrollbar.Left.Pixels, 0);
             }
-
         }
 
         public void SetScrollbar(UIScrollbar scrollbar)

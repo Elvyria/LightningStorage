@@ -1,5 +1,3 @@
-﻿using Terraria;
-using Terraria.ID;
 
 namespace MagicStorage.Content.Items
 {

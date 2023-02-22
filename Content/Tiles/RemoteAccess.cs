@@ -1,7 +1,5 @@
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ModLoader;
-using Terraria;
 using MagicStorage.Content.Items;
 using MagicStorage.Content.TileEntities;
 
@@ -32,8 +30,7 @@ namespace MagicStorage.Content.Tiles
 
         public override bool RightClick(int i, int j)
         {
-            Player player = Main.player[Main.myPlayer];
-            Item item = player.inventory[player.selectedItem];
+            Item item = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
             if (item.type == ModContent.ItemType<Locator>() || item.type == ModContent.ItemType<LocatorDisk>())
             {
                 if (Main.tile[i, j].TileFrameX % 36 == 18)
@@ -51,14 +48,14 @@ namespace MagicStorage.Content.Tiles
                 {
                     if (item.type == ModContent.ItemType<Items.LocatorDisk>())
                     {
-                        locator.location = new Point16(-1, -1);
+                        locator.location = Point16.NegativeOne;
                     }
                     else
                     {
                         item.SetDefaults(0);
                     }
                 }
-                if (player.selectedItem == 58)
+                if (Main.LocalPlayer.selectedItem == 58)
                 {
                     Main.mouseItem = item.Clone();
                 }
