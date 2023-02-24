@@ -54,11 +54,10 @@ class CraftingGUI : UIState
 	private UISlotZone resultZone;
 
 	private List<Item> items;
-	private List<Item> ingredients = new List<Item>();
+	private List<Item> ingredients;
 
-	private Dictionary<int, int> itemCounts = new Dictionary<int, int>();
-	private Dictionary<int, int> recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
-	private List<Recipe.Condition> conditions = new List<Recipe.Condition>(3);
+	private Dictionary<int, int> itemCounts;
+	private Dictionary<int, int> recipeGroupCounts;
 
 	private Item resultItem = UISlotZone.Air;
 
@@ -66,8 +65,9 @@ class CraftingGUI : UIState
 	private TEStorageHeart heart;
 	private TECraftingAccess access;
 
-	private bool[] adjTiles = new bool[0];
-	private bool[] adjLiquids = new bool[Main.maxLiquidTypes];
+	private bool[] adjTiles;
+	private bool[] adjLiquids;
+	private List<Recipe.Condition> conditions;
 
 	private List<Recipe> recipes;
 
@@ -84,7 +84,7 @@ class CraftingGUI : UIState
 
 	private UIText reqObjText2;
 
-	private List<Item> storageItems = new List<Item>();
+	private List<Item> storageItems;
 
 	private RecipeMode recipeMode = RecipeMode.Available;
 	private IComparer<Item> sortMode = SortMode.Default;
@@ -328,6 +328,14 @@ class CraftingGUI : UIState
 			return;
 		}
 
+		adjTiles = new bool[player.adjTile.Length];
+		adjLiquids= new bool[Main.maxLiquidTypes];
+		ingredients = new List<Item>(4);
+		itemCounts = new Dictionary<int, int>();
+		recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
+		conditions = new List<Recipe.Condition>(3);
+		storageItems = new List<Item>();
+
 		Refresh();
 	}
 
@@ -336,10 +344,20 @@ class CraftingGUI : UIState
 		player = null;
 		heart = null;
 		access = null;
+
 		recipes = null;
 		recipeAvailable = null;
 		selectedRecipe = null;
 
+		adjTiles = null;
+		adjLiquids= null;
+		ingredients = null;
+		itemCounts = null;
+		recipeGroupCounts = null;
+		conditions = null;
+		storageItems = null;
+
+		recipeMode = RecipeMode.Available;
 		filterMode = FilterMode.All;
 		sortMode = SortMode.Default;
 
@@ -699,11 +717,6 @@ class CraftingGUI : UIState
 
 	private void RefreshStations()
 	{
-		if (adjTiles.Length < player.adjTile.Length)
-		{
-			Array.Resize(ref adjTiles, player.adjTile.Length);
-		}
-
 		Array.Clear(adjTiles,   0, adjTiles.Length);
 		Array.Clear(adjLiquids, 0, adjLiquids.Length);
 		conditions.Clear();

@@ -29,7 +29,7 @@ class StorageGUI : UIState
 
 	private Player player;
 	private TEStorageHeart heart;
-	private List<Item> items = new List<Item>();
+	private List<Item> items;
 
 	private UIPanel panel;
 
@@ -215,6 +215,7 @@ class StorageGUI : UIState
 	{
 		player = null;
 		heart = null;
+
 		items = null;
 
 		sortMode = SortMode.Default;
