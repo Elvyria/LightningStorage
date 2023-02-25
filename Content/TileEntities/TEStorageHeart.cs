@@ -12,7 +12,15 @@ public class TEStorageHeart : TEStorageCenter
 {
 	public List<Point16> remoteAccesses = new List<Point16>();
 	private int updateTimer = 60;
-	private int compactStage = 0;
+	private CompactStage compactStage = CompactStage.Emptying;
+
+	enum CompactStage
+	{
+		Emptying,
+		Defragging,
+		Packing,
+		Waiting,
+	}
 
 	public override bool IsTileValidForEntity(int i, int j)
 	{
@@ -64,12 +72,13 @@ public class TEStorageHeart : TEStorageCenter
 
 	public void Compact()
 	{
-		switch (compactStage)
+        bool v = compactStage switch
 		{
-			case 0: EmptyInactive(); break;
-			case 1: Defragment();    break;
-			case 2: PackItems();     break;
-		}
+			CompactStage.Emptying   => EmptyInactive(),
+			CompactStage.Defragging => Defragment(),
+			CompactStage.Packing    => PackItems(),
+			_                       => false,
+		};
 	}
 
 	public bool EmptyInactive()
