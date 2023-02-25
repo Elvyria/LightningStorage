@@ -192,7 +192,7 @@ public class StoragePlayer : ModPlayer
 		int oldStack = item.stack;
 		if (StorageCrafting())
 		{
-			GetCraftingAccess().TryDepositStation(item);
+			GetCraftingAccess().DepositStation(item);
 		}
 		else
 		{

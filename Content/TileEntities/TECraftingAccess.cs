@@ -23,7 +23,7 @@ public class TECraftingAccess : TEStorageComponent
         return tile.HasTile && tile.TileType == ModContent.TileType<CraftingAccess>();
     }
 
-    public void TryDepositStation(Item item)
+    public void DepositStation(Item item)
     {
 			if (Array.Exists(stations, s => s.type == item.type))
 				return;
