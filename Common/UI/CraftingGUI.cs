@@ -750,11 +750,12 @@ class CraftingGUI : UIState
 				adjLiquids[LiquidID.Lava]  |= TileID.Sets.CountsAsLavaSource[item.createTile];
 				adjLiquids[LiquidID.Honey] |= TileID.Sets.CountsAsHoneySource[item.createTile];
 
-				adjTiles[TileID.Bottles]   |= item.createTile == TileID.AlchemyTable;
-				adjTiles[TileID.Tables]    |= item.createTile == TileID.BewitchingTable || item.createTile == TileID.AlchemyTable || item.createTile == TileID.Tables2;
-				adjTiles[TileID.Anvils]    |= item.createTile == TileID.MythrilAnvil;
-				adjTiles[TileID.Furnaces]  |= item.createTile == TileID.Hellforge || item.createTile == TileID.Hellforge || item.createTile == TileID.GlassKiln;
-				adjTiles[TileID.Hellforge] |= item.createTile == TileID.AdamantiteForge;
+				adjTiles[TileID.Bottles]     |= item.createTile == TileID.AlchemyTable;
+				adjTiles[TileID.Tables]      |= item.createTile == TileID.BewitchingTable || item.createTile == TileID.AlchemyTable || item.createTile == TileID.Tables2;
+				adjTiles[TileID.Anvils]      |= item.createTile == TileID.MythrilAnvil;
+				adjTiles[TileID.Furnaces]    |= item.createTile == TileID.Hellforge || item.createTile == TileID.Hellforge || item.createTile == TileID.GlassKiln;
+				adjTiles[TileID.WorkBenches] |= item.createTile == TileID.HeavyWorkBench;
+				adjTiles[TileID.Hellforge]   |= item.createTile == TileID.AdamantiteForge;
 
 				adjTiles[item.createTile] = true;
 			}
