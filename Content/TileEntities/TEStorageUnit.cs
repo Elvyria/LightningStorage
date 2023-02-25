@@ -263,7 +263,7 @@ public class TEStorageUnit : TEStorageComponent
 		TagCompound tagCenter = tag.GetCompound("Center");
 		center = new Point16(tagCenter.GetShort("X"), tagCenter.GetShort("Y"));
 
-		ClearItemsData();
+		ClearItems();
 		items.Capacity = Capacity;
 		foreach (TagCompound tagItem in tag.GetList<TagCompound>("Items"))
 		{
@@ -280,7 +280,7 @@ public class TEStorageUnit : TEStorageComponent
 		}
 	}
 
-	private void ClearItemsData()
+	private void ClearItems()
 	{
 		items.Clear();
 		hasSpaceInStack.Clear();
