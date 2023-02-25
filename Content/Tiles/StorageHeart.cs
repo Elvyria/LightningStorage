@@ -31,7 +31,7 @@ public class StorageHeart : StorageAccess
 	{
 		Player player = Main.LocalPlayer;
 		Item selectedItem = player.inventory[player.selectedItem];
-		if (selectedItem.type == ModContent.ItemType<Locator>() || selectedItem.type == ModContent.ItemType<LocatorDisk>() || selectedItem.type == ModContent.ItemType<PortableAccess>())
+		if (selectedItem.type == ModContent.ItemType<Locator>() || selectedItem.type == ModContent.ItemType<PortableAccess>())
 		{
 			if (Main.tile[i, j].TileFrameX % 36 == 18)
 			{

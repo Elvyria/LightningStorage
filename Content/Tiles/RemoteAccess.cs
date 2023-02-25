@@ -31,7 +31,7 @@ public class RemoteAccess : StorageAccess
 	public override bool RightClick(int i, int j)
 	{
 		Item item = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-		if (item.type == ModContent.ItemType<Locator>() || item.type == ModContent.ItemType<LocatorDisk>())
+		if (item.type == ModContent.ItemType<Locator>())
 		{
 			if (Main.tile[i, j].TileFrameX % 36 == 18)
 			{
@@ -46,14 +46,7 @@ public class RemoteAccess : StorageAccess
 			string message;
 			if (ent.TryLocate(locator.location, out message))
 			{
-				if (item.type == ModContent.ItemType<Items.LocatorDisk>())
-				{
-					locator.location = Point16.NegativeOne;
-				}
-				else
-				{
-					item.TurnToAir();
-				}
+				item.TurnToAir();
 			}
 			if (Main.LocalPlayer.selectedItem == 58)
 			{

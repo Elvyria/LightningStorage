@@ -109,7 +109,7 @@ public class PortableAccess : Locator
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient<LocatorDisk>()
+			.AddIngredient<Locator>()
 			.AddIngredient(ItemID.Diamond, 3)
 			.AddIngredient(ItemID.Ruby, 7)
 			.AddTile(TileID.LunarCraftingStation)
