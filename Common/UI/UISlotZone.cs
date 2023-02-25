@@ -12,6 +12,7 @@ public class UISlotZone : UIElement
 {
 	public static readonly Item Air = new Item();
 
+	public int mouseSlot = -1;
 	public int padding = 4;
 
 	private int columns = 1;
@@ -183,10 +184,10 @@ public class UISlotZone : UIElement
 
 	public void DrawText(SpriteBatch spriteBatch)
 	{
-		int slot = MouseSlot();
-		if (slot >= 0)
+		mouseSlot = MouseSlot();
+		if (mouseSlot >= 0)
 		{
-			Item item = getItem(slot);
+			Item item = getItem(mouseSlot);
 			if (!item.IsAir)
 			{
 				Main.hoverItemName = item.Name;

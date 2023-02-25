@@ -244,12 +244,28 @@ class StorageGUI : UIState
 
 		UpdateStackTimer();
 		UpdateStackSplit();
+		UpdateCursor();
 
 		if (nameFilter != searchBar.Text || modFilter != searchBar2.Text)
 		{
 			nameFilter = searchBar.Text;
 			modFilter = searchBar2.Text;
 			RefreshItems();
+		}
+	}
+
+	public void UpdateCursor() {
+		if (!GetItem(slotZone.mouseSlot).IsAir)
+		{
+			if (ItemSlot.ControlInUse)
+			{
+				Main.cursorOverride = 6;
+			}
+
+			if (ItemSlot.ShiftInUse)
+			{
+				Main.cursorOverride = 8;
+			}
 		}
 	}
 
@@ -339,7 +355,7 @@ class StorageGUI : UIState
 
 	private void PressSlotZone(UIEvent e, UIElement element)
 	{
-		int slot = slotZone.MouseSlot();
+		int slot = slotZone.mouseSlot;
 		bool changed = false;
 
 		if (!Main.mouseItem.IsAir)
@@ -387,10 +403,10 @@ class StorageGUI : UIState
 			return;
 		}
 
-		int slot = slotZone.MouseSlot();
+		int slot = slotZone.mouseSlot;
 		bool changed = false;
 
-		if (slot >= 0 && slot < items.Count && !items[slot].IsAir && stackSplit <= 1)
+		if (!GetItem(slot).IsAir && stackSplit <= 1)
 		{
 			if (stackSplit == 0)
 			{

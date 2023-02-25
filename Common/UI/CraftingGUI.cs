@@ -386,6 +386,7 @@ class CraftingGUI : UIState
 		UpdateStackTimer();
 		UpdateCraftButton();
 		UpdateResultSlot();
+		UpdateCursor();
 
 		if (nameFilter != searchBar.Text || modFilter != searchBar2.Text)
 		{
@@ -500,6 +501,17 @@ class CraftingGUI : UIState
 		}
 	}
 
+	public void UpdateCursor()
+	{
+		if (ItemSlot.ShiftInUse)
+		{
+			if (resultZone.mouseSlot == 0 && !resultItem.IsAir || !GetStation(stationZone.mouseSlot).IsAir)
+			{
+				Main.cursorOverride = 8;
+			}
+		}
+	}
+
 	public override void Draw(SpriteBatch spriteBatch)
 	{
 		base.Draw(spriteBatch);
@@ -520,7 +532,7 @@ class CraftingGUI : UIState
 
 	private Item GetStation(int slot)
 	{
-		if (slot < access.stations.Length)
+		if (slot >= 0 && slot < access.stations.Length)
 		{
 			return access.stations[slot];
 		}
@@ -845,7 +857,7 @@ class CraftingGUI : UIState
 			return;
 		}
 
-		int slot = ingredientZone.MouseSlot();
+		int slot = ingredientZone.mouseSlot;
 
 		if (slot >= 0 && slot < selectedRecipe.requiredItem.Count)
 		{
@@ -899,7 +911,7 @@ class CraftingGUI : UIState
 
 	private void PressRecipe(UIEvent _event, UIElement _element)
 	{
-		int slot = recipeZone.MouseSlot();
+		int slot = recipeZone.mouseSlot;
 
 		if (slot >= 0 && slot < recipes.Count())
 		{
@@ -914,7 +926,7 @@ class CraftingGUI : UIState
 
 	private void PressStation(UIEvent _event, UIElement _element)
 	{
-		int slot = stationZone.MouseSlot();
+		int slot = stationZone.mouseSlot;
 
 		if (slot < 0 || slot >= access.stations.Length || access.stations[slot].IsAir && Main.mouseItem.IsAir)
 		{
@@ -952,7 +964,7 @@ class CraftingGUI : UIState
 
 	private void PressResult(UIEvent _event, UIElement _element)
 	{
-		if (selectedRecipe == null || Main.mouseItem.IsAir && resultItem.IsAir || resultZone.MouseSlot() != 0)
+		if (selectedRecipe == null || Main.mouseItem.IsAir && resultItem.IsAir || resultZone.mouseSlot != 0)
 		{
 			return;
 		}
