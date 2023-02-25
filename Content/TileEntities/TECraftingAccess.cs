@@ -37,7 +37,7 @@ public class TECraftingAccess : TEStorageComponent
                 item.stack--;
                 if (item.stack <= 0)
                 {
-                    item.SetDefaults(0);
+                    item.TurnToAir();
                 }
                 return;
             }
@@ -84,7 +84,7 @@ public class TECraftingAccess : TEStorageComponent
             item.stack--;
             if (item.stack <= 0)
             {
-                item.SetDefaults(0);
+                item.TurnToAir();
             }
             return item;
         }

@@ -52,7 +52,7 @@ public class RemoteAccess : StorageAccess
 				}
 				else
 				{
-					item.SetDefaults(0);
+					item.TurnToAir();
 				}
 			}
 			if (Main.LocalPlayer.selectedItem == 58)
