@@ -49,10 +49,10 @@ public class StorageComponent : ModTile
 		return ModContent.ItemType<Items.StorageComponent>();
 	}
 
-	// public override bool CanPlace(int i, int j)
-	// {
-	// return false;
-	// }
+	public override bool CanPlace(int i, int j)
+	{
+		return true;
+	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
