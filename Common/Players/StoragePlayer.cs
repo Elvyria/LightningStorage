@@ -16,7 +16,7 @@ public class StoragePlayer : ModPlayer
 
 	public void RefreshItems()
 	{
-		if (storageAccess.X != -1)
+		if (storageAccess != Point16.NegativeOne)
 		{
 			UISystem system = ModContent.GetInstance<UISystem>();
 			TileEntity tile = TileEntity.ByPosition[storageAccess];
@@ -131,9 +131,7 @@ public class StoragePlayer : ModPlayer
 		UISystem system = ModContent.GetInstance<UISystem>();
 		system.UI.SetState(null);
 
-		storageAccess = Point16.NegativeOne;
-
-		Recipe.FindRecipes();
+		SoundEngine.PlaySound(SoundID.MenuClose);
 	}
 
 	public Point16 ViewingStorage()
