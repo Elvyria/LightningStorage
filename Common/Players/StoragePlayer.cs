@@ -196,7 +196,7 @@ public class StoragePlayer : ModPlayer
 		}
 		else
 		{
-			GetStorageHeart().DepositItem(item);
+			GetStorageHeart().Deposit(item);
 		}
 		if (item.type != oldType || item.stack != oldStack)
 		{

@@ -85,15 +85,9 @@ public class TEStorageHeart : TEStorageCenter
 
 	public bool EmptyInactive()
 	{
-		TEStorageUnit inactiveUnit = null;
-
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
-		{
-			if (!storageUnit.active && !storageUnit.IsEmpty)
-			{
-				inactiveUnit = storageUnit;
-			}
-		}
+		IEnumerable<TEStorageUnit> units = GetStorageUnits();
+		IEnumerable<TEStorageUnit> activeUnits = units.Where(unit => unit.active);
+		TEStorageUnit inactiveUnit = units.FirstOrDefault(unit => !unit.active && !unit.IsEmpty);
 
 		if (inactiveUnit == null)
 		{
@@ -101,147 +95,166 @@ public class TEStorageHeart : TEStorageCenter
 			return false;
 		}
 
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+		foreach (TEStorageUnit unit in activeUnits)
 		{
-			if (storageUnit.IsEmpty && inactiveUnit.NumItems <= storageUnit.Capacity)
+			if (unit.IsEmpty && unit.Capacity >= inactiveUnit.NumItems)
 			{
-				TEStorageUnit.SwapItems(inactiveUnit, storageUnit);
+				TEStorageUnit.SwapItems(inactiveUnit, unit);
 				return true;
 			}
 		}
+
 		bool hasChange = false;
+
 		Item tryMove = inactiveUnit.WithdrawStack();
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+		int amount = tryMove.stack;
+
+		foreach (TEStorageUnit unit in activeUnits)
 		{
-			if (storageUnit.active)
+			while (unit.HasSpaceFor(tryMove) && amount != 0)
 			{
-				while (storageUnit.HasSpaceFor(tryMove) && !tryMove.IsAir)
+				amount -= unit.Deposit(tryMove, amount);
+
+				if (amount == 0 && !inactiveUnit.IsEmpty)
 				{
-					storageUnit.Deposit(tryMove);
-					if (tryMove.IsAir && !inactiveUnit.IsEmpty)
-					{
-						tryMove = inactiveUnit.WithdrawStack();
-					}
-					hasChange = true;
+					tryMove = inactiveUnit.WithdrawStack();
+					amount = tryMove.stack;
 				}
+
+				hasChange = true;
+			}
+
+			if (inactiveUnit.IsEmpty) {
+				break;
 			}
 		}
-		if (!tryMove.IsAir)
+
+		if (amount != 0)
 		{
-			inactiveUnit.Deposit(tryMove);
+			inactiveUnit.Deposit(tryMove, amount);
 		}
+
 		if (!hasChange)
 		{
 			compactStage++;
 		}
+
 		return hasChange;
 	}
 
 	public bool Defragment()
 	{
-		TEStorageUnit emptyUnit = null;
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
-		{
-			if (emptyUnit == null && storageUnit.IsEmpty && storageUnit.active)
+		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
+		TEStorageUnit emptyUnit = activeUnits.FirstOrDefault(unit => unit.IsEmpty);
+
+		if (emptyUnit != null) {
+			foreach (TEStorageUnit unit in activeUnits)
 			{
-				emptyUnit = storageUnit;
-			}
-			else if (emptyUnit != null && !storageUnit.IsEmpty && storageUnit.NumItems <= emptyUnit.Capacity)
-			{
-				TEStorageUnit.SwapItems(emptyUnit, storageUnit);
-				return true;
+				if (emptyUnit.Capacity > unit.Capacity && !unit.IsEmpty)
+				{
+					TEStorageUnit.SwapItems(emptyUnit, unit);
+					return true;
+				}
 			}
 		}
+
 		compactStage++;
 		return false;
 	}
 
 	public bool PackItems()
 	{
-		TEStorageUnit unitWithSpace = null;
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
+		IEnumerable<TEStorageUnit> spaceUnits = activeUnits.Where(unit => !unit.IsEmpty && !unit.IsFull);
+
+		if (spaceUnits.Count() <= 1)
 		{
-			if (unitWithSpace == null && !storageUnit.IsFull && storageUnit.active)
+			compactStage++;
+			return false;
+		}
+
+		TEStorageUnit unitWithSpace = spaceUnits.MaxBy(unit => unit.Capacity);
+
+		foreach (TEStorageUnit unit in activeUnits)
+		{
+			if (unit != unitWithSpace)
 			{
-				unitWithSpace = storageUnit;
-			}
-			else if (unitWithSpace != null && !storageUnit.IsEmpty)
-			{
-				while (!unitWithSpace.IsFull && !storageUnit.IsEmpty)
+				while (!unitWithSpace.IsFull && !unit.IsEmpty)
 				{
-					Item item = storageUnit.WithdrawStack();
-					unitWithSpace.Deposit(item);
-					if (!item.IsAir)
+					Item item = unit.WithdrawStack();
+					int deposited = unitWithSpace.Deposit(item, item.stack);
+					if (deposited != item.stack)
 					{
-						storageUnit.Deposit(item);
+						unit.Deposit(item, item.stack - deposited);
 					}
 				}
+
 				return true;
 			}
 		}
+
 		compactStage++;
 		return false;
 	}
 
-	public void ResetCompactStage(int stage = 0)
-	{
-		if (stage < compactStage)
-		{
-			compactStage = stage;
-		}
-	}
+	public void ResetCompactStage() => compactStage = CompactStage.Emptying;
 
-	public void DepositItem(Item toDeposit)
+	public void Deposit(Item deposit)
 	{
-		int oldStack = toDeposit.stack;
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+		if (deposit.IsAir || deposit.stack < 1)
 		{
-			if (storageUnit.active && storageUnit.HasSpaceInStackFor(toDeposit))
-			{
-				storageUnit.Deposit(toDeposit);
-				if (toDeposit.IsAir)
-				{
-					return;
-				}
-			}
+			return;
 		}
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+
+		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
+
+		int amount = deposit.stack;
+		foreach (TEStorageUnit unit in activeUnits)
 		{
-			if (storageUnit.active && !storageUnit.IsFull)
+			amount -= unit.Fill(deposit, amount);
+			if (amount == 0) break;
+		}
+
+		if (amount != 0)
+		{
+			foreach (TEStorageUnit unit in activeUnits)
 			{
-				storageUnit.Deposit(toDeposit);
-				if (toDeposit.IsAir)
+				if (!unit.IsFull)
 				{
-					return;
+					amount -= unit.Deposit(deposit, amount);
+					if (amount == 0) break;
 				}
 			}
 		}
 
-		if (oldStack != toDeposit.stack)
+		if (deposit.stack != amount)
 		{
+			deposit.stack = amount;
+
+			if (deposit.stack == 0)
+			{
+				deposit.TurnToAir();
+			}
+
 			ResetCompactStage();
 		}
 	}
 
-	public Item TryWithdraw(Item lookFor)
+	public Item Withdraw(Item lookFor)
 	{
-		Item result = new Item();
+		Item result = lookFor.Clone();
+		result.stack = 0;
 
-		foreach (TEStorageUnit storageUnit in GetStorageUnits())
+		IEnumerable<TEStorageUnit> units = GetStorageUnits();
+
+		foreach (TEStorageUnit storageUnit in units)
 		{
 			if (storageUnit.HasItem(lookFor))
 			{
 				Item withdrawn = storageUnit.Withdraw(lookFor);
 				if (!withdrawn.IsAir)
 				{
-					if (result.IsAir)
-					{
-						result = withdrawn;
-					}
-					else
-					{
-						result.stack += withdrawn.stack;
-					}
+					result.stack += withdrawn.stack;
 
 					if (result.stack == lookFor.stack)
 					{
@@ -251,10 +264,12 @@ public class TEStorageHeart : TEStorageCenter
 			}
 		}
 
-		if (result.stack > 0)
+		if (result.stack == 0)
 		{
-			ResetCompactStage();
+			return new Item();
 		}
+
+		ResetCompactStage();
 
 		return result;
 	}

@@ -361,7 +361,7 @@ class StorageGUI : UIState
 		if (!Main.mouseItem.IsAir)
 		{
 			int oldStack = Main.mouseItem.stack;
-			heart.DepositItem(Main.mouseItem);
+			heart.Deposit(Main.mouseItem);
 			changed = oldStack != Main.mouseItem.stack;
 		}
 		else if (slot >= 0 && slot < items.Count && !items[slot].IsAir)
@@ -373,7 +373,7 @@ class StorageGUI : UIState
 				item.stack = item.maxStack;
 			}
 
-			Main.mouseItem = heart.TryWithdraw(item);
+			Main.mouseItem = heart.Withdraw(item);
 
 			if (ItemSlot.ShiftInUse)
 			{
@@ -422,12 +422,12 @@ class StorageGUI : UIState
 
 			if (Main.mouseItem.IsAir)
 			{
-				Main.mouseItem = heart.TryWithdraw(item);
+				Main.mouseItem = heart.Withdraw(item);
 				changed = true;
 			}
 			else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < item.maxStack)
 			{
-				heart.TryWithdraw(item);
+				heart.Withdraw(item);
 				Main.mouseItem.stack += 1;
 				changed = true;
 			}
@@ -449,7 +449,7 @@ class StorageGUI : UIState
 			if (!item.IsAir && item.stack > 0 && !item.favorited)
 			{
 				int oldStack = item.stack;
-				heart.DepositItem(item);
+				heart.Deposit(item);
 				changed |= oldStack != item.stack;
 			}
 		}

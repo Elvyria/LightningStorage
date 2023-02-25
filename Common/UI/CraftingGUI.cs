@@ -480,11 +480,11 @@ class CraftingGUI : UIState
 
 			if (Main.mouseItem.IsAir)
 			{
-				Main.mouseItem = heart.TryWithdraw(withdraw);
+				Main.mouseItem = heart.Withdraw(withdraw);
 			}
 			else if (Main.mouseItem.type == resultItem.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
 			{
-				heart.TryWithdraw(withdraw);
+				heart.Withdraw(withdraw);
 				Main.mouseItem.stack += 1;
 			}
 			else return;
@@ -972,7 +972,7 @@ class CraftingGUI : UIState
 
 		if (!Main.mouseItem.IsAir && selectedRecipe.createItem.type == Main.mouseItem.type)
 		{
-			heart.DepositItem(Main.mouseItem);
+			heart.Deposit(Main.mouseItem);
 		}
 		else if (Main.mouseItem.IsAir && !resultItem.IsAir)
 		{
@@ -982,7 +982,7 @@ class CraftingGUI : UIState
 				withdraw.stack = withdraw.maxStack;
 			}
 
-			Main.mouseItem = heart.TryWithdraw(withdraw);
+			Main.mouseItem = heart.Withdraw(withdraw);
 
 			if (ItemSlot.ShiftInUse)
 			{
@@ -1091,7 +1091,7 @@ class CraftingGUI : UIState
 		List<Item> items = new List<Item>(toWithdraw.Count);
 		foreach (Item tryWithdraw in toWithdraw)
 		{
-			Item withdrawn = heart.TryWithdraw(tryWithdraw);
+			Item withdrawn = heart.Withdraw(tryWithdraw);
 			if (!withdrawn.IsAir)
 			{
 				items.Add(withdrawn);
@@ -1101,7 +1101,7 @@ class CraftingGUI : UIState
 			{
 				for (int k = 0; k < items.Count; k++)
 				{
-					heart.DepositItem(items[k]);
+					heart.Deposit(items[k]);
 					if (items[k].IsAir)
 					{
 						items.RemoveAt(k);
@@ -1113,7 +1113,7 @@ class CraftingGUI : UIState
 		}
 
 		items.Clear();
-		heart.DepositItem(result);
+		heart.Deposit(result);
 		if (!result.IsAir)
 		{
 			items.Add(result);

@@ -99,50 +99,56 @@ public class TEStorageUnit : TEStorageComponent
 		return items;
 	}
 
-	public void Deposit(Item toDeposit)
+	public int Fill(Item deposit, int amount)
 	{
-		Item original = toDeposit.Clone();
-
-		bool finished = false;
-		bool hasChange = false;
+		if (!HasSpaceInStackFor(deposit) || amount == 0)
+		{
+			return 0;
+		}
 
 		foreach (Item item in items)
 		{
-			if (ItemData.Matches(toDeposit, item) && item.stack < item.maxStack)
+			if (ItemData.Matches(deposit, item) && item.stack < item.maxStack)
 			{
-				int total = item.stack + toDeposit.stack;
-				int newStack = total;
-				if (newStack > item.maxStack)
+				int available = item.maxStack - item.stack;
+
+				if (available > amount)
 				{
-					newStack = item.maxStack;
+					item.stack += amount;
+					return amount;
 				}
-				item.stack = newStack;
-				hasChange = true;
-				toDeposit.stack = total - newStack;
-				if (toDeposit.stack <= 0)
+				else
 				{
-					toDeposit.SetDefaults(0, true);
-					finished = true;
-					break;
+					item.stack += available;
+					hasSpaceInStack.Remove(new ItemData(item));
+					return available;
 				}
 			}
 		}
 
-		if (!finished && !IsFull)
+		return 0;
+	}
+
+	public int Deposit(Item deposit, int amount)
+	{
+		if (amount < 1) return 0;
+
+		int filled = Fill(deposit, amount);
+
+		if (filled == amount || (filled == 0 && IsFull))
 		{
-			Item item = toDeposit.Clone();
-			item.newAndShiny = false;
-			item.favorited = false;
-			items.Add(item);
-			toDeposit.SetDefaults(0, true);
-			hasChange = true;
-			finished = true;
+			return filled;
 		}
 
-		if (hasChange)
-		{
-			RepairMetadata();
-		}
+		Item item = deposit.Clone();
+		item.stack = amount - filled;
+		item.newAndShiny = false;
+		item.favorited = false;
+		items.Add(item);
+
+		RepairMetadata();
+
+		return amount;
 	}
 
 	public Item Withdraw(Item lookFor)
