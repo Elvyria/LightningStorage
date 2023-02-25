@@ -16,11 +16,10 @@ public class StorageUnitCrimtane : ModItem
 		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.sellPrice(silver: 32);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 2;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Crimtane;
 	}
 
-	public override void AddRecipes()
-	{
+	public override void AddRecipes() {
 		CreateRecipe()
 			.AddIngredient<Items.StorageUnit>()
 			.AddIngredient<Items.UpgradeCrimtane>()

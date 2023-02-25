@@ -1,6 +1,6 @@
 namespace MagicStorage.Content.Items;
 
-public class UpgradeHellstone : ModItem
+public class UpgradeHellstone : ModItem, Common.IStorageUpgrade
 {
 	public override void SetDefaults()
 	{
@@ -18,5 +18,17 @@ public class UpgradeHellstone : ModItem
 			.AddIngredient(ItemID.Topaz)
 			.AddTile(TileID.Anvils)
 			.Register();
+	}
+
+	public void Upgrade(int i, int j) {
+		Content.Tiles.StorageUnit.SetStyle(i, j, Tiles.StorageUnit.StyleID.Hellstone);
+	}
+
+	public bool CanUpgrade(int i, int j) {
+		Tile tile = Main.tile[i, j];
+		int style = tile.TileFrameY / 36;
+
+		return (style == Tiles.StorageUnit.StyleID.Demonite || style == Tiles.StorageUnit.StyleID.Crimtane)
+			&& tile.TileType == ModContent.TileType<Tiles.StorageUnit>();
 	}
 }

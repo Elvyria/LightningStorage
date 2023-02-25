@@ -16,7 +16,7 @@ public class StorageUnitTerra : ModItem
 		Item.rare = ItemRarityID.Purple;
 		Item.value = Item.sellPrice(silver: 12);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 7;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Terra;
 	}
 
 	public override void AddRecipes()

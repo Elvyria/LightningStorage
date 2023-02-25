@@ -1,6 +1,6 @@
 namespace MagicStorage.Content.Items;
 
-public class UpgradeDemonite : ModItem
+public class UpgradeDemonite : ModItem, Common.IStorageUpgrade
 {
 	public override void SetDefaults()
 	{
@@ -18,5 +18,17 @@ public class UpgradeDemonite : ModItem
 			.AddIngredient(ItemID.Amethyst)
 			.AddTile(TileID.Anvils)
 			.Register();
+	}
+
+	public void Upgrade(int i, int j) {
+		Content.Tiles.StorageUnit.SetStyle(i, j, Tiles.StorageUnit.StyleID.Demonite);
+	}
+
+	public bool CanUpgrade(int i, int j) {
+		Tile tile = Main.tile[i, j];
+		int style = tile.TileFrameY / 36;
+
+		return style == Tiles.StorageUnit.StyleID.Default
+			&& tile.TileType == ModContent.TileType<Tiles.StorageUnit>();
 	}
 }

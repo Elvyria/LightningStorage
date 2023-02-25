@@ -16,7 +16,7 @@ public class StorageUnitDemonite : ModItem
 		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.sellPrice(silver: 32);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 1;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Demonite;
 	}
 
 	public override void AddRecipes()

@@ -16,7 +16,7 @@ public class StorageUnitBlueChlorophyte : ModItem
         Item.rare = ItemRarityID.Lime;
         Item.value = Item.sellPrice(gold: 1, silver: 60);
         Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-        Item.placeStyle = 5;
+        Item.placeStyle = Tiles.StorageUnit.StyleID.BlueChlorophyte;
     }
 
     public override void AddRecipes()

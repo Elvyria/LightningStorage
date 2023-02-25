@@ -1,6 +1,6 @@
 namespace MagicStorage.Content.Items;
 
-public class UpgradeTerra : ModItem
+public class UpgradeTerra : ModItem, Common.IStorageUpgrade
 {
 	public override void SetDefaults()
 	{
@@ -26,5 +26,17 @@ public class UpgradeTerra : ModItem
 				.AddTile(TileID.LunarCraftingStation)
 				.Register();
 		}
+	}
+
+	public void Upgrade(int i, int j) {
+		Content.Tiles.StorageUnit.SetStyle(i, j, Tiles.StorageUnit.StyleID.Terra);
+	}
+
+	public bool CanUpgrade(int i, int j) {
+		Tile tile = Main.tile[i, j];
+		int style = tile.TileFrameY / 36;
+
+		return style == Tiles.StorageUnit.StyleID.Luminite
+			&& tile.TileType == ModContent.TileType<Tiles.StorageUnit>();
 	}
 }

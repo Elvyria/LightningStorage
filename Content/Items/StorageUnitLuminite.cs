@@ -16,7 +16,7 @@ public class StorageUnitLuminite : ModItem
 		Item.rare = ItemRarityID.Red;
 		Item.value = Item.sellPrice(gold: 2, silver: 50);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 6;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Luminite;
 	}
 
 	public override void AddRecipes()

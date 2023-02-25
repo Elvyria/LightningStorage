@@ -16,7 +16,7 @@ public class StorageUnitHallowed : ModItem
 		Item.rare = ItemRarityID.LightRed;
 		Item.value = Item.sellPrice(gold: 1);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 4;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Hallowed;
 	}
 
 	public override void AddRecipes()

@@ -5,6 +5,8 @@ using ReLogic.Content;
 
 using Terraria.DataStructures;
 using Terraria.ObjectData;
+
+using MagicStorage.Common;
 using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Content.Tiles;
@@ -12,6 +14,32 @@ namespace MagicStorage.Content.Tiles;
 public class StorageUnit : StorageComponent
 {
 	private Asset<Texture2D> glowTexture;
+
+	public class StyleID
+	{
+		public const byte Default         = 0;
+		public const byte Demonite        = 1;
+		public const byte Crimtane        = 2;
+		public const byte Hellstone       = 3;
+		public const byte Hallowed        = 4;
+		public const byte BlueChlorophyte = 5;
+		public const byte Luminite        = 6;
+		public const byte Terra           = 7;
+		public const byte Tiny            = 8;
+	}
+
+	public List<int> styles = new()
+	{
+		ModContent.ItemType<Items.StorageUnit>(),
+		ModContent.ItemType<Items.StorageUnitDemonite>(),
+		ModContent.ItemType<Items.StorageUnitCrimtane>(),
+		ModContent.ItemType<Items.StorageUnitHellstone>(),
+		ModContent.ItemType<Items.StorageUnitHallowed>(),
+		ModContent.ItemType<Items.StorageUnitBlueChlorophyte>(),
+		ModContent.ItemType<Items.StorageUnitLuminite>(),
+		ModContent.ItemType<Items.StorageUnitTerra>(),
+		ModContent.ItemType<Items.StorageUnitTiny>(),
+	};
 
 	public override void Load()
 	{
@@ -26,10 +54,7 @@ public class StorageUnit : StorageComponent
 		TileObjectData.newTile.StyleWrapLimit = 6;
 	}
 
-	public override ModTileEntity GetTileEntity()
-	{
-		return ModContent.GetInstance<TEStorageUnit>();
-	}
+	public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEStorageUnit>();
 
 	public override void MouseOver(int i, int j)
 	{
@@ -39,38 +64,13 @@ public class StorageUnit : StorageComponent
 	public override int ItemType(int frameX, int frameY)
 	{
 		int style = frameY / 36;
-		int type;
-		switch (style)
+
+		if (style < 0 || style > styles.Count)
 		{
-			case 1:
-				type = ModContent.ItemType<Items.StorageUnitDemonite>();
-				break;
-			case 2:
-				type = ModContent.ItemType<Items.StorageUnitCrimtane>();
-				break;
-			case 3:
-				type = ModContent.ItemType<Items.StorageUnitHellstone>();
-				break;
-			case 4:
-				type = ModContent.ItemType<Items.StorageUnitHallowed>();
-				break;
-			case 5:
-				type = ModContent.ItemType<Items.StorageUnitBlueChlorophyte>();
-				break;
-			case 6:
-				type = ModContent.ItemType<Items.StorageUnitLuminite>();
-				break;
-			case 7:
-				type = ModContent.ItemType<Items.StorageUnitTerra>();
-				break;
-			case 8:
-				type = ModContent.ItemType<Items.StorageUnitTiny>();
-				break;
-			default:
-				type = ModContent.ItemType<Items.StorageUnit>();
-				break;
+			return styles[StyleID.Default];
 		}
-		return type;
+
+		return styles[style];
 	}
 
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
@@ -101,59 +101,36 @@ public class StorageUnit : StorageComponent
 		{
 			j--;
 		}
+
 		if (TryUpgrade(i, j))
 		{
 			return true;
 		}
+
 		TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
-		Main.player[Main.myPlayer].tileInteractionHappened = true;
+		Main.LocalPlayer.tileInteractionHappened = true;
 		string activeString = storageUnit.active ? "Active" : "Inactive";
 		string fullnessString = storageUnit.NumItems + " / " + storageUnit.Capacity + " Items";
 		Main.NewText(activeString + ", " + fullnessString);
+
 		return base.RightClick(i, j);
 	}
 
 	private bool TryUpgrade(int i, int j)
 	{
-		Player player = Main.player[Main.myPlayer];
+		Player player = Main.LocalPlayer;
 		Item item = player.inventory[player.selectedItem];
-		int style = Main.tile[i, j].TileFrameY / 36;
 		bool success = false;
-		if (style == 0 && item.type == ModContent.ItemType<Items.UpgradeDemonite>())
+
+		if (item.ModItem is IStorageUpgrade upgrade)
 		{
-			SetStyle(i, j, 1);
-			success = true;
+			if (upgrade.CanUpgrade(i, j))
+			{
+				upgrade.Upgrade(i, j);
+				success = true;
+			}
 		}
-		else if (style == 0 && item.type == ModContent.ItemType<Items.UpgradeCrimtane>())
-		{
-			SetStyle(i, j, 2);
-			success = true;
-		}
-		else if ((style == 1 || style == 2) && item.type == ModContent.ItemType<Items.UpgradeHellstone>())
-		{
-			SetStyle(i, j, 3);
-			success = true;
-		}
-		else if (style == 3 && item.type == ModContent.ItemType<Items.UpgradeHallowed>())
-		{
-			SetStyle(i, j, 4);
-			success = true;
-		}
-		else if (style == 4 && item.type == ModContent.ItemType<Items.UpgradeBlueChlorophyte>())
-		{
-			SetStyle(i, j, 5);
-			success = true;
-		}
-		else if (style == 5 && item.type == ModContent.ItemType<Items.UpgradeLuminite>())
-		{
-			SetStyle(i, j, 6);
-			success = true;
-		}
-		else if (style == 6 && item.type == ModContent.ItemType<Items.UpgradeTerra>())
-		{
-			SetStyle(i, j, 7);
-			success = true;
-		}
+
 		if (success)
 		{
 			TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
@@ -166,17 +143,18 @@ public class StorageUnit : StorageComponent
 			item.stack--;
 			if (item.stack <= 0)
 			{
-				item.SetDefaults(0);
+				item.TurnToAir();
 			}
 			if (player.selectedItem == 58)
 			{
 				Main.mouseItem = item.Clone();
 			}
 		}
+
 		return success;
 	}
 
-	private void SetStyle(int i, int j, int style)
+	public static void SetStyle(int i, int j, int style)
 	{
 		Main.tile[i, j].TileFrameY = (short)(36 * style);
 		Main.tile[i, j + 1].TileFrameY = (short)(36 * style + 18);

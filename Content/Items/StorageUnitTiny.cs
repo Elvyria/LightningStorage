@@ -16,6 +16,6 @@ public class StorageUnitTiny : ModItem
 		Item.rare = ItemRarityID.White;
 		Item.value = Item.sellPrice(silver: 6);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 8;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Tiny;
 	}
 }

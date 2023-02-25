@@ -16,7 +16,7 @@ public class StorageUnitHellstone : ModItem
 		Item.rare = ItemRarityID.Green;
 		Item.value = Item.sellPrice(silver: 50);
 		Item.createTile = ModContent.TileType<Tiles.StorageUnit>();
-		Item.placeStyle = 3;
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Hellstone;
 	}
 
 	public override void AddRecipes()
