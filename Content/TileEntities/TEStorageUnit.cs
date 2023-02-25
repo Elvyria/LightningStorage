@@ -19,33 +19,20 @@ public class TEStorageUnit : TEStorageComponent
 	private HashSet<ItemData> hasSpaceInStack = new HashSet<ItemData>();
 	private HashSet<ItemData> hasItem = new HashSet<ItemData>();
 
+	public static int[] capacities = new[] { 40, 80, 80, 120, 160, 240, 320, 640, 4 };
+
 	public int Capacity
 	{
 		get
 		{
 			int style = Main.tile[Position.X, Position.Y].TileFrameY / 36;
-			if (style == 8)
+
+			if (style < 0 || style >= capacities.Length)
 			{
-				return 4;
+				return 0;
 			}
-			if (style > 1)
-			{
-				style--;
-			}
-			int capacity = style + 1;
-			if (capacity > 4)
-			{
-				capacity++;
-			}
-			if (capacity > 6)
-			{
-				capacity++;
-			}
-			if (capacity > 8)
-			{
-				capacity += 7;
-			}
-			return 40 * capacity;
+
+			return capacities[style];
 		}
 	}
 
