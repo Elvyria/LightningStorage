@@ -141,38 +141,6 @@ public class StoragePlayer : ModPlayer
 		return storageAccess;
 	}
 
-	public static void GetItem(Item item, bool toMouse)
-	{
-		StoragePlayer storagePlayer = LocalPlayer;
-		Player player = storagePlayer.Player;
-
-		if (toMouse && Main.playerInventory && Main.mouseItem.IsAir)
-		{
-			Main.mouseItem = item;
-			item = new Item();
-		}
-		else if (toMouse && Main.playerInventory && Main.mouseItem.type == item.type)
-		{
-			int total = Main.mouseItem.stack + item.stack;
-			if (total > Main.mouseItem.maxStack)
-			{
-				total = Main.mouseItem.maxStack;
-			}
-			int difference = total - Main.mouseItem.stack;
-			Main.mouseItem.stack = total;
-			item.stack -= difference;
-		}
-		if (!item.IsAir)
-		{
-			item = player.GetItem(Main.myPlayer, item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-			if (!item.IsAir)
-			{
-				Point16 access = storagePlayer.ViewingStorage();
-				player.QuickSpawnClonedItem(new EntitySource_TileEntity(TileEntity.ByPosition[access]), item, item.stack);
-			}
-		}
-	}
-
 	public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
 	{
 		if (context != ItemSlot.Context.InventoryItem && context != ItemSlot.Context.InventoryCoin && context != ItemSlot.Context.InventoryAmmo)
