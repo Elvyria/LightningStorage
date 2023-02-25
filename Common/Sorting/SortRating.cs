@@ -1,25 +1,7 @@
-using System.Reflection;
-
 namespace MagicStorage.Common.Sorting;
 
 public static class SortRating
 {
-	public static int[] weaponRatings = new int[0];
-
-	static SortRating()
-	{
-		var damageClasses =
-			(List<DamageClass>)typeof(DamageClassLoader)
-			.GetField("DamageClasses", BindingFlags.NonPublic | BindingFlags.Static)
-			.GetValue(null);
-
-		foreach (var c in damageClasses)
-		{
-			// c.Type
-		}
-
-	}
-
 	public const int WeaponMelee       = 0;
 	public const int WeaponRanged      = 1;
 	public const int WeaponMagic       = 2;
