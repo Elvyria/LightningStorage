@@ -143,12 +143,13 @@ public class UISearchBar : UIElement
 
 		string drawText = text;
 
+		Color color = text.Length == 0 ? Color.DimGray : Color.Black;
+
 		if (text.Length == 0)
 			drawText = focused ? string.Empty : defaultText.Value;
 
 		DynamicSpriteFont font = FontAssets.MouseText.Value;
 		float scale = innerHeight / font.MeasureString(drawText).Y;
-		Color color = focused ? Color.Black : Color.DimGray;
 
 		spriteBatch.DrawString(font, drawText, new Vector2(dim.X + padding, dim.Y + padding), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 		if (focused && cursorTimer < 30)
