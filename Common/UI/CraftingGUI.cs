@@ -1080,13 +1080,13 @@ class CraftingGUI : UIState
 
 		RecipeLoader.OnCraft(resultItem, selectedRecipe, toWithdraw);
 
-		foreach (Item item in Craft(heart, toWithdraw, resultItem))
+		foreach (Item item in Craft(toWithdraw, resultItem))
 		{
 			player.QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
 		}
 	}
 
-	internal List<Item> Craft(TEStorageHeart heart, List<Item> toWithdraw, Item result)
+	internal List<Item> Craft(List<Item> toWithdraw, Item result)
 	{
 		List<Item> items = new List<Item>(toWithdraw.Count);
 		foreach (Item tryWithdraw in toWithdraw)
