@@ -35,11 +35,13 @@ public class TEStorageHeart : TEStorageCenter
 
 	public IEnumerable<TEStorageUnit> GetStorageUnits()
 	{
-		return storageUnits
-			.Concat(remoteAccesses.Where(remoteAccess => ByPosition.ContainsKey(remoteAccess) && ByPosition[remoteAccess] is TERemoteAccess)
-			.SelectMany(remoteAccess => ((TERemoteAccess)ByPosition[remoteAccess]).storageUnits))
-			.Where(storageUnit => ByPosition.ContainsKey(storageUnit) && ByPosition[storageUnit] is TEStorageUnit)
-			.Select(storageUnit => (TEStorageUnit)ByPosition[storageUnit]);
+		return remoteAccesses
+			.Select(TileEntity.ByPosition.GetValueOrDefault)
+			.OfType<TERemoteAccess>()
+			.SelectMany(access => access.storageUnits)
+			.Concat(storageUnits)
+			.Select(TileEntity.ByPosition.GetValueOrDefault)
+			.OfType<TEStorageUnit>();
 	}
 
 	public IEnumerable<Item> GetStoredItems()
