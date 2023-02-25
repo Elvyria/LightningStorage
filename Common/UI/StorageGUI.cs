@@ -404,39 +404,35 @@ class StorageGUI : UIState
 		}
 
 		int slot = slotZone.mouseSlot;
-		bool changed = false;
 
 		if (!GetItem(slot).IsAir && stackSplit <= 1)
 		{
-			if (stackSplit == 0)
-			{
-				stackSplit = 15;
-			}
-			else
-			{
-				stackSplit = stackDelay;
-			}
+			stackSplit = stackSplit == 0 ? 15 : stackDelay;
 
 			Item item = items[slot].Clone();
 			item.stack = 1;
 
+			bool changed = false;
+
 			if (Main.mouseItem.IsAir)
 			{
 				Main.mouseItem = heart.Withdraw(item);
-				changed = true;
+				changed = !Main.mouseItem.IsAir;
 			}
 			else if (Main.mouseItem.type == item.type && Main.mouseItem.stack < item.maxStack)
 			{
-				heart.Withdraw(item);
-				Main.mouseItem.stack += 1;
-				changed = true;
+				if (!heart.Withdraw(item).IsAir)
+				{
+					Main.mouseItem.stack += 1;
+					changed = true;
+				}
 			}
-		}
 
-		if (changed)
-		{
-			RefreshItems();
-			SoundEngine.PlaySound(SoundID.MenuTick);
+			if (changed)
+			{
+				RefreshItems();
+				SoundEngine.PlaySound(SoundID.MenuTick);
+			}
 		}
 	}
 
