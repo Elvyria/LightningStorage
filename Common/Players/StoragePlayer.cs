@@ -73,10 +73,44 @@ public class StoragePlayer : ModPlayer
 
 	public void OpenStorage(Point16 point, bool remote = false)
 	{
+		if (point == storageAccess)
+		{
+			remoteAccess = remote;
+			return;
+		}
+
 		storageAccess = point;
 		remoteAccess = remote;
+		timeSinceOpen = 0;
+
 		UISystem system = ModContent.GetInstance<UISystem>();
 		ModTile tile = TileLoader.GetTile(Main.tile[storageAccess.X, storageAccess.Y].TileType);
+
+		Main.playerInventory = true;
+		Main.editChest = false;
+		Main.recBigList = false;
+
+		Player.chest = -1;
+
+		if (Player.talkNPC > -1)
+		{
+			Player.SetTalkNPC(-1);
+			Main.npcChatCornerItem = 0;
+			Main.npcChatText = string.Empty;
+		}
+
+		if (Main.editSign)
+		{
+			Player.sign = -1;
+			Main.editSign = false;
+			Main.npcChatText = string.Empty;
+		}
+
+		if (Main.editChest)
+		{
+			Main.editChest = false;
+			Main.npcChatText = string.Empty;
+		}
 
 		if (tile is CraftingAccess)
 		{
@@ -86,10 +120,14 @@ public class StoragePlayer : ModPlayer
 		{
 			system.UI.SetState(system.StorageUI);
 		}
+
+		SoundEngine.PlaySound(SoundID.MenuOpen);
 	}
 
 	public void CloseStorage()
 	{
+		storageAccess = Point16.NegativeOne;
+
 		UISystem system = ModContent.GetInstance<UISystem>();
 		system.UI.SetState(null);
 

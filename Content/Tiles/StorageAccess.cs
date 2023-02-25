@@ -74,31 +74,12 @@ public class StorageAccess : StorageComponent
 			return true;
 		}
 
-		Player player = Main.LocalPlayer;
-		StoragePlayer modPlayer = player.GetModPlayer<StoragePlayer>();
-
-		if (Main.editSign)
+		if (PlayerInput.GrappleAndInteractAreShared)
 		{
-			player.sign = -1;
-			Main.editSign = false;
-			Main.npcChatText = string.Empty;
+			PlayerInput.Triggers.JustPressed.Grapple = false;
 		}
 
-		if (Main.editChest)
-		{
-			Main.editChest = false;
-			Main.npcChatText = string.Empty;
-		}
-
-		if (player.talkNPC > -1)
-		{
-			player.SetTalkNPC(-1);
-			Main.npcChatCornerItem = 0;
-			Main.npcChatText = string.Empty;
-		}
-
-		bool hadChestOpen = player.chest != -1;
-		player.chest = -1;
+		StoragePlayer modPlayer = Main.LocalPlayer.GetModPlayer<StoragePlayer>();
 
 		Point16 toOpen = new Point16(i, j);
 		Point16 prevOpen = modPlayer.ViewingStorage();
@@ -108,18 +89,8 @@ public class StorageAccess : StorageComponent
 		}
 		else
 		{
-			bool hadOtherOpen = prevOpen.X >= 0 && prevOpen.Y >= 0;
 			modPlayer.OpenStorage(toOpen);
-			modPlayer.timeSinceOpen = 0;
-			if (PlayerInput.GrappleAndInteractAreShared)
-			{
-				PlayerInput.Triggers.JustPressed.Grapple = false;
-			}
-			Main.recBigList = false;
 		}
-
-		// SoundEngine.PlaySound(SoundID.MenuClose);
-		// SoundEngine.PlaySound(hadChestOpen || hadOtherOpen ? SoundID.MenuTick : SoundID.MenuOpen);
 
 		return true;
 	}
