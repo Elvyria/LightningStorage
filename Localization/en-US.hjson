@@ -112,11 +112,6 @@ Mods: {
 				DisplayName: Blue Chlorophyte Storage Unit
 			}
 
-			SnowBiomeEmulator: {
-				DisplayName: Broken Snowglobe
-				Tooltip: Allows the Storage Crafting Interface to craft snow biome recipes
-			}
-
 			StorageUnitTiny: {
 				DisplayName: Tiny Storage Unit
 			}

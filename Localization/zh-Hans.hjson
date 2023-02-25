@@ -112,11 +112,6 @@ Mods: {
 				DisplayName: 存储单元(蓝色叶绿)
 			}
 
-			SnowBiomeEmulator: {
-				DisplayName: 雪地环境模拟器
-				Tooltip: 允许制作存储单元拥有雪地环境
-			}
-
 			StorageUnitTiny: {
 				DisplayName: 存储单元(小)
 			}

@@ -112,11 +112,6 @@ Mods: {
 				DisplayName: Jednostka magazynująca (Niebieski Chlorofit)
 			}
 
-			SnowBiomeEmulator: {
-				DisplayName: Emulator Śnieżnego Biomu
-				Tooltip: Dodaje funkcje do Interfejsu Rzemieślniczego, pozwalającą na wytwarzanie przedmiotów dostępnych jedynie w Śnieżnym Biomie
-			}
-
 			StorageUnitTiny: {
 				DisplayName: Mała jednostka magazynująca
 			}

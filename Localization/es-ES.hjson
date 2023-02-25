@@ -112,11 +112,6 @@ Mods: {
 				DisplayName: Unidad de Almacenamiento (Clorofita Azul)
 			}
 
-			SnowBiomeEmulator: {
-				DisplayName: Emulador de bioma de la nieve
-				Tooltip: Permite la Interfaz de Elaboración de almacenamiento a hacer de recetas de bioma de la nieve
-			}
-
 			StorageUnitTiny: {
 				DisplayName: Unidad de Almacenamiento Minúsculo
 			}

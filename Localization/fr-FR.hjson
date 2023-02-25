@@ -112,11 +112,6 @@ Mods: {
 				DisplayName: Unité de stockage (Chlorophylle Bleu)
 			}
 
-			SnowBiomeEmulator: {
-				DisplayName: Emulateur de biome de neige
-				Tooltip: Permet à L'interface de Stockage Artisanat de créer des recettes de biome de neige
-			}
-
 			StorageUnitTiny: {
 				DisplayName: Unité de Stockage Miniscule
 			}
