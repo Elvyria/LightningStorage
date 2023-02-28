@@ -11,7 +11,7 @@ using Terraria.GameContent;
 
 namespace MagicStorage.Common.UI;
 
-public class UISearchBar : UIElement
+public class UISearchBar : UIElement, IInput
 {
 	private bool focused = false;
 	private bool Focused { get { return focused; } }
@@ -92,7 +92,7 @@ public class UISearchBar : UIElement
 			ResetFocus();
 	}
 
-	private void UpdateText()
+	public void UpdateInput()
 	{
 		cursorTimer++;
 		cursorTimer %= 70;

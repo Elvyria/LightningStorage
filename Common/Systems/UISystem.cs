@@ -7,6 +7,8 @@ namespace MagicStorage.Common.Systems;
 
 public class UISystem : ModSystem
 {
+	internal readonly HashSet<IInput> inputs = new HashSet<IInput>(2);
+
 #pragma warning disable 0649
 	internal UserInterface UI;
 	internal StorageGUI StorageUI;
@@ -44,6 +46,14 @@ public class UISystem : ModSystem
 			UI.Update(gameTime);
 		}
 	}
+
+    public override void PostUpdateInput()
+    {
+		foreach (IInput input in inputs)
+		{
+			input.UpdateInput();
+		}
+    }
 
 	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 	{

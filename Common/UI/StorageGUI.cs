@@ -10,6 +10,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 
+using MagicStorage.Common.Systems;
 using MagicStorage.Common.Players;
 using MagicStorage.Common.Sorting;
 using MagicStorage.Content.TileEntities;
@@ -210,6 +211,10 @@ class StorageGUI : UIState
 			return;
 		}
 
+		UISystem system = ModContent.GetInstance<UISystem>();
+		system.inputs.Add(searchBar);
+		system.inputs.Add(searchBar2);
+
 		RefreshItems();
 	}
 
@@ -228,6 +233,10 @@ class StorageGUI : UIState
 
 		nameFilter = string.Empty;
 		modFilter = string.Empty;
+
+		UISystem system = ModContent.GetInstance<UISystem>();
+		system.inputs.Remove(searchBar);
+		system.inputs.Remove(searchBar2);
 	}
 
 	public override void Update(GameTime gameTime)

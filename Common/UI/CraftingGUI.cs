@@ -17,6 +17,7 @@ using Terraria.Map;
 
 using MagicStorage.Common.Players;
 using MagicStorage.Common.Sorting;
+using MagicStorage.Common.Systems;
 using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Common.UI;
@@ -336,6 +337,10 @@ class CraftingGUI : UIState
 		conditions = new List<Recipe.Condition>(3);
 		storageItems = new List<Item>();
 
+		UISystem system = ModContent.GetInstance<UISystem>();
+		system.inputs.Add(searchBar);
+		system.inputs.Add(searchBar2);
+
 		Refresh();
 	}
 
@@ -367,6 +372,10 @@ class CraftingGUI : UIState
 
 		modFilter = string.Empty;
 		nameFilter = string.Empty;
+
+		UISystem system = ModContent.GetInstance<UISystem>();
+		system.inputs.Remove(searchBar);
+		system.inputs.Remove(searchBar2);
 	}
 
 	public override void Update(GameTime gameTime)
