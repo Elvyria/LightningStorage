@@ -127,23 +127,29 @@ public class UISearchBar : UIElement
 	protected override void DrawSelf(SpriteBatch spriteBatch)
 	{
 		CalculatedStyle dim = GetDimensions();
-		int innerWidth = (int)dim.Width - 2 * padding;
-		int innerHeight = (int)dim.Height - 2 * padding;
-		spriteBatch.Draw(texture.Value, dim.Position(), new Rectangle(0, 0, padding, padding), Color.White);
-		spriteBatch.Draw(texture.Value, new Rectangle((int)dim.X + padding, (int)dim.Y, innerWidth, padding), new Rectangle(padding, 0, 1, padding), Color.White);
-		spriteBatch.Draw(texture.Value, new Vector2(dim.X + padding + innerWidth, dim.Y), new Rectangle(padding + 1, 0, padding, padding), Color.White);
-		spriteBatch.Draw(texture.Value, new Rectangle((int)dim.X, (int)dim.Y + padding, padding, innerHeight), new Rectangle(0, padding, padding, 1), Color.White);
-		spriteBatch.Draw(texture.Value, new Rectangle((int)dim.X + padding, (int)dim.Y + padding, innerWidth, innerHeight), new Rectangle(padding, padding, 1, 1), Color.White);
-		spriteBatch.Draw(texture.Value, new Rectangle((int)dim.X + padding + innerWidth, (int)dim.Y + padding, padding, innerHeight), new Rectangle(padding + 1, padding, padding, 1), Color.White);
-		spriteBatch.Draw(texture.Value, new Vector2(dim.X, dim.Y + padding + innerHeight), new Rectangle(0, padding + 1, padding, padding), Color.White);
-		spriteBatch.Draw(texture.Value, new Rectangle((int)dim.X + padding, (int)dim.Y + padding + innerHeight, innerWidth, padding), new Rectangle(padding, padding + 1, 1, padding), Color.White);
-		spriteBatch.Draw(texture.Value, new Vector2(dim.X + padding + innerWidth, dim.Y + padding + innerHeight), new Rectangle(padding + 1, padding + 1, padding, padding), Color.White);
 
-		UpdateText();
+		Vector2 pos = dim.Position();
+
+		Texture2D texture = this.texture.Value;
+		int halfWidth = texture.Width / 2;
+		int halfHeight = texture.Height / 2;
+
+		Rectangle mainRectangle = new Rectangle(halfHeight, halfWidth, 1, 1);
+
+		spriteBatch.Draw(texture, pos, new Rectangle(0, 0, halfWidth, halfHeight), Color.White);
+		spriteBatch.Draw(texture, pos + new Vector2(halfWidth, dim.Height), new Rectangle(halfWidth, texture.Height, -halfWidth, -halfHeight), Color.White);
+
+		spriteBatch.Draw(texture, pos + new Vector2(dim.Width, halfHeight), new Rectangle(texture.Width, halfHeight, -halfWidth, -halfHeight), Color.White);
+		spriteBatch.Draw(texture, pos + new Vector2(dim.Width, dim.Height), new Rectangle(texture.Width, texture.Height, -halfWidth, -halfHeight), Color.White);
+
+		spriteBatch.Draw(texture, new Rectangle((int) dim.X + halfWidth, (int) dim.Y, (int) dim.Width - 2 * halfWidth + 1, (int) dim.Height), mainRectangle, Color.White);
+		spriteBatch.Draw(texture, new Rectangle((int) dim.X, (int) dim.Y + halfHeight, (int) dim.Width + 1, (int) dim.Height - 2 * halfHeight), mainRectangle, Color.White);
+
+		int innerHeight = (int)dim.Height - 2 * halfHeight;
 
 		string drawText = text;
 
-		Color color = text.Length == 0 ? Color.DimGray : Color.Black;
+		Color color = focused || text.Length != 0 ? Color.Black : Color.DimGray;
 
 		if (text.Length == 0)
 			drawText = focused ? string.Empty : defaultText.Value;
@@ -151,12 +157,12 @@ public class UISearchBar : UIElement
 		DynamicSpriteFont font = FontAssets.MouseText.Value;
 		float scale = innerHeight / font.MeasureString(drawText).Y;
 
-		spriteBatch.DrawString(font, drawText, new Vector2(dim.X + padding, dim.Y + padding), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+		spriteBatch.DrawString(font, drawText, new Vector2(dim.X + halfWidth, dim.Y + halfHeight), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 		if (focused && cursorTimer < 30)
 		{
 			scale = innerHeight / font.MeasureString(defaultText.Value).Y;
 			float drawCursor = font.MeasureString(drawText.Substring(0, cursorPosition)).X * scale;
-			spriteBatch.DrawString(font, "|", new Vector2(dim.X + padding + drawCursor, dim.Y + padding), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+			spriteBatch.DrawString(font, "|", new Vector2(dim.X + halfWidth + drawCursor, dim.Y + halfHeight), color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 		}
 	}
 
