@@ -1,3 +1,5 @@
+using System.Linq;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -312,19 +314,16 @@ class StorageGUI : UIState
 		}
 	}
 
-	private void UpdateCounter()
+	public void UpdateCounter()
 	{
-		int numItems = 0;
-		int capacity = 0;
+		IEnumerable<TEStorageUnit> units = heart.GetStorageUnits();
+		int numItems = units.Sum(unit => unit.NumItems);
 
-		foreach (TEStorageUnit unit in heart.GetStorageUnits())
-		{
-			numItems += unit.NumItems;
-			capacity += unit.Capacity;
-		}
+		IEnumerable<TEStorageUnit> activeUnits = units.Where(unit => unit.active);
+		int capacity = activeUnits.Sum(unit => unit.Capacity);
 
 		int len = capacityText.Text.Length;
-		capacityText.SetText(numItems + "/" + capacity + " Items");
+		capacityText.SetText($"{numItems} / {capacity} Items");
 
 		if (len != capacityText.Text.Length)
 			capacityText.Recalculate();
