@@ -15,7 +15,15 @@ public class StorageUnit : StorageComponent
 {
 	private Asset<Texture2D> glowTexture;
 
-	public class StyleID
+	public static class IndicatorStyle
+	{
+		public const byte Empty    = 0;
+		public const byte Filled   = 1;
+		public const byte Full     = 2;
+		public const byte Inactive = 3;
+	}
+
+	public static class StyleID
 	{
 		public const byte Default         = 0;
 		public const byte Demonite        = 1;
@@ -154,12 +162,24 @@ public class StorageUnit : StorageComponent
 		return success;
 	}
 
-	public static void SetStyle(int i, int j, int style)
+	public static void SetIndicator(int i, int j, short style)
 	{
-		Main.tile[i, j].TileFrameY = (short)(36 * style);
-		Main.tile[i, j + 1].TileFrameY = (short)(36 * style + 18);
-		Main.tile[i + 1, j].TileFrameY = (short)(36 * style);
-		Main.tile[i + 1, j + 1].TileFrameY = (short)(36 * style + 18);
+		style *= 36;
+
+		Main.tile[i, j].TileFrameX = style;
+		Main.tile[i, j + 1].TileFrameX = style;
+		Main.tile[i + 1, j].TileFrameX = unchecked((short)(style + 18));
+		Main.tile[i + 1, j + 1].TileFrameX = unchecked((short)(style + 18));
+	}
+
+	public static void SetStyle(int i, int j, short style)
+	{
+		style *= 36;
+
+		Main.tile[i, j].TileFrameY = style;
+		Main.tile[i, j + 1].TileFrameY = unchecked((short)(style + 18));
+		Main.tile[i + 1, j].TileFrameY = style;
+		Main.tile[i + 1, j + 1].TileFrameY = unchecked((short)(style + 18));
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

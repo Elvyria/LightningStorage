@@ -6,6 +6,8 @@ using Terraria.ModLoader.IO;
 using MagicStorage.Common;
 using MagicStorage.Content.Tiles;
 
+using IndicatorStyle = MagicStorage.Content.Tiles.StorageUnit.IndicatorStyle;
+
 namespace MagicStorage.Content.TileEntities;
 
 public class TEStorageUnit : TEStorageComponent
@@ -147,6 +149,7 @@ public class TEStorageUnit : TEStorageComponent
 		items.Add(item);
 
 		RepairMetadata();
+		UpdateTileFrame();
 
 		return amount;
 	}
@@ -184,6 +187,7 @@ public class TEStorageUnit : TEStorageComponent
 		}
 
 		RepairMetadata();
+		UpdateTileFrame();
 
 		Item result = lookFor.Clone();
 		result.stack = lookFor.stack - amount;
@@ -191,34 +195,14 @@ public class TEStorageUnit : TEStorageComponent
 		return result;
 	}
 
-	public bool UpdateTileFrame()
+	public void UpdateTileFrame()
 	{
-		Tile topLeft = Main.tile[Position.X, Position.Y];
-		int oldFrame = topLeft.TileFrameX;
-		int style;
-		if (IsEmpty)
-		{
-			style = 0;
-		}
-		else if (IsFull)
-		{
-			style = 2;
-		}
-		else
-		{
-			style = 1;
-		}
-		if (!active)
-		{
-			style += 3;
-		}
-		style *= 36;
-		topLeft.TileFrameX = (short)style;
-		Main.tile[Position.X, Position.Y + 1].TileFrameX = (short)style;
-		Main.tile[Position.X + 1, Position.Y].TileFrameX = (short)(style + 18);
-		Main.tile[Position.X + 1, Position.Y + 1].TileFrameX = (short)(style + 18);
+		short style = IsEmpty ? IndicatorStyle.Empty : IndicatorStyle.Filled;
+		style = IsFull ? IndicatorStyle.Full : style;
 
-		return oldFrame != style;
+		if (!active) style += IndicatorStyle.Inactive;
+
+		StorageUnit.SetIndicator(Position.X, Position.Y, style);
 	}
 
 	internal static void SwapItems(TEStorageUnit unit1, TEStorageUnit unit2)
@@ -240,7 +224,10 @@ public class TEStorageUnit : TEStorageComponent
 	{
 		Item item = items[items.Count - 1];
 		items.RemoveAt(items.Count - 1);
+
 		RepairMetadata();
+		UpdateTileFrame();
+
 		return item;
 	}
 
