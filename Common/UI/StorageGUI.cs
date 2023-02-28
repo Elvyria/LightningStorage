@@ -181,7 +181,7 @@ class StorageGUI : UIState
 
 		panel.Append(slotZone);
 
-		UIScrollbar scrollbar = new UIScrollbar();
+		UIScrollableBar scrollbar = new UIScrollableBar();
 		scrollbar.Left.Set(10, 0);
 		slotZone.SetScrollbar(scrollbar);
 

@@ -234,7 +234,7 @@ class CraftingGUI : UIState
 		recipeZone.OnMouseDown += PressRecipe;
 		panel.Append(recipeZone);
 
-		UIScrollbar scrollbar = new UIScrollbar();
+		UIScrollableBar scrollbar = new UIScrollableBar();
 		scrollbar.Left.Set(10, 0);
 		recipeZone.SetScrollbar(scrollbar);
 		panel.Append(scrollbar);
