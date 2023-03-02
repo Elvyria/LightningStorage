@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using MagicStorage.Common.Players;
 using MagicStorage.Common.UI;
+using MagicStorage.Common.UI.States;
 
 namespace MagicStorage.Common.Systems;
 
@@ -15,6 +16,9 @@ public class UISystem : ModSystem
 	internal CraftingGUI CraftingUI;
 #pragma warning restore 0649
 
+	internal UserInterface ItemUI;
+	internal AccessSelector AccessState;
+
 	private GameTime _lastUpdateUiGameTime;
 
 	public override void Load()
@@ -25,6 +29,9 @@ public class UISystem : ModSystem
 
 			StorageUI = new StorageGUI();
 			CraftingUI = new CraftingGUI();
+
+			ItemUI = new UserInterface();
+			AccessState = new AccessSelector();
 		}
 	}
 
@@ -32,6 +39,9 @@ public class UISystem : ModSystem
 	{
 		StorageUI = null;
 		CraftingUI = null;
+
+		ItemUI = null;
+		AccessState = null;
 	}
 
 	public override void PreSaveAndQuit() {
@@ -44,6 +54,11 @@ public class UISystem : ModSystem
 		if (UI?.CurrentState != null)
 		{
 			UI.Update(gameTime);
+		}
+
+		if (ItemUI?.CurrentState != null)
+		{
+			ItemUI.Update(gameTime);
 		}
 	}
 
@@ -73,5 +88,18 @@ public class UISystem : ModSystem
 						},
 						InterfaceScaleType.UI));
 		}
+
+		int wireIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Wire Selection"));
+		layers.Insert(wireIndex, new LegacyGameInterfaceLayer(
+					"MagicStorage: Portable Access",
+					delegate
+					{
+						if (_lastUpdateUiGameTime != null && ItemUI?.CurrentState != null)
+						{
+							ItemUI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+						}
+						return true;
+					},
+					InterfaceScaleType.UI));
 	}
 }

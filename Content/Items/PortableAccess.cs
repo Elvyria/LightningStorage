@@ -2,6 +2,8 @@
 using Terraria.ModLoader.IO;
 
 using MagicStorage.Common.Players;
+using MagicStorage.Common.UI.States;
+using MagicStorage.Common.Systems;
 
 namespace MagicStorage.Content.Items;
 
@@ -12,6 +14,7 @@ public class PortableAccess : ModItem
 
 	public override void SetDefaults()
 	{
+		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.width = 28;
 		Item.height = 28;
 		Item.maxStack = 1;
@@ -22,33 +25,87 @@ public class PortableAccess : ModItem
 		Item.value = Item.sellPrice(gold: 10);
 	}
 
-    public override bool CanUseItem(Player player)
-    {
+	public override bool CanUseItem(Player player)
+	{
+		if (player.altFunctionUse == 2)
+		{
+			int i = (int)(((float)Main.mouseX + Main.screenPosition.X) / 16f);
+			int j = (int)(((float)Main.mouseY + Main.screenPosition.Y) / 16f);
+
+			Tile tile = Main.tile[i, j];
+
+			if (tile.TileFrameX % 36 == 18)
+			{
+				i--;
+			}
+			if (tile.TileFrameY % 36 == 18)
+			{
+				j--;
+			}
+
+			if (tile.HasTile && tile.TileType == ModContent.TileType<Tiles.StorageHeart>())
+			{
+				storage = new Point16(i, j);
+				Main.NewText("Portable access successfully set to: X=" + i + ", Y=" + j);
+			}
+
+			if (tile.HasTile && tile.TileType == ModContent.TileType<Tiles.CraftingAccess>())
+			{
+				crafting = new Point16(i, j);
+				Main.NewText("Portable access successfully set to: X=" + i + ", Y=" + j);
+			}
+
+			return false;
+		}
+
 		return storage != Point16.NegativeOne || crafting != Point16.NegativeOne;
-    }
+	}
+
+    public override bool AltFunctionUse(Player player) => true;
 
 	public override bool? UseItem(Player player)
 	{
-		if (player.whoAmI == Main.myPlayer)
+		if (player.whoAmI != Main.myPlayer) return base.UseItem(player);
+
+		UISystem system = ModContent.GetInstance<UISystem>();
+
+		if (Main.mouseLeft)
 		{
-			Point16 access = storage;
+			player.itemAnimation = 8;
 
-			if (access != Point16.NegativeOne)
+			system.AccessState.Open(true);
+		}
+		else
+		{
+			if (system.ItemUI.CurrentState == system.AccessState)
 			{
-				Tile tile = Main.tile[access.X, access.Y];
-				if (!tile.HasTile) return false;
+				int selected = system.AccessState.Selected;
+				system.AccessState.Close(true);
 
-				StoragePlayer modPlayer = player.GetModPlayer<StoragePlayer>();
+				Point16 access;
+				access = selected == AccessSelector.SELECTION_STORAGE  ? storage : Point16.NegativeOne;
+				access = selected == AccessSelector.SELECTION_CRAFTING ? crafting : access;
 
-				modPlayer.OpenStorage(access, true);
+				if (access != Point16.NegativeOne)
+				{
+					Tile tile = Main.tile[access.X, access.Y];
+					if (!tile.HasTile) return false;
 
-				return true;
+					StoragePlayer modPlayer = player.GetModPlayer<StoragePlayer>();
+
+					modPlayer.OpenStorage(access, true);
+
+					return true;
+				}
+
+				return false;
 			}
 		}
 
-		return false;
+		return base.UseItem(player);
 	}
 
+	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
@@ -83,5 +140,10 @@ public class PortableAccess : ModItem
     {
         base.LoadData(tag);
 
+		TagCompound storageTag = tag.GetCompound("Storage");
+		storage = new Point16(storageTag.GetShort("X"), storageTag.GetShort("Y"));
+
+		TagCompound craftingTag = tag.GetCompound("Crafting");
+		crafting = new Point16(craftingTag.GetShort("X"), craftingTag.GetShort("Y"));
     }
 }

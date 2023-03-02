@@ -28,6 +28,19 @@ public class CraftingAccess : StorageAccess
 		b = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
+	public override bool RightClick(int i, int j)
+	{
+		Player player = Main.LocalPlayer;
+		Item selectedItem = player.inventory[player.selectedItem];
+
+		if (selectedItem.type == ModContent.ItemType<Items.PortableAccess>())
+		{
+			return false;
+		}
+
+		return base.RightClick(i, j);
+	}
+
 	public override TEStorageHeart GetHeart(int i, int j)
 	{
 		Point16 point = TEStorageComponent.FindStorageCenter(new Point16(i, j));

@@ -39,6 +39,11 @@ public class StorageHeart : StorageAccess
 		Player player = Main.LocalPlayer;
 		Item selectedItem = player.inventory[player.selectedItem];
 
+		if (selectedItem.type == ModContent.ItemType<PortableAccess>())
+		{
+			return false;
+		}
+
 		if (Main.tile[i, j].TileFrameX % 36 == 18)
 		{
 			i--;
@@ -57,19 +62,6 @@ public class StorageHeart : StorageAccess
 				Main.mouseItem = selectedItem.Clone();
 			}
 			Main.NewText("Locator successfully set to: X=" + i + ", Y=" + j);
-
-			return true;
-		}
-
-		if (selectedItem.type == ModContent.ItemType<PortableAccess>())
-		{
-			PortableAccess accessItem = (PortableAccess) selectedItem.ModItem;
-			accessItem.storage = new Point16(i, j);
-			if (player.selectedItem == 58)
-			{
-				Main.mouseItem = selectedItem.Clone();
-			}
-			Main.NewText("Portable access successfully set to: X=" + i + ", Y=" + j);
 
 			return true;
 		}
