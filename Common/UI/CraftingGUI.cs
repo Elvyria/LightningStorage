@@ -31,12 +31,18 @@ class CraftingGUI : UIState
 
 	private const float padding = 4f;
 
+	const float panelLeft = 20f;
+
 	private const int columns = 10;
 	private const int columns2 = 7;
 
 	private const int recipePanelColumns = 7;
 	private const int ingredientRows = 2;
 	private const int storageRows = 4;
+
+	private float easeTimer = 0;
+	public bool opening = false;
+	public bool closing = false;
 
 	private int stackSplit = 0;
 	private int stackDelay = 7;
@@ -106,7 +112,6 @@ class CraftingGUI : UIState
 		float smallSlotHeight = TextureAssets.InventoryBack9.Height() * smallScale;
 
 		float panelTop = Main.instance.invBottom + 60f;
-		const float panelLeft = 20f;
 		const float pannelBottom = 20f;
 
 		panel = new UIPanel();
@@ -116,7 +121,7 @@ class CraftingGUI : UIState
 		float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
 		float panelHeight = Main.screenHeight - panelTop - pannelBottom;
 
-		panel.Left.Set(panelLeft, 0f);
+		panel.Left.Set((int)(opening ? -panelWidth : panelLeft), 0f);
 		panel.Top.Set(panelTop, 0f);
 		panel.Width.Set(panelWidth, 0f);
 		panel.Height.Set(panelHeight, 0f);
@@ -311,11 +316,23 @@ class CraftingGUI : UIState
 		Append(recipePanel);
 	}
 
-	// public override void Recalculate()
-	// {
+	private bool AnimationOpen()
+	{
+		const float speed = 0.2f;
 
-	// base.Recalculate();
-	// }
+		panel.Left.Pixels = Animation.Ease(-panel.Width.Pixels, panelLeft, speed, ref easeTimer);
+
+		return Math.Abs(panel.Left.Pixels - panelLeft) > 0.1;
+	}
+
+	private bool AnimationClose()
+	{
+		const float speed = 0.35f;
+
+		panel.Left.Pixels = Animation.Ease(panelLeft, -panel.Width.Pixels, speed, ref easeTimer);
+
+		return Math.Abs(panel.Left.Pixels - (-panel.Width.Pixels)) > 0.1;
+	}
 
 	public override void OnActivate()
 	{
@@ -337,6 +354,8 @@ class CraftingGUI : UIState
 		conditions = new List<Recipe.Condition>(3);
 		storageItems = new List<Item>();
 
+		panel.Left.Pixels = opening ? -panel.Width.Pixels : panelLeft;
+
 		UISystem system = ModContent.GetInstance<UISystem>();
 		system.inputs.Add(searchBar);
 		system.inputs.Add(searchBar2);
@@ -349,6 +368,11 @@ class CraftingGUI : UIState
 		player = null;
 		heart = null;
 		access = null;
+
+		easeTimer = 0;
+		stackSplit = 0;
+		stackDelay = 7;
+		stackCounter = 0;
 
 		recipes = null;
 		recipeAvailable = null;
@@ -378,9 +402,55 @@ class CraftingGUI : UIState
 		system.inputs.Remove(searchBar2);
 	}
 
+	public void Open(bool animate = false)
+	{
+		easeTimer = 0;
+		opening = animate;
+		closing = false;
+
+		UISystem system = ModContent.GetInstance<UISystem>();
+		if (system.UI.CurrentState == this) return;
+
+		system.UI.SetState(this);
+	}
+
+	public void Close(bool animate = false)
+	{
+		UISystem system = ModContent.GetInstance<UISystem>();
+		if (system.UI.CurrentState == null) return;
+
+		if (animate)
+		{
+			easeTimer = 0;
+			opening = false;
+			closing = true;
+		}
+		else
+		{
+			system.UI.SetState(null);
+		}
+	}
+
 	public override void Update(GameTime gameTime)
 	{
+		if (closing)
+		{
+			if (!AnimationClose())
+			{
+				Close();
+			}
+
+			return;
+		}
+
 		base.Update(gameTime);
+
+		if (opening)
+		{
+			opening = AnimationOpen();
+
+			return;
+		}
 
 		// TODO: Check access and heart changes
 

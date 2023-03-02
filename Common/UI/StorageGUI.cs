@@ -17,7 +17,7 @@ using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Common.UI;
 
-class StorageGUI : UIState
+class StorageGUI : UIState, ISwitchable
 {
 	private bool isMouseHovering;
 
@@ -26,7 +26,13 @@ class StorageGUI : UIState
 	private const int padding = 4;
 	private const int columns = 10;
 
-	private int stackSplit;
+	const float panelLeft = 20f;
+
+	private float easeTimer = 0;
+	public bool opening = false;
+	public bool closing = false;
+
+	private int stackSplit = 0;
 	private int stackDelay = 7;
 	private int stackCounter = 0;
 
@@ -60,7 +66,6 @@ class StorageGUI : UIState
 		float slotHeight = TextureAssets.InventoryBack9.Height() * inventoryScale;
 
 		float panelTop = Main.instance.invBottom + 60;
-		const float panelLeft = 20f;
 
 		panel = new UIPanel();
 
@@ -69,7 +74,7 @@ class StorageGUI : UIState
 		float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
 		float panelHeight = Main.screenHeight - panelTop - 20f;
 
-		panel.Left.Set(panelLeft, 0f);
+		panel.Left.Set((int)(opening ? -panelWidth : panelLeft), 0f);
 		panel.Top.Set(panelTop, 0f);
 		panel.Width.Set(panelWidth, 0f);
 		panel.Height.Set(panelHeight, 0f);
@@ -200,6 +205,20 @@ class StorageGUI : UIState
 		Append(panel);
 	}
 
+	private bool AnimationOpen()
+	{
+		panel.Left.Pixels = Animation.Ease(-panel.Width.Pixels, panelLeft, 0.2f, ref easeTimer);
+
+		return Math.Abs(panel.Left.Pixels - panelLeft) > 0.1;
+	}
+
+	private bool AnimationClose()
+	{
+		panel.Left.Pixels = Animation.Ease(panelLeft, -panel.Width.Pixels, 0.2f, ref easeTimer);
+
+		return Math.Abs(panel.Left.Pixels - (-panel.Width.Pixels)) > 0.1;
+	}
+
 	public override void OnActivate()
 	{
 		player = Main.LocalPlayer;
@@ -210,6 +229,8 @@ class StorageGUI : UIState
 			Deactivate();
 			return;
 		}
+
+		panel.Left.Pixels = opening ? -panel.Width.Pixels : panelLeft;
 
 		UISystem system = ModContent.GetInstance<UISystem>();
 		system.inputs.Add(searchBar);
@@ -225,6 +246,14 @@ class StorageGUI : UIState
 
 		items = null;
 
+		easeTimer = 0;
+		opening = false;
+		closing = false;
+
+		stackSplit = 0;
+		stackDelay = 7;
+		stackCounter = 0;
+
 		sortMode = SortMode.Default;
 		filterMode = FilterMode.All;
 
@@ -239,9 +268,53 @@ class StorageGUI : UIState
 		system.inputs.Remove(searchBar2);
 	}
 
+	public void Open(bool animate = false)
+	{
+		easeTimer = 0;
+		opening = animate;
+		closing = false;
+
+		UISystem system = ModContent.GetInstance<UISystem>();
+		if (system.UI.CurrentState == this) return;
+
+		system.UI.SetState(this);
+	}
+
+	public void Close(bool animate = false)
+	{
+		UISystem system = ModContent.GetInstance<UISystem>();
+		if (system.UI.CurrentState == null) return;
+
+		if (animate)
+		{
+			easeTimer = 0;
+			opening = false;
+			closing = true;
+		}
+		else
+		{
+			system.UI.SetState(null);
+		}
+	}
+
 	public override void Update(GameTime gameTime)
 	{
+		if (closing)
+		{
+			if (!AnimationClose())
+			{
+				Close();
+			}
+
+			return;
+		}
+
 		base.Update(gameTime);
+
+		if (opening)
+		{
+			opening = AnimationOpen();
+		}
 
 		// TODO: Check access and heart changes
 

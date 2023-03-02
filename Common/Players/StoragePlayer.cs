@@ -1,4 +1,6 @@
 using Terraria.DataStructures;
+
+using MagicStorage.Common.UI;
 using MagicStorage.Common.Systems;
 using MagicStorage.Content.TileEntities;
 using MagicStorage.Content.Tiles;
@@ -114,11 +116,11 @@ public class StoragePlayer : ModPlayer
 
 		if (tile is CraftingAccess)
 		{
-			system.UI.SetState(system.CraftingUI);
+			system.CraftingUI.Open();
 		}
 		else if (tile is StorageAccess)
 		{
-			system.UI.SetState(system.StorageUI);
+			system.StorageUI.Open(true);
 		}
 
 		SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -129,7 +131,15 @@ public class StoragePlayer : ModPlayer
 		storageAccess = Point16.NegativeOne;
 
 		UISystem system = ModContent.GetInstance<UISystem>();
-		system.UI.SetState(null);
+
+		if (system.UI.CurrentState is ISwitchable ui)
+		{
+			ui.Close(true);
+		}
+		else
+		{
+			system.UI.SetState(null);
+		}
 
 		SoundEngine.PlaySound(SoundID.MenuClose);
 	}
