@@ -12,12 +12,12 @@ public class UISystem : ModSystem
 
 #pragma warning disable 0649
 	internal UserInterface UI;
-	internal StorageGUI StorageUI;
-	internal CraftingGUI CraftingUI;
+	internal StorageAccessUI StorageUI;
+	internal CraftingAccessUI CraftingUI;
 #pragma warning restore 0649
 
 	internal UserInterface ItemUI;
-	internal AccessSelector AccessState;
+	internal PortableAccessUI AccessState;
 
 	private GameTime _lastUpdateUiGameTime;
 
@@ -27,11 +27,11 @@ public class UISystem : ModSystem
 		{
 			UI = new UserInterface();
 
-			StorageUI = new StorageGUI();
-			CraftingUI = new CraftingGUI();
+			StorageUI = new StorageAccessUI();
+			CraftingUI = new CraftingAccessUI();
 
 			ItemUI = new UserInterface();
-			AccessState = new AccessSelector();
+			AccessState = new PortableAccessUI();
 		}
 	}
 

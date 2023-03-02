@@ -20,9 +20,9 @@ using MagicStorage.Common.Sorting;
 using MagicStorage.Common.Systems;
 using MagicStorage.Content.TileEntities;
 
-namespace MagicStorage.Common.UI;
+namespace MagicStorage.Common.UI.States;
 
-class CraftingGUI : UIState
+class CraftingAccessUI : UIState
 {
 	private bool isMouseHovering;
 

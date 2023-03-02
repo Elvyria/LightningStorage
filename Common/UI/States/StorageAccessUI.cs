@@ -15,9 +15,9 @@ using MagicStorage.Common.Players;
 using MagicStorage.Common.Sorting;
 using MagicStorage.Content.TileEntities;
 
-namespace MagicStorage.Common.UI;
+namespace MagicStorage.Common.UI.States;
 
-class StorageGUI : UIState, ISwitchable
+class StorageAccessUI : UIState, ISwitchable
 {
 	private bool isMouseHovering;
 

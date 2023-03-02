@@ -83,8 +83,8 @@ public class PortableAccess : ModItem
 				system.AccessState.Close(true);
 
 				Point16 access;
-				access = selected == AccessSelector.SELECTION_STORAGE  ? storage : Point16.NegativeOne;
-				access = selected == AccessSelector.SELECTION_CRAFTING ? crafting : access;
+				access = selected == PortableAccessUI.SELECTION_STORAGE  ? storage : Point16.NegativeOne;
+				access = selected == PortableAccessUI.SELECTION_CRAFTING ? crafting : access;
 
 				if (access != Point16.NegativeOne)
 				{

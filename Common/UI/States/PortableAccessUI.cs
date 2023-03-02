@@ -7,7 +7,7 @@ using MagicStorage.Common.Systems;
 
 namespace MagicStorage.Common.UI.States;
 
-class AccessSelector : UIState, ISwitchable
+class PortableAccessUI : UIState, ISwitchable
 {
 	public bool Initialized { get; private set; }
 	public int  Selected    { get => selector.Selected; }
