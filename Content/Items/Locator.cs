@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.Localization;
 

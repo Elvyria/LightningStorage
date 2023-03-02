@@ -1,4 +1,4 @@
-﻿namespace MagicStorage.Content.Items;
+namespace MagicStorage.Content.Items;
 
 public class RemoteAccess : ModItem
 {
