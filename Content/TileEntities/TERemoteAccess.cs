@@ -52,19 +52,13 @@ public class TERemoteAccess : TEStorageCenter
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-
-		TagCompound tagLocator = new TagCompound();
-		tagLocator.Set("X", locator.X);
-		tagLocator.Set("Y", locator.Y);
-
-		tag.Set("Locator", tagLocator);
+		tag.Set("Locator", locator);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		TagCompound tagLocator = tag.GetCompound("Locator");
-		locator = new Point16(tagLocator.GetShort("X"), tagLocator.GetShort("Y"));
+		locator = tag.GetPoint16("Locator");
 	}
 
 }

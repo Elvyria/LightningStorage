@@ -1,3 +1,5 @@
+using System.Linq;
+
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -83,24 +85,18 @@ public abstract class TEStorageCenter : TEStorageComponent
 
     public override void SaveData(TagCompound tag)
     {
-        List<TagCompound> tagUnits = new List<TagCompound>(storageUnits.Count);
-        foreach (Point16 storageUnit in storageUnits)
-        {
-				tagUnits.Add(new TagCompound()
-				{
-					{ "X", storageUnit.X },
-					{ "Y", storageUnit.Y }
-				});
-        }
+		List<TagCompound> tagUnits = storageUnits
+			.Select(TagExtensions.BuildTag)
+			.ToList();
 
         tag.Set("StorageUnits", tagUnits);
     }
 
     public override void LoadData(TagCompound tag)
     {
-        foreach (TagCompound tagUnit in tag.GetList<TagCompound>("StorageUnits"))
-        {
-            storageUnits.Add(new Point16(tagUnit.GetShort("X"), tagUnit.GetShort("Y")));
-        }
+		storageUnits = tag
+			.GetList<TagCompound>("StorageUnits")
+			.Select(TagExtensions.GetPoint16)
+			.ToList();
     }
 }

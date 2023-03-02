@@ -53,12 +53,11 @@ public class Locator : ModItem
 
 	public override void SaveData(TagCompound tag)
 	{
-		tag.Set("X", location.X);
-		tag.Set("Y", location.Y);
+		tag.Create("Location", location);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		location = new Point16(tag.GetShort("X"), tag.GetShort("Y"));
+		location = tag.GetPoint16("Location");
 	}
 }

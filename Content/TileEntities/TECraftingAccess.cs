@@ -94,7 +94,7 @@ public class TECraftingAccess : TEStorageComponent
 
     public override void SaveData(TagCompound tag)
     {
-        tag["Stations"] = stations.Select(item => ItemIO.Save(item)).ToList();
+        tag["Stations"] = stations.Select(ItemIO.Save).ToList();
     }
 
     public override void LoadData(TagCompound tag)
@@ -102,7 +102,7 @@ public class TECraftingAccess : TEStorageComponent
         IList<TagCompound> stations = tag.GetList<TagCompound>("Stations");
         if (stations != null && stations.Any())
         {
-            this.stations = stations.Select(item => ItemIO.Load(item)).ToArray();
+            this.stations = stations.Select(ItemIO.Load).ToArray();
         }
     }
 }

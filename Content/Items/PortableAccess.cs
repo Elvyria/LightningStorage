@@ -120,30 +120,15 @@ public class PortableAccess : ModItem
     {
         base.SaveData(tag);
 
-		TagCompound storageTag = new TagCompound()
-		{
-			{ "X", storage.X },
-			{ "Y", storage.Y }
-		};
-
-		TagCompound craftingTag = new TagCompound()
-		{
-			{ "X", crafting.X },
-			{ "Y", crafting.Y }
-		};
-
-		tag.Set("Storage",  storageTag);
-		tag.Set("Crafting", craftingTag);
+		tag.Create("Storage",  storage);
+		tag.Create("Crafting", crafting);
     }
 
     public override void LoadData(TagCompound tag)
     {
         base.LoadData(tag);
 
-		TagCompound storageTag = tag.GetCompound("Storage");
-		storage = new Point16(storageTag.GetShort("X"), storageTag.GetShort("Y"));
-
-		TagCompound craftingTag = tag.GetCompound("Crafting");
-		crafting = new Point16(craftingTag.GetShort("X"), craftingTag.GetShort("Y"));
+		storage  = tag.GetPoint16("Storage");
+		crafting = tag.GetPoint16("Crafting");
     }
 }

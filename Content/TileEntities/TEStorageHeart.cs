@@ -278,26 +278,17 @@ public class TEStorageHeart : TEStorageCenter
 	{
 		base.SaveData(tag);
 
-		List<TagCompound> tagRemotes = new List<TagCompound>(remoteAccesses.Count);
-		foreach (Point16 remoteAccess in remoteAccesses)
-		{
-			tagRemotes.Add(new TagCompound()
-					{
-					{ "X", remoteAccess.X },
-					{ "Y", remoteAccess.Y }
-					});
-		}
-
-		tag.Set("RemoteAccesses", tagRemotes);
+		List<TagCompound> tags = remoteAccesses.Select(TagExtensions.BuildTag).ToList();
+		tag.Set("RemoteAccesses", tags);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
 
-		foreach (TagCompound tagRemote in tag.GetList<TagCompound>("RemoteAccesses"))
-		{
-			remoteAccesses.Add(new Point16(tagRemote.GetShort("X"), tagRemote.GetShort("Y")));
-		}
+		remoteAccesses =
+			tag.GetList<TagCompound>("RemoteAccesses")
+			.Select(TagExtensions.GetPoint16)
+			.ToList();
 	}
 }

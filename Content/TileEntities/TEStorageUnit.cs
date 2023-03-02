@@ -233,28 +233,20 @@ public class TEStorageUnit : TEStorageComponent
 
 	public override void SaveData(TagCompound tag)
 	{
-		TagCompound tagCenter = new TagCompound()
-		{
-			{ "X", center.X },
-			{ "Y", center.Y }
-		};
-
 		List<TagCompound> tagItems = items
 			.Where(item => !item.IsAir && item.stack > 0)
 			.Select(ItemIO.Save)
-			.ToList<TagCompound>();
+			.ToList();
 
 		tag.Set("Active", active);
-		tag.Set("Center", tagCenter);
+		tag.Set("Center", center);
 		tag.Set("Items",  tagItems);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		active = tag.GetBool("Active");
-
-		TagCompound tagCenter = tag.GetCompound("Center");
-		center = new Point16(tagCenter.GetShort("X"), tagCenter.GetShort("Y"));
+		center = tag.GetPoint16("Center");
 
 		ClearItems();
 		items.Capacity = Capacity;

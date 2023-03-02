@@ -71,16 +71,11 @@ public abstract class TEStoragePoint : TEStorageComponent
 
 	public override void SaveData(TagCompound tag)
 	{
-		TagCompound tagCenter = new TagCompound();
-		tagCenter.Set("X", center.X);
-		tagCenter.Set("Y", center.Y);
-
-		tag.Set("Center", tagCenter);
+		tag.Set("Center", center);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		TagCompound tagCenter = tag.GetCompound("Center");
-		center = new Point16(tagCenter.GetShort("X"), tagCenter.GetShort("Y"));
+		center = tag.GetPoint16("Center");
 	}
 }
