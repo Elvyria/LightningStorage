@@ -29,8 +29,8 @@ public class UISearchBar : UIElement, IInput
 	public UISearchBar()
 	{
 		SetPadding(padding);
-		OnClick += Focus;
-		OnRightClick += Clear;
+		OnClick += (_, _) => Focus();
+		OnRightClick += (_, _) => Clear();
 	}
 
 	public override void OnInitialize()
@@ -57,16 +57,6 @@ public class UISearchBar : UIElement, IInput
 		text = string.Empty;
 		cursorPosition = 0;
 		cursorTimer = 0;
-	}
-
-	public void Clear(UIEvent _event, UIElement _element)
-	{
-		Clear();
-	}
-
-	public void Focus(UIEvent _event, UIElement _element)
-	{
-		Focus();
 	}
 
 	public void ResetFocus()
