@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using MagicStorage.Content.TileEntities;
@@ -19,6 +21,11 @@ public class CraftingAccess : StorageAccess
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
+	}
+
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		b = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
 	public override TEStorageHeart GetHeart(int i, int j)

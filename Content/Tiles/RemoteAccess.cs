@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using MagicStorage.Content.Items;
@@ -26,6 +28,11 @@ public class RemoteAccess : StorageAccess
 	{
 		TileEntity ent = TileEntity.ByPosition[new Point16(i, j)];
 		return ((TERemoteAccess)ent).GetHeart();
+	}
+
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		r = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
 	public override bool RightClick(int i, int j)

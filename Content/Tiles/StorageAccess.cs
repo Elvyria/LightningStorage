@@ -16,6 +16,13 @@ public class StorageAccess : StorageComponent
 {
 	private Asset<Texture2D> glowTexture;
 
+	public override void SetStaticDefaults()
+	{
+		base.SetStaticDefaults();
+
+		Main.tileLighted[Type] = true;
+	}
+
 	public override void Load()
 	{
 		base.Load();
@@ -30,6 +37,11 @@ public class StorageAccess : StorageComponent
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
+	}
+
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		r = g = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
 	public virtual TEStorageHeart GetHeart(int i, int j)

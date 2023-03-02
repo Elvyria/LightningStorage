@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using MagicStorage.Content.Items;
@@ -25,6 +27,11 @@ public class StorageHeart : StorageAccess
 	public override TEStorageHeart GetHeart(int i, int j)
 	{
 		return (TEStorageHeart) TileEntity.ByPosition[new Point16(i, j)];
+	}
+
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		g = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
 	public override bool RightClick(int i, int j)
