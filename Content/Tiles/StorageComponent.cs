@@ -51,7 +51,11 @@ public class StorageComponent : ModTile
 
 	public override bool CanPlace(int i, int j)
 	{
-		return true;
+		return
+			!( Framing.GetTileSafely(i, j - 1).HasTile
+			|| Framing.GetTileSafely(i, j).HasTile
+			|| Framing.GetTileSafely(i + 1, j - 1).HasTile
+			|| Framing.GetTileSafely(i + 1, j).HasTile);
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
