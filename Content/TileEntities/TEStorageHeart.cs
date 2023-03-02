@@ -60,12 +60,12 @@ public class TEStorageHeart : TEStorageCenter
 			}
 		}
 
-		if (updateTimer < 600)
+		if (updateTimer < 100)
 		{
 			updateTimer++;
 		}
 
-		if (updateTimer == 600 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
+		if (updateTimer == 100 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
 		{
 			updateTimer = 0;
 			Compact();
