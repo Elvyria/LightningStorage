@@ -37,6 +37,7 @@ public class UISystem : ModSystem
 
 	public override void Unload()
 	{
+		UI = null;
 		StorageUI = null;
 		CraftingUI = null;
 
@@ -73,21 +74,18 @@ public class UISystem : ModSystem
 	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 	{
 		int invIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
-		if (invIndex != -1)
-		{
-			layers.Insert(invIndex + 1, new LegacyGameInterfaceLayer(
-						"MagicStorage: StorageAccess",
-						delegate
+		layers.Insert(invIndex + 1, new LegacyGameInterfaceLayer(
+					"MagicStorage: StorageAccess",
+					delegate
+					{
+						if (_lastUpdateUiGameTime != null && UI?.CurrentState != null)
 						{
-							if (_lastUpdateUiGameTime != null && UI?.CurrentState != null)
-							{
-								Main.hidePlayerCraftingMenu = true;
-								UI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
-							}
-							return true;
-						},
-						InterfaceScaleType.UI));
-		}
+							Main.hidePlayerCraftingMenu = true;
+							UI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+						}
+						return true;
+					},
+					InterfaceScaleType.UI));
 
 		int wireIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Wire Selection"));
 		layers.Insert(wireIndex, new LegacyGameInterfaceLayer(
