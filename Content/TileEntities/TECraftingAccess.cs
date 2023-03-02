@@ -25,8 +25,7 @@ public class TECraftingAccess : TEStorageComponent
 
     public void DepositStation(Item item)
     {
-			if (Array.Exists(stations, s => s.type == item.type))
-				return;
+		if (Array.Exists(stations, s => s.type == item.type)) return;
 
         for (int k = 0; k < stations.Length; k++)
         {

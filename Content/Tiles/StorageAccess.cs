@@ -14,7 +14,10 @@ namespace MagicStorage.Content.Tiles;
 
 public class StorageAccess : StorageComponent
 {
+	[AllowNull]
 	private Asset<Texture2D> glowTexture;
+
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
 	public override void SetStaticDefaults()
 	{
@@ -34,29 +37,15 @@ public class StorageAccess : StorageComponent
 		return ModContent.ItemType<Items.StorageAccess>();
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-	{
-		return true;
-	}
-
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		r = g = 0.15f * (MathF.Sin((float)Main.timeForVisualEffects * 0.01f - MathHelper.PiOver2) + 3f);
 	}
 
-	public virtual TEStorageHeart GetHeart(int i, int j)
+	public virtual TEStorageHeart? GetHeart(int i, int j)
 	{
-		Point16 point = TEStorageComponent.FindStorageCenter(new Point16(i, j));
-		if (point.X < 0 || point.Y < 0 || !TileEntity.ByPosition.ContainsKey(point))
-		{
-			return null;
-		}
-		TileEntity heart = TileEntity.ByPosition[point];
-		if (!(heart is TEStorageCenter))
-		{
-			return null;
-		}
-		return ((TEStorageCenter)heart).GetHeart();
+		TEStorageCenter? center = TEStorageComponent.FindStorageCenter(new Point16(i, j));
+		return center?.GetHeart();
 	}
 
 	public override void MouseOver(int i, int j)

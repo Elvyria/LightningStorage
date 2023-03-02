@@ -28,10 +28,7 @@ public class TEStorageHeart : TEStorageCenter
 		return tile.TileType == ModContent.TileType<StorageHeart>();
 	}
 
-	public override TEStorageHeart GetHeart()
-	{
-		return this;
-	}
+	public override TEStorageHeart GetHeart() => this;
 
 	public IEnumerable<TEStorageUnit> GetStorageUnits()
 	{
@@ -87,7 +84,7 @@ public class TEStorageHeart : TEStorageCenter
 	{
 		IEnumerable<TEStorageUnit> units = GetStorageUnits();
 		IEnumerable<TEStorageUnit> activeUnits = units.Where(unit => unit.active);
-		TEStorageUnit inactiveUnit = units.FirstOrDefault(unit => !unit.active && !unit.IsEmpty);
+		TEStorageUnit? inactiveUnit = units.FirstOrDefault(unit => !unit.active && !unit.IsEmpty);
 
 		if (inactiveUnit == null)
 		{
@@ -145,9 +142,10 @@ public class TEStorageHeart : TEStorageCenter
 	public bool Defragment()
 	{
 		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
-		TEStorageUnit emptyUnit = activeUnits.FirstOrDefault(unit => unit.IsEmpty);
+		TEStorageUnit? emptyUnit = activeUnits.FirstOrDefault(unit => unit.IsEmpty);
 
-		if (emptyUnit != null) {
+		if (emptyUnit != null)
+		{
 			foreach (TEStorageUnit unit in activeUnits)
 			{
 				if (emptyUnit.Capacity > unit.Capacity && !unit.IsEmpty)
@@ -166,14 +164,13 @@ public class TEStorageHeart : TEStorageCenter
 	{
 		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
 		IEnumerable<TEStorageUnit> spaceUnits = activeUnits.Where(unit => !unit.IsEmpty && !unit.IsFull);
+		TEStorageUnit? unitWithSpace = spaceUnits.MaxBy(unit => unit.Capacity);
 
-		if (spaceUnits.Count() <= 1)
+		if (unitWithSpace == null)
 		{
 			compactStage++;
 			return false;
 		}
-
-		TEStorageUnit unitWithSpace = spaceUnits.MaxBy(unit => unit.Capacity);
 
 		foreach (TEStorageUnit unit in activeUnits)
 		{
@@ -201,10 +198,7 @@ public class TEStorageHeart : TEStorageCenter
 
 	public void Deposit(Item deposit)
 	{
-		if (deposit.IsAir || deposit.stack < 1)
-		{
-			return;
-		}
+		if (deposit.IsAir || deposit.stack < 1) return;
 
 		IEnumerable<TEStorageUnit> activeUnits = GetStorageUnits().Where(unit => unit.active);
 

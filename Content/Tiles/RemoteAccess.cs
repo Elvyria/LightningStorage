@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using Terraria.DataStructures;
-using Terraria.GameContent.ObjectInteractions;
 using MagicStorage.Content.Items;
 using MagicStorage.Content.TileEntities;
 
@@ -9,22 +8,11 @@ namespace MagicStorage.Content.Tiles;
 
 public class RemoteAccess : StorageAccess
 {
-	public override ModTileEntity GetTileEntity()
-	{
-		return ModContent.GetInstance<TERemoteAccess>();
-	}
+	public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TERemoteAccess>();
 
-	public override int ItemType(int frameX, int frameY)
-	{
-		return ModContent.ItemType<Items.RemoteAccess>();
-	}
+	public override int ItemType(int frameX, int frameY) => ModContent.ItemType<Items.RemoteAccess>();
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-	{
-		return true;
-	}
-
-	public override TEStorageHeart GetHeart(int i, int j)
+	public override TEStorageHeart? GetHeart(int i, int j)
 	{
 		TileEntity ent = TileEntity.ByPosition[new Point16(i, j)];
 		return ((TERemoteAccess)ent).GetHeart();

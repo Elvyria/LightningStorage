@@ -10,16 +10,16 @@ public class UISystem : ModSystem
 {
 	internal readonly HashSet<IInput> inputs = new HashSet<IInput>(2);
 
-#pragma warning disable 0649
+#nullable disable
 	internal UserInterface UI;
 	internal StorageAccessUI StorageUI;
 	internal CraftingAccessUI CraftingUI;
-#pragma warning restore 0649
 
 	internal UserInterface ItemUI;
 	internal PortableAccessUI AccessState;
+#nullable restore
 
-	private GameTime _lastUpdateUiGameTime;
+	private GameTime? _lastUpdateUiGameTime;
 
 	public override void Load()
 	{

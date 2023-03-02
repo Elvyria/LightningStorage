@@ -17,7 +17,7 @@ public struct ItemData
 		Prefix = item.prefix;
 	}
 
-	public override bool Equals(object other)
+	public override bool Equals(object? other)
 	{
 		if (other is ItemData data)
 		{

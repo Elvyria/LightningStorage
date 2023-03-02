@@ -13,7 +13,10 @@ public class UIButtonChoice : UIElement
 	private const int padding = 8;
 	private int hoverButton = -1;
 
+	[AllowNull]
 	private Asset<Texture2D> backTexture;
+
+	[AllowNull]
 	private Asset<Texture2D> backTextureActive;
 
 	private Asset<Texture2D>[] textures;

@@ -19,6 +19,7 @@ namespace MagicStorage.Common.UI.States;
 
 class StorageAccessUI : UIState, ISwitchable
 {
+#nullable disable
 	private bool isMouseHovering;
 
 	private const float inventoryScale = 0.8f;
@@ -56,16 +57,14 @@ class StorageAccessUI : UIState, ISwitchable
 	private IFilter<Item> filterMode = FilterMode.All;
 	private string nameFilter = string.Empty;
 	private string modFilter = string.Empty;
-
-	private static readonly Color lightBlue = new Color(73, 94, 171);
-	private static readonly Color blue = new Color(63, 82, 151) * 0.7f;
+#nullable restore
 
 	public override void OnInitialize()
 	{
 		float slotWidth = TextureAssets.InventoryBack9.Width() * inventoryScale;
 		float slotHeight = TextureAssets.InventoryBack9.Height() * inventoryScale;
 
-		float panelTop = Main.instance.invBottom + 60;
+		float panelTop = Main.instance.invBottom + 60f;
 
 		panel = new UIPanel();
 
@@ -74,15 +73,15 @@ class StorageAccessUI : UIState, ISwitchable
 		float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
 		float panelHeight = Main.screenHeight - panelTop - 20f;
 
-		panel.Left.Set((int)(opening ? -panelWidth : panelLeft), 0f);
-		panel.Top.Set(panelTop, 0f);
-		panel.Width.Set(panelWidth, 0f);
-		panel.Height.Set(panelHeight, 0f);
+		panel.Left.Pixels = (int)(opening ? -panelWidth : panelLeft);
+		panel.Top.Pixels = panelTop;
+		panel.Width.Pixels = panelWidth;
+		panel.Height.Pixels = panelHeight;
 		panel.Recalculate();
 
 		UIElement topBar = new UIElement();
-		topBar.Width.Set(0f, 1f);
-		topBar.Height.Set(32f, 0f);
+		topBar.Width.Percent = 1f;
+		topBar.Height.Pixels = 32f;
 		panel.Append(topBar);
 
 		sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
@@ -100,7 +99,7 @@ class StorageAccessUI : UIState, ISwitchable
 					Language.GetText("Mods.MagicStorage.Common.SortStack")
 				});
 
-		sortButtons.OnClick += (a, b) =>
+		sortButtons.OnClick += (_, _) =>
 		{
 			IComparer<Item> newSort = SortMode.from(sortButtons.choice);
 			if (newSort != sortMode)
@@ -113,29 +112,29 @@ class StorageAccessUI : UIState, ISwitchable
 		topBar.Append(sortButtons);
 
 		UITextPanel<LocalizedText> depositButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.MagicStorage.Common.DepositAll"), 1f);
-		depositButton.Left.Set(sortButtons.GetDimensions().Width + 2 * padding, 0f);
-		depositButton.Width.Set(128f, 0f);
+		depositButton.Left.Pixels = sortButtons.GetDimensions().Width + 2 * padding;
+		depositButton.Width.Pixels = 128f;
 		depositButton.Height.Set(-2 * padding, 1f);
 		depositButton.PaddingTop = 8f;
 		depositButton.PaddingBottom = 8f;
 		depositButton.OnClick += ClickDeposit;
-		depositButton.OnMouseOver += (a, b) => depositButton.BackgroundColor = lightBlue;
-		depositButton.OnMouseOut += (a, b) => depositButton.BackgroundColor = blue;
+		depositButton.OnMouseOver += (_, _) => depositButton.BackgroundColor = StateColor.lightBlue;
+		depositButton.OnMouseOut  += (_, _) => depositButton.BackgroundColor = StateColor.blue;
 
 		topBar.Append(depositButton);
 
 		float depositButtonRight = sortButtons.GetDimensions().Width + 2 * padding + depositButton.GetDimensions().Width;
 		searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
-		searchBar.Left.Set(depositButtonRight + padding, 0f);
+		searchBar.Left.Pixels = depositButtonRight + padding;
 		searchBar.Width.Set(-depositButtonRight - 2 * padding, 1f);
-		searchBar.Height.Set(0f, 1f);
+		searchBar.Height.Percent = 1f;
 
 		topBar.Append(searchBar);
 
 		UIElement topBar2 = new UIElement();
-		topBar2.Width.Set(0f, 1f);
-		topBar2.Height.Set(32f, 0f);
-		topBar2.Top.Set(36f, 0f);
+		topBar2.Width.Percent = 1f;
+		topBar2.Height.Pixels = 32f;
+		topBar2.Top.Pixels = 36f;
 
 		panel.Append(topBar2);
 
@@ -173,30 +172,30 @@ class StorageAccessUI : UIState, ISwitchable
 		topBar2.Append(filterButtons);
 
 		searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
-		searchBar2.Left.Set(depositButtonRight + padding, 0f);
+		searchBar2.Left.Pixels = depositButtonRight + padding;
 		searchBar2.Width.Set(-depositButtonRight - 2 * padding, 1f);
-		searchBar2.Height.Set(0f, 1f);
+		searchBar2.Height.Percent = 1f;
 
 		topBar2.Append(searchBar2);
 
 		slotZone = new UISlotZone(GetItem, inventoryScale);
-		slotZone.Width.Set(0f, 1f);
-		slotZone.Top.Set(76f, 0f);
+		slotZone.Width.Percent = 1f;
+		slotZone.Top.Pixels = 76f;
 		slotZone.Height.Set(-116f, 1f);
 		slotZone.OnMouseDown += PressSlotZone;
 
 		panel.Append(slotZone);
 
 		UIScrollableBar scrollbar = new UIScrollableBar();
-		scrollbar.Left.Set(10, 0);
+		scrollbar.Left.Pixels = 10f;
 		slotZone.SetScrollbar(scrollbar);
 
 		panel.Append(scrollbar);
 
 		capacityText = new UIText(string.Empty);
 		capacityText.Top.Set(-32f, 1f);
-		capacityText.Left.Set(6f, 0f);
-		capacityText.Height.Set(32f, 0);
+		capacityText.Left.Pixels = 6f;
+		capacityText.Height.Pixels = 32f;
 		panel.Append(capacityText);
 
 		float slotZoneHeight = capacityText.GetDimensions().Y - (filterButtons.GetDimensions().Y + filterButtons.GetDimensions().Height);
@@ -221,18 +220,18 @@ class StorageAccessUI : UIState, ISwitchable
 
 	public override void OnActivate()
 	{
+		UISystem system = ModContent.GetInstance<UISystem>();
 		player = Main.LocalPlayer;
 		heart = StoragePlayer.LocalPlayer.GetStorageHeart();
 
 		if (heart == null)
 		{
-			Deactivate();
+			system.UI.SetState(null);
 			return;
 		}
 
 		panel.Left.Pixels = opening ? -panel.Width.Pixels : panelLeft;
 
-		UISystem system = ModContent.GetInstance<UISystem>();
 		system.inputs.Add(searchBar);
 		system.inputs.Add(searchBar2);
 
@@ -341,15 +340,8 @@ class StorageAccessUI : UIState, ISwitchable
 	public void UpdateCursor() {
 		if (!GetItem(slotZone.mouseSlot).IsAir)
 		{
-			if (ItemSlot.ControlInUse)
-			{
-				Main.cursorOverride = 6;
-			}
-
-			if (ItemSlot.ShiftInUse)
-			{
-				Main.cursorOverride = 8;
-			}
+			Main.cursorOverride = ItemSlot.ControlInUse ? 6 : Main.cursorOverride;
+			Main.cursorOverride = ItemSlot.ShiftInUse   ? 8 : Main.cursorOverride;
 		}
 	}
 
@@ -523,7 +515,7 @@ class StorageAccessUI : UIState, ISwitchable
 		for (int k = 10; k < 50; k++)
 		{
 			Item item = player.inventory[k];
-			if (!item.IsAir && item.stack > 0 && !item.favorited)
+			if (!item.favorited)
 			{
 				int oldStack = item.stack;
 				heart.Deposit(item);

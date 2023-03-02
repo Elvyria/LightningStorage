@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using Terraria.DataStructures;
-using Terraria.GameContent.ObjectInteractions;
 using MagicStorage.Content.Items;
 using MagicStorage.Content.TileEntities;
 
@@ -9,20 +8,9 @@ namespace MagicStorage.Content.Tiles;
 
 public class StorageHeart : StorageAccess
 {
-	public override ModTileEntity GetTileEntity()
-	{
-		return ModContent.GetInstance<TEStorageHeart>();
-	}
+	public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEStorageHeart>();
 
-	public override int ItemType(int frameX, int frameY)
-	{
-		return ModContent.ItemType<Items.StorageHeart>();
-	}
-
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-	{
-		return true;
-	}
+	public override int ItemType(int frameX, int frameY) => ModContent.ItemType<Items.StorageHeart>();
 
 	public override TEStorageHeart GetHeart(int i, int j)
 	{

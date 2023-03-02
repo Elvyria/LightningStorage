@@ -24,6 +24,7 @@ namespace MagicStorage.Common.UI.States;
 
 class CraftingAccessUI : UIState
 {
+#nullable disable
 	private bool isMouseHovering;
 
 	private const float inventoryScale = 0.8f;
@@ -98,11 +99,7 @@ class CraftingAccessUI : UIState
 	private IFilter<Item> filterMode = FilterMode.All;
 	private string nameFilter = string.Empty;
 	private string modFilter = string.Empty;
-
-	private static readonly Color lightBlue = new Color(73, 94, 171);
-	private static readonly Color blue = new Color(63, 82, 151) * 0.7f;
-	private static readonly Color darkBlue = new Color(30, 40, 100) * 0.7f;
-	private static readonly Color deepBlue = new Color(163, 104, 176) * 1.15f;
+#nullable restore
 
 	public override void OnInitialize()
 	{
@@ -336,13 +333,14 @@ class CraftingAccessUI : UIState
 
 	public override void OnActivate()
 	{
+		UISystem system = ModContent.GetInstance<UISystem>();
 		player = Main.LocalPlayer;
 		heart = StoragePlayer.LocalPlayer.GetStorageHeart();
 		access = StoragePlayer.LocalPlayer.GetCraftingAccess();
 
 		if (access == null || heart == null)
 		{
-			Deactivate();
+			system.UI.SetState(null);
 			return;
 		}
 
@@ -356,7 +354,6 @@ class CraftingAccessUI : UIState
 
 		panel.Left.Pixels = opening ? -panel.Width.Pixels : panelLeft;
 
-		UISystem system = ModContent.GetInstance<UISystem>();
 		system.inputs.Add(searchBar);
 		system.inputs.Add(searchBar2);
 
@@ -480,13 +477,13 @@ class CraftingAccessUI : UIState
 	{
 		if (selectedRecipe == null || !IsAvailable(selectedRecipe))
 		{
-			craftButton.BackgroundColor = darkBlue;
+			craftButton.BackgroundColor = StateColor.darkBlue;
 			return;
 		}
 
 		if (craftButton.IsMouseHovering)
 		{
-			craftButton.BackgroundColor = lightBlue;
+			craftButton.BackgroundColor = StateColor.lightBlue;
 
 			if (Main.mouseLeft && stackSplit <= 1)
 			{
@@ -500,13 +497,17 @@ class CraftingAccessUI : UIState
 				}
 
 				TryCraft();
-				Refresh();
+
+				RefreshItems();
+				RefreshStorageItems();
+				RefreshRecipes();
+
 				SoundEngine.PlaySound(SoundID.Grab);
 			}
 		}
 		else
 		{
-			craftButton.BackgroundColor = blue;
+			craftButton.BackgroundColor = StateColor.blue;
 		}
 	}
 
@@ -661,7 +662,7 @@ class CraftingAccessUI : UIState
 
 			if (!recipeAvailable[slot])
 			{
-				return deepBlue;
+				return StateColor.deepBlue;
 			}
 		}
 
@@ -932,10 +933,7 @@ class CraftingAccessUI : UIState
 
 	private void PressIngredient(UIEvent _event, UIElement _element)
 	{
-		if (selectedRecipe == null)
-		{
-			return;
-		}
+		if (selectedRecipe == null) return;
 
 		int slot = ingredientZone.mouseSlot;
 
@@ -1044,10 +1042,7 @@ class CraftingAccessUI : UIState
 
 	private void PressResult(UIEvent _event, UIElement _element)
 	{
-		if (selectedRecipe == null || Main.mouseItem.IsAir && resultItem.IsAir || resultZone.mouseSlot != 0)
-		{
-			return;
-		}
+		if (selectedRecipe == null || Main.mouseItem.IsAir && resultItem.IsAir || resultZone.mouseSlot != 0) return;
 
 		if (!Main.mouseItem.IsAir && selectedRecipe.createItem.type == Main.mouseItem.type)
 		{
@@ -1069,7 +1064,9 @@ class CraftingAccessUI : UIState
 			}
 		}
 
-		Refresh();
+		RefreshItems();
+		RefreshStorageItems();
+		RefreshRecipes();
 
 		SoundEngine.PlaySound(SoundID.Grab);
 	}
@@ -1086,13 +1083,15 @@ class CraftingAccessUI : UIState
 
 			foreach (Item requiredItem in selectedRecipe.requiredItem)
 			{
-				Item item = requiredItem.Clone();
-				ingredients.Add(item);
+				Item item = requiredItem;
 
 				if (selectedRecipe.ProcessGroupsForText(item.type, out string nameOverride))
 				{
+					item = item.Clone();
 					item.SetNameOverride(nameOverride);
 				}
+
+				ingredients.Add(item);
 			}
 
 			RefreshStorageItems();

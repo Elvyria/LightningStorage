@@ -6,9 +6,9 @@ using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Content.Tiles;
 
-public class StorageComponent : ModTile
+public abstract class StorageComponent : ModTile
 {
-	public override string HighlightTexture { get { return typeof(StorageComponent).FullName.Replace('.', '/') + "_Highlight"; } }
+	public override string HighlightTexture => typeof(StorageComponent)?.FullName?.Replace('.', '/') + "_Highlight";
 
 	public override void SetStaticDefaults()
 	{
@@ -23,7 +23,7 @@ public class StorageComponent : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 
 		ModifyObjectData();
-		ModTileEntity tileEntity = GetTileEntity();
+		ModTileEntity? tileEntity = GetTileEntity();
 
 		TileObjectData.newTile.HookPostPlaceMyPlayer = tileEntity != null ?
 			new PlacementHook(tileEntity.Hook_AfterPlacement, -1, 0, false) :
@@ -39,15 +39,9 @@ public class StorageComponent : ModTile
 
 	public virtual void ModifyObjectData() {}
 
-	public virtual ModTileEntity GetTileEntity()
-	{
-		return null;
-	}
+	public virtual ModTileEntity? GetTileEntity() => null;
 
-	public virtual int ItemType(int frameX, int frameY)
-	{
-		return ModContent.ItemType<Items.StorageComponent>();
-	}
+	public virtual int ItemType(int frameX, int frameY) => ModContent.ItemType<Items.StorageComponent>();
 
 	public override bool CanPlace(int i, int j)
 	{
@@ -61,7 +55,7 @@ public class StorageComponent : ModTile
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
 		Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
-		ModTileEntity tileEntity = GetTileEntity();
+		ModTileEntity? tileEntity = GetTileEntity();
 		if (tileEntity != null)
 		{
 			tileEntity.Kill(i, j);

@@ -105,7 +105,6 @@ public class PortableAccess : ModItem
 		return base.UseItem(player);
 	}
 
-	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()

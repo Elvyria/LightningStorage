@@ -40,11 +40,8 @@ public class StorageDeactivator : ModItem
 				storageUnit.active = !storageUnit.active;
 				string activeText = storageUnit.active ? "Activated" : "Deactivated" ;
 				Main.NewText("Storage Unit has been " + activeText);
-				if (storageUnit is TEStorageUnit)
-				{
-					((TEStorageUnit)storageUnit).UpdateTileFrame();
-					storageUnit.GetHeart().ResetCompactStage();
-				}
+				storageUnit.UpdateTileFrame();
+				storageUnit.GetHeart()?.ResetCompactStage();
 			}
 		}
 		return true;

@@ -25,7 +25,7 @@ public class UISlotZone : UIElement
 	private float slotHeight;
 	private float slotWidth;
 
-	private UIScrollbar scrollbar;
+	private UIScrollbar? scrollbar;
 
 	public UISlotZone(Func<int, Item> getItem, float scale)
 	{
@@ -87,9 +87,7 @@ public class UISlotZone : UIElement
 
 	public void UpdateScrollBar(int rows)
 	{
-		if (scrollbar == null) return;
-
-		scrollbar.SetView(this.rows, rows);
+		scrollbar?.SetView(this.rows, rows);
 	}
 
 	public override void ScrollWheel(UIScrollWheelEvent evt)
@@ -120,7 +118,7 @@ public class UISlotZone : UIElement
 			return -1;
 		}
 
-		int increment = scrollbar == null ? 0 : (int)scrollbar?.ViewPosition;
+		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition;
 
 		return increment * columns + row * columns + column;
 	}

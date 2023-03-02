@@ -31,10 +31,7 @@ public abstract class TEStorageCenter : TEStorageComponent
                 explored.Add(explore);
                 if (ByPosition.ContainsKey(explore) && ByPosition[explore] is TEStorageUnit storageUnit)
                 {
-                    if (storageUnit.Link(Position))
-                    {
-                        changed = true;
-                    }
+					changed |= storageUnit.Link(Position);
                     storageUnits.Add(explore);
                     hashStorageUnits.Add(explore);
                 }
@@ -59,7 +56,7 @@ public abstract class TEStorageCenter : TEStorageComponent
 
         if (changed)
         {
-            TEStorageHeart heart = GetHeart();
+            TEStorageHeart? heart = GetHeart();
             if (heart != null)
             {
                 heart.ResetCompactStage();
@@ -81,7 +78,7 @@ public abstract class TEStorageCenter : TEStorageComponent
         }
     }
 
-    public abstract TEStorageHeart GetHeart();
+    public abstract TEStorageHeart? GetHeart();
 
     public override void SaveData(TagCompound tag)
     {

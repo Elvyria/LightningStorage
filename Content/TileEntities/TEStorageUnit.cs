@@ -38,12 +38,13 @@ public class TEStorageUnit : TEStorageComponent
 		}
 	}
 
-	public TEStorageHeart GetHeart()
+	public TEStorageHeart? GetHeart()
 	{
-		if (center != Point16.NegativeOne && ByPosition.ContainsKey(center) && ByPosition[center] is TEStorageCenter)
+		if (center != Point16.NegativeOne && ByPosition.ContainsKey(center) && ByPosition[center] is TEStorageCenter storageCenter)
 		{
-			return ((TEStorageCenter)ByPosition[center]).GetHeart();
+			return storageCenter.GetHeart();
 		}
+
 		return null;
 	}
 
@@ -54,25 +55,12 @@ public class TEStorageUnit : TEStorageComponent
 		return changed;
 	}
 
-	public bool Unlink()
-	{
-		return Link(Point16.NegativeOne);
-	}
+	public bool Unlink() => Link(Point16.NegativeOne);
 
-	public bool IsFull
-	{
-		get => items.Count >= Capacity;
-	}
+	public bool IsEmpty  => items.Count == 0;
+	public bool IsFull   => items.Count >= Capacity;
 
-	public bool IsEmpty
-	{
-		get => items.Count == 0;
-	}
-
-	public int NumItems
-	{
-		get => items.Count;
-	}
+	public int  NumItems => items.Count;
 
 	public override bool IsTileValidForEntity(int i, int j)
 	{
@@ -86,20 +74,11 @@ public class TEStorageUnit : TEStorageComponent
 		return hasSpaceInStack.Contains(data);
 	}
 
-	public bool HasSpaceFor(Item check)
-	{
-		return !IsFull || HasSpaceInStackFor(check);
-	}
+	public bool HasSpaceFor(Item check) => !IsFull || HasSpaceInStackFor(check);
 
-	public bool HasItem(Item item)
-	{
-		return hasItem.Contains(new ItemData(item));
-	}
+	public bool HasItem(Item item) => hasItem.Contains(new ItemData(item));
 
-	public IEnumerable<Item> GetItems()
-	{
-		return items;
-	}
+	public IEnumerable<Item> GetItems() => items;
 
 	public int Fill(Item deposit, int amount)
 	{

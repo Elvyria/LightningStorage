@@ -13,6 +13,7 @@ namespace MagicStorage.Content.Tiles;
 
 public class StorageUnit : StorageComponent
 {
+	[AllowNull]
 	private Asset<Texture2D> glowTexture;
 
 	public static class IndicatorStyle
@@ -62,7 +63,7 @@ public class StorageUnit : StorageComponent
 		TileObjectData.newTile.StyleWrapLimit = 6;
 	}
 
-	public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEStorageUnit>();
+	public override ModTileEntity? GetTileEntity() => ModContent.GetInstance<TEStorageUnit>();
 
 	public override void MouseOver(int i, int j)
 	{
@@ -143,11 +144,10 @@ public class StorageUnit : StorageComponent
 		{
 			TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
 			storageUnit.UpdateTileFrame();
-			TEStorageHeart heart = storageUnit.GetHeart();
-			if (heart != null)
-			{
-				heart.ResetCompactStage();
-			}
+
+			TEStorageHeart? heart = storageUnit.GetHeart();
+			heart?.ResetCompactStage();
+
 			item.stack--;
 			if (item.stack <= 0)
 			{

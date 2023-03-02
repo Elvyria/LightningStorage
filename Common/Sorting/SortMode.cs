@@ -1,5 +1,6 @@
 namespace MagicStorage.Common.Sorting;
 
+#nullable disable
 public static class SortMode
 {
 	public static readonly IComparer<Item> Default = new SortDefault();

@@ -22,6 +22,7 @@ public class UISearchBar : UIElement, IInput
 	private int cursorPosition = 0;
 	private int cursorTimer = 0;
 
+	[AllowNull]
 	private Asset<Texture2D> texture;
 
 	public string Text { get => text; }

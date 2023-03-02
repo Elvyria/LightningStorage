@@ -74,14 +74,6 @@ public class RecipeSystem : ModSystem
 				ItemID.MeteoriteChest,
 				ItemID.MarbleChest);
 		RecipeGroup.RegisterGroup("MagicStorage:AnyChest", group);
-
-		group = new RecipeGroup(() => Language.GetText("LegacyMisc.37").Value + " " + Language.GetTextValue("Mods.MagicStorage.Common.SnowBiomeBlock"),
-				ItemID.SnowBlock,
-				ItemID.IceBlock,
-				ItemID.PurpleIceBlock,
-				ItemID.PinkIceBlock);
-
-		RecipeGroup.RegisterGroup("MagicStorage:AnySnowBiomeBlock", group);
 	}
 }
 

@@ -9,10 +9,12 @@ namespace MagicStorage.Common.UI;
 
 public class UISelector : UIElement, ISwitchable
 {
-	private Vector2 circleOrigin;
 
+#nullable disable
+	private Vector2 circleOrigin;
 	private Texture2D circleBackground;
 	private Texture2D circleSelected;
+
 	private Asset<Texture2D>[] textures;
 
 	private Vector2[] targetPositions;
@@ -35,6 +37,7 @@ public class UISelector : UIElement, ISwitchable
 	public bool Visible { get => opacity > 0; }
 
 	private float circleRadius;
+#nullable restore
 
 	public UISelector(Asset<Texture2D>[] textures, Vector2[] positions)
 	{

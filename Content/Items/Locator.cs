@@ -8,13 +8,7 @@ public class Locator : ModItem
 {
 	public Point16 location = Point16.NegativeOne;
 
-	protected override bool CloneNewInstances
-	{
-		get
-		{
-			return true;
-		}
-	}
+	protected override bool CloneNewInstances => true;
 
 	public override void SetDefaults()
 	{

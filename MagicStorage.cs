@@ -1,5 +1,6 @@
 global using System;
 global using System.Collections.Generic;
+global using System.Diagnostics.CodeAnalysis;
 
 global using Terraria;
 global using Terraria.ID;
@@ -13,6 +14,7 @@ namespace MagicStorage;
 
 public class MagicStorage : Mod
 {
+	[AllowNull]
 	public static MagicStorage Instance;
 
 	public override void Load()

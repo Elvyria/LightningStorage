@@ -69,7 +69,7 @@ public abstract class TEStorageComponent : ModTileEntity
 
             if (tile.TileType == ModContent.TileType<StorageConnector>())
             {
-					Point16 check = new Point16(checkX, checkY);
+				Point16 check = new Point16(checkX, checkY);
                 if (!points.Contains(check))
                 {
                     points.Add(check);
@@ -100,7 +100,7 @@ public abstract class TEStorageComponent : ModTileEntity
         return points;
     }
 
-    public static Point16 FindStorageCenter(Point16 startSearch)
+    public static TEStorageCenter? FindStorageCenter(Point16 startSearch)
     {
         HashSet<Point16> explored = new HashSet<Point16>(8){ startSearch };
         Queue<Point16> toExplore = new Queue<Point16>(8);
@@ -117,9 +117,9 @@ public abstract class TEStorageComponent : ModTileEntity
             {
                 explored.Add(explore);
 
-                if (TileEntity.ByPosition.ContainsKey(explore) && TileEntity.ByPosition[explore] is TEStorageCenter)
+                if (TileEntity.ByPosition.ContainsKey(explore) && TileEntity.ByPosition[explore] is TEStorageCenter center)
                 {
-                    return explore;
+                    return center;
                 }
 
                 foreach (Point16 point in AdjacentComponents(explore))
@@ -129,16 +129,12 @@ public abstract class TEStorageComponent : ModTileEntity
             }
         }
 
-        return Point16.NegativeOne;
+        return null;
     }
 
     public static void RefreshNetwork(Point16 position)
     {
-        Point16 pos = FindStorageCenter(position);
-        if (pos != Point16.NegativeOne)
-        {
-            TEStorageCenter center = ((TEStorageCenter) TileEntity.ByPosition[pos]);
-            center.ResetAndSearch();
-        }
+        TEStorageCenter? center = FindStorageCenter(position);
+		center?.ResetAndSearch();
     }
 }

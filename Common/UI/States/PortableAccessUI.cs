@@ -15,6 +15,7 @@ class PortableAccessUI : UIState, ISwitchable
 	public const int SELECTION_STORAGE  = 0;
 	public const int SELECTION_CRAFTING = 1;
 
+	[AllowNull]
 	private UISelector selector;
 
 	private bool opening;
@@ -29,8 +30,8 @@ class PortableAccessUI : UIState, ISwitchable
 				},
 				new Vector2[]
 				{
-					new Vector2(-35, -35),
-					new Vector2(35, -35)
+					new Vector2(-35f, -35f),
+					new Vector2(35f, -35f)
 				});
 
 		Append(selector);
