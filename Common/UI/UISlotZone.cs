@@ -20,6 +20,7 @@ public class UISlotZone : UIElement
 
 	private Func<int, Item> getItem;
 	private Func<int, Color> getColor;
+	private Func<int, Texture2D> getSlotTexture;
 
 	private float scale;
 	private float slotHeight;
@@ -30,7 +31,8 @@ public class UISlotZone : UIElement
 	public UISlotZone(Func<int, Item> getItem, float scale)
 	{
 		this.getItem = getItem;
-		getColor = (_) => Color.White;
+		this.getColor = (_) => StateColor.slotBG;
+		this.getSlotTexture = (_) => TextureAssets.InventoryBack13.Value;
 
 		this.scale = scale;
 		slotHeight = TextureAssets.InventoryBack.Height() * scale;
@@ -40,14 +42,14 @@ public class UISlotZone : UIElement
 		Height.Set(slotHeight, 0);
 	}
 
-	public UISlotZone(Func<int, Item> getItem, Func<int, Color> getColor, float scale)
+	public UISlotZone(Func<int, Item> getItem, Func<int, Color> getColor, float scale) : this(getItem, scale)
 	{
-		this.getItem = getItem;
 		this.getColor = getColor;
+	}
 
-		this.scale = scale;
-		slotHeight = TextureAssets.InventoryBack.Height() * scale;
-		slotWidth = TextureAssets.InventoryBack.Width() * scale;
+	public UISlotZone(Func<int, Item> getItem, Func<int, Color> getColor, Func<int, Texture2D> getSlotTexture, float scale) : this(getItem, getColor, scale)
+	{
+		this.getSlotTexture = getSlotTexture;
 	}
 
 	public void SetScale(float scale)
@@ -134,14 +136,14 @@ public class UISlotZone : UIElement
 		{
 			int slot = k + increment;
 			Vector2 drawPos = origin + new Vector2((slotWidth + padding) * (k % columns), (slotHeight + padding) * (k / columns));
-			DrawSlot(spriteBatch, getItem(slot), getColor(slot), drawPos);
+			DrawSlot(spriteBatch, getItem(slot), getSlotTexture(slot), getColor(slot), drawPos);
 		}
 	}
 
-	private void DrawSlot(SpriteBatch spriteBatch, Item item, Color slotColor, Vector2 drawPos)
+	private void DrawSlot(SpriteBatch spriteBatch, Item item, Texture2D slotTexture, Color slotColor, Vector2 drawPos)
 	{
 		// Draw item slot background
-		spriteBatch.Draw(TextureAssets.InventoryBack9.Value, drawPos, null, slotColor, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(slotTexture, drawPos, null, slotColor, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
 		if (!item.IsAir)
 		{

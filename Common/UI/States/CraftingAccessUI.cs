@@ -63,6 +63,7 @@ class CraftingAccessUI : UIState
 
 	private List<Item> items;
 	private List<Item> ingredients;
+	private List<byte> craftableIngredients;
 
 	private Dictionary<int, int> itemCounts;
 	private Dictionary<int, int> recipeGroupCounts;
@@ -232,13 +233,13 @@ class CraftingAccessUI : UIState
 		recipeText.Top.Set(152f, 0f);
 		panel.Append(recipeText);
 
-		recipeZone = new UISlotZone(GetRecipe, GetRecipeColor, inventoryScale);
+		recipeZone = new UISlotZone(GetRecipe, GetRecipeColor, GetRecipeSlotTexture, inventoryScale);
 		recipeZone.Top.Set(176f, 0f);
 		recipeZone.OnMouseDown += PressRecipe;
 		panel.Append(recipeZone);
 
 		UIScrollableBar scrollbar = new UIScrollableBar();
-		scrollbar.Left.Set(10, 0);
+		scrollbar.Left.Pixels = -30f;
 		recipeZone.SetScrollbar(scrollbar);
 		panel.Append(scrollbar);
 
@@ -256,7 +257,7 @@ class CraftingAccessUI : UIState
 		previewZone.Left.Set(-slotWidth, 1f);
 		recipePanel.Append(previewZone);
 
-		ingredientZone = new UISlotZone(GetIngredient, smallScale);
+		ingredientZone = new UISlotZone(GetIngredient, GetIngredientColor, GetIngredientSlotTexture, smallScale);
 		ingredientZone.Top.Set(54f, 0f);
 		ingredientZone.SetDimensions(recipePanelColumns, ingredientRows);
 		ingredientZone.OnMouseDown += PressIngredient;
@@ -347,6 +348,7 @@ class CraftingAccessUI : UIState
 		adjTiles = new bool[player.adjTile.Length];
 		adjLiquids= new bool[Main.maxLiquidTypes];
 		ingredients = new List<Item>(4);
+		craftableIngredients = new List<byte>(4);
 		itemCounts = new Dictionary<int, int>();
 		recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
 		conditions = new List<Recipe.Condition>(3);
@@ -378,6 +380,7 @@ class CraftingAccessUI : UIState
 		adjTiles = null;
 		adjLiquids= null;
 		ingredients = null;
+		craftableIngredients = null;
 		itemCounts = null;
 		recipeGroupCounts = null;
 		conditions = null;
@@ -638,7 +641,6 @@ class CraftingAccessUI : UIState
 		}
 
 		return UISlotZone.Air;
-
 	}
 
 	private Item GetStorage(int slot)
@@ -651,22 +653,57 @@ class CraftingAccessUI : UIState
 		return UISlotZone.Air;
 	}
 
+	private Color GetIngredientColor(int slot)
+	{
+		if (slot >= 0 && slot < craftableIngredients.Count)
+		{
+			return craftableIngredients[slot] switch
+			{
+				1  => StateColor.slotLight,
+				2  => StateColor.slotRed,
+				_  => StateColor.slotBG,
+			};
+		}
+
+		return StateColor.slotBG;
+	}
+
+	private Texture2D GetIngredientSlotTexture(int slot)
+	{
+		if (slot >= 0 && slot < craftableIngredients.Count && recipes[slot] == selectedRecipe && craftableIngredients[slot] == 1)
+		{
+			return TextureAssets.InventoryBack16.Value;
+		}
+
+		return TextureAssets.InventoryBack13.Value;
+	}
+
 	private Color GetRecipeColor(int slot)
 	{
 		if (slot < recipes.Count)
 		{
-			if (recipes[slot] == selectedRecipe)
-			{
-				return Color.Lime;
-			}
-
 			if (!recipeAvailable[slot])
 			{
-				return StateColor.deepBlue;
+				return recipes[slot] != selectedRecipe ? StateColor.slotRed : StateColor.darkRed;
+			}
+
+			if (recipes[slot] == selectedRecipe)
+			{
+				return StateColor.slotSelected;
 			}
 		}
 
-		return Color.White;
+		return StateColor.slotBG;
+	}
+
+	private Texture2D GetRecipeSlotTexture(int slot)
+	{
+		if (slot < recipes.Count && recipes[slot] == selectedRecipe)
+		{
+			return TextureAssets.InventoryBack15.Value;
+		}
+
+		return TextureAssets.InventoryBack13.Value;
 	}
 
 	private Item GetSelectedItem(int slot)
@@ -940,13 +977,11 @@ class CraftingAccessUI : UIState
 		if (slot >= 0 && slot < selectedRecipe.requiredItem.Count)
 		{
 			Item ingredient = selectedRecipe.requiredItem[slot];
-			foreach (Recipe recipe in Main.recipe)
+			bool available = false;
+			Recipe? recipe = FindRecipe(ingredient, out available);
+			if (recipe != null)
 			{
-				if (recipe.createItem.type == ingredient.type)
-				{
-					SelectRecipe(recipe);
-					return;
-				}
+				SelectRecipe(recipe);
 			}
 		}
 	}
@@ -1080,6 +1115,7 @@ class CraftingAccessUI : UIState
 			UpdateRecipeText();
 
 			ingredients.Clear();
+			craftableIngredients.Clear();
 
 			foreach (Item requiredItem in selectedRecipe.requiredItem)
 			{
@@ -1094,8 +1130,45 @@ class CraftingAccessUI : UIState
 				ingredients.Add(item);
 			}
 
+			foreach (Item ingredient in selectedRecipe.requiredItem)
+			{
+				bool available = false;
+				Recipe? ingredientRecipe = FindRecipe(ingredient, out available);
+
+				if (ingredientRecipe == null)
+				{
+					craftableIngredients.Add(0);
+				}
+				else
+				{
+					craftableIngredients.Add(available ? (byte) 1 : (byte) 2);
+				}
+			}
+
 			RefreshStorageItems();
 		}
+	}
+
+	private Recipe? FindRecipe(Item item, out bool available)
+	{
+		available = false;
+		Recipe? result = null;
+
+		foreach (Recipe recipe in Main.recipe)
+		{
+			if (recipe.createItem.type == item.type)
+			{
+				result = recipe;
+
+				if (IsAvailable(result))
+				{
+					available = true;
+					break;
+				}
+			}
+		}
+
+		return result;
 	}
 
 	private void TryCraft()
