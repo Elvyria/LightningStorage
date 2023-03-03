@@ -39,6 +39,7 @@ public class Locator : ModItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
+			.AddIngredient(ItemID.GPS)
 			.AddIngredient(ItemID.MeteoriteBar, 10)
 			.AddIngredient(ItemID.Amber, 5)
 			.AddTile(TileID.Anvils)
