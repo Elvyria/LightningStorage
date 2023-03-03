@@ -107,6 +107,8 @@ class StorageAccessUI : UIState, ISwitchable
 				sortMode = newSort;
 				RefreshItems();
 			}
+
+			SoundEngine.PlaySound(SoundID.MenuTick);
 		};
 
 		topBar.Append(sortButtons);
@@ -159,7 +161,7 @@ class StorageAccessUI : UIState, ISwitchable
 					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
 				});
 
-		filterButtons.OnClick += (a, b) =>
+		filterButtons.OnClick += (_, _) =>
 		{
 			IFilter<Item> newFilter = FilterMode.from(filterButtons.choice);
 			if (newFilter != filterMode)
@@ -167,6 +169,8 @@ class StorageAccessUI : UIState, ISwitchable
 				filterMode = newFilter;
 				RefreshItems();
 			}
+
+			SoundEngine.PlaySound(SoundID.MenuTick);
 		};
 
 		topBar2.Append(filterButtons);
@@ -187,7 +191,7 @@ class StorageAccessUI : UIState, ISwitchable
 		panel.Append(slotZone);
 
 		UIScrollableBar scrollbar = new UIScrollableBar();
-		scrollbar.Left.Pixels = 10f;
+		scrollbar.Left.Pixels = -30f;
 		slotZone.SetScrollbar(scrollbar);
 
 		panel.Append(scrollbar);

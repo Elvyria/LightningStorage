@@ -93,6 +93,7 @@ public class StoragePlayer : ModPlayer
 		Main.editChest = false;
 		Main.recBigList = false;
 
+		Player.sign = -1;
 		Player.chest = -1;
 
 		if (Player.talkNPC > -1)
@@ -104,7 +105,6 @@ public class StoragePlayer : ModPlayer
 
 		if (Main.editSign)
 		{
-			Player.sign = -1;
 			Main.editSign = false;
 			Main.npcChatText = string.Empty;
 		}
