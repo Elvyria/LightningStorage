@@ -32,19 +32,9 @@ public class StorageHeart : StorageAccess
 			return false;
 		}
 
-		(i, j) = Main.tile[i, j].FrameOrigin(i, j);
-
 		if (selectedItem.type == ModContent.ItemType<Locator>())
 		{
-			Locator locator = (Locator)selectedItem.ModItem;
-			locator.location = new Point16(i, j);
-			if (player.selectedItem == 58)
-			{
-				Main.mouseItem = selectedItem.Clone();
-			}
-			Main.NewText("Locator successfully set to: X=" + i + ", Y=" + j);
-
-			return true;
+			return false;
 		}
 
 		return base.RightClick(i, j);

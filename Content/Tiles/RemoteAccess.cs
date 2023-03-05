@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 
 using Terraria.DataStructures;
+
+using MagicStorage.Common.Players;
 using MagicStorage.Content.Items;
 using MagicStorage.Content.TileEntities;
 
@@ -25,28 +27,29 @@ public class RemoteAccess : StorageAccess
 
 	public override bool RightClick(int i, int j)
 	{
-		Item item = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-		if (item.type == ModContent.ItemType<Locator>())
+		Player player = Main.LocalPlayer;
+		Item selectedItem = player.inventory[player.selectedItem];
+
+		if (selectedItem.type == ModContent.ItemType<Locator>())
+		{
+			return false;
+		}
+
+		if (ItemSlot.ShiftInUse)
 		{
 			(i, j) = Main.tile[i, j].FrameOrigin(i, j);
+			Point16 pos = new Point16(i, j);
+			TERemoteAccess access = (TERemoteAccess) TileEntity.ByPosition[pos];
+			access.Reset();
 
-			TERemoteAccess ent = (TERemoteAccess)TileEntity.ByPosition[new Point16(i, j)];
-			Locator locator = (Locator)item.ModItem;
-			string message;
-			if (ent.TryLocate(locator.location, out message))
+			if (pos == StoragePlayer.LocalPlayer.ViewingStorage())
 			{
-				item.TurnToAir();
+				StoragePlayer.LocalPlayer.CloseStorage();
 			}
-			if (Main.LocalPlayer.selectedItem == 58)
-			{
-				Main.mouseItem = item.Clone();
-			}
-			Main.NewText(message);
-			return true;
+
+			return false;
 		}
-		else
-		{
-			return base.RightClick(i, j);
-		}
+
+		return base.RightClick(i, j);
 	}
 }

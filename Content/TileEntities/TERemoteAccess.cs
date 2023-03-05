@@ -16,7 +16,7 @@ public class TERemoteAccess : TEStorageCenter
 
 	public override TEStorageHeart? GetHeart()
 	{
-		if (locator != Point16.NegativeOne && !ByPosition.ContainsKey(locator) && ByPosition[locator] is TEStorageHeart heart)
+		if (locator != Point16.NegativeOne && ByPosition.ContainsKey(locator) && ByPosition[locator] is TEStorageHeart heart)
 		{
 			return heart;
 		}
@@ -24,23 +24,20 @@ public class TERemoteAccess : TEStorageCenter
 		return null;
 	}
 
-	public bool TryLocate(Point16 toLocate, out string message)
+	public void Reset()
 	{
-		if (locator != Point16.NegativeOne)
+		locator = Point16.NegativeOne;
+	}
+
+	public bool Bind(Point16 pos)
+	{
+		if (pos != Point16.NegativeOne && TileEntity.ByPosition.ContainsKey(pos) && TileEntity.ByPosition[pos] is TEStorageHeart)
 		{
-			message = "This Access already has a locator, please mine then replace to reset it";
-			return false;
+			locator = pos;
+			return true;
 		}
 
-		if (toLocate.X < 0 || toLocate.Y < 0)
-		{
-			message = "The locator has not been set to a destination";
-			return false;
-		}
-
-		message = "Success!";
-		locator = toLocate;
-		return true;
+		return false;
 	}
 
 	public override void Update()
