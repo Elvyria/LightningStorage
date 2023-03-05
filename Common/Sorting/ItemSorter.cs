@@ -32,21 +32,6 @@ public static class ItemSorter
 		return result;
 	}
 
-	public static Recipe[] SortAndFilter(Recipe[] recipes, IComparer<Item> sortMode, IFilter<Item> filterMode, string modFilter, string nameFilter)
-	{
-		Recipe[] result;
-
-		if (filterMode != FilterMode.All || modFilter.Length != 0 || nameFilter.Length != 0)
-		{
-			result = Array.FindAll(recipes, recipe => !recipe.createItem.IsAir && filterMode.Passes(recipe.createItem) && FilterName(recipe.createItem, modFilter, nameFilter));
-		}
-		else result = Array.FindAll(recipes, recipe => !recipe.createItem.IsAir);
-
-		Array.Sort(result, (a, b) => sortMode.Compare(a.createItem, b.createItem));
-
-		return result;
-	}
-
 	// Must be sorted
 	public static void Compact(List<Item> items)
 	{

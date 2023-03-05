@@ -16,7 +16,6 @@ public class TEStorageUnit : TEStorageComponent
 	private Point16 center;
 
 	private List<Item> items = new List<Item>();
-	private bool receiving = false;
 
 	private HashSet<ItemData> hasSpaceInStack = new HashSet<ItemData>();
 	private HashSet<ItemData> hasItem = new HashSet<ItemData>();

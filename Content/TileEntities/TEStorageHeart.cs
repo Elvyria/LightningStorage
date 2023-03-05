@@ -166,7 +166,7 @@ public class TEStorageHeart : TEStorageCenter
 		IEnumerable<TEStorageUnit> spaceUnits = activeUnits.Where(unit => !unit.IsEmpty && !unit.IsFull);
 		TEStorageUnit? unitWithSpace = spaceUnits.MaxBy(unit => unit.Capacity);
 
-		if (unitWithSpace == null)
+		if (unitWithSpace == null || spaceUnits.Count() < 2)
 		{
 			compactStage++;
 			return false;
@@ -174,7 +174,7 @@ public class TEStorageHeart : TEStorageCenter
 
 		foreach (TEStorageUnit unit in activeUnits)
 		{
-			if (unit != unitWithSpace)
+			if (unit != unitWithSpace && !unit.IsFull)
 			{
 				while (!unitWithSpace.IsFull && !unit.IsEmpty)
 				{

@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Linq;
 
 using Microsoft.Xna.Framework;
@@ -78,9 +77,10 @@ class CraftingAccessUI : UIState
 	private bool[] adjLiquids;
 	private List<Recipe.Condition> conditions;
 
+	private Recipe[] vanillaRecipes;
 	private List<Recipe> recipes;
 
-	private List<bool> recipeAvailable;
+	private bool[] recipeAvailable;
 
 	private Recipe selectedRecipe;
 
@@ -120,9 +120,9 @@ class CraftingAccessUI : UIState
 		float panelHeight = Main.screenHeight - panelTop - pannelBottom;
 
 		panel.Left.Set((int)(opening ? -panelWidth : panelLeft), 0f);
-		panel.Top.Set(panelTop, 0f);
-		panel.Width.Set(panelWidth, 0f);
-		panel.Height.Set(panelHeight, 0f);
+		panel.Top.Pixels = panelTop;
+		panel.Width.Pixels = panelWidth;
+		panel.Height.Pixels = panelHeight;
 		panel.Recalculate();
 
 		recipePanel = new UIPanel();
@@ -130,12 +130,12 @@ class CraftingAccessUI : UIState
 		float recipeWidth = columns2 * (smallSlotWidth + padding);
 		recipeWidth += recipePanel.PaddingLeft + recipePanel.PaddingRight;
 		recipePanel.Top = panel.Top;
-		recipePanel.Left.Set(recipeLeft, 0f);
-		recipePanel.Width.Set(recipeWidth, 0f);
+		recipePanel.Left.Pixels = recipeLeft;
+		recipePanel.Width.Pixels = recipeWidth;
 
 		UIElement topBar = new UIElement();
-		topBar.Width.Set(0f, 1f);
-		topBar.Height.Set(32f, 0f);
+		topBar.Width.Percent = 1f;
+		topBar.Height.Pixels = 32f;
 		panel.Append(topBar);
 
 		sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
@@ -170,20 +170,20 @@ class CraftingAccessUI : UIState
 
 		recipeButtons.OnClick += ClickRecipeButtons;
 		float recipeButtonsLeft = sortButtonsRight + 32f + 3 * padding;
-		recipeButtons.Left.Set(recipeButtonsLeft, 0f);
+		recipeButtons.Left.Pixels = recipeButtonsLeft;
 		topBar.Append(recipeButtons);
 		float recipeButtonsRight = recipeButtonsLeft + recipeButtons.GetDimensions().Width + padding;
 
 		searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
 		searchBar.Left.Set(recipeButtonsRight + padding, 0f);
 		searchBar.Width.Set(-recipeButtonsRight - 2 * padding, 1f);
-		searchBar.Height.Set(0f, 1f);
+		searchBar.Height.Percent = 1f;
 		topBar.Append(searchBar);
 
 		UIElement topBar2 = new UIElement();
-		topBar2.Width.Set(0f, 1f);
-		topBar2.Height.Set(32f, 0f);
-		topBar2.Top.Set(36f, 0f);
+		topBar2.Width.Percent = 1f;
+		topBar2.Height.Pixels = 32f;
+		topBar2.Top.Pixels = 36f;
 		panel.Append(topBar2);
 
 		filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
@@ -216,25 +216,25 @@ class CraftingAccessUI : UIState
 		searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
 		searchBar2.Left.Set(filterButtonsRight + padding, 0f);
 		searchBar2.Width.Set(-filterButtonsRight - 2 * padding, 1f);
-		searchBar2.Height.Set(0f, 1f);
+		searchBar2.Height.Percent = 1f;
 		topBar2.Append(searchBar2);
 
 		UIText stationText = new UIText(Language.GetText("Mods.MagicStorage.Common.CraftingStations"));
-		stationText.Top.Set(76f, 0f);
+		stationText.Top.Pixels = 76f;
 		panel.Append(stationText);
 
 		stationZone = new UISlotZone(GetStation, inventoryScale);
-		stationZone.Top.Set(100f, 0f);
+		stationZone.Top.Pixels = 100f;
 		stationZone.SetDimensions(columns, 1);
 		stationZone.OnMouseDown += PressStation;
 		panel.Append(stationZone);
 
 		UIText recipeText = new UIText(Language.GetText("Mods.MagicStorage.Common.Recipes"));
-		recipeText.Top.Set(152f, 0f);
+		recipeText.Top.Pixels = 152f;
 		panel.Append(recipeText);
 
 		recipeZone = new UISlotZone(GetRecipe, GetRecipeColor, GetRecipeSlotTexture, inventoryScale);
-		recipeZone.Top.Set(176f, 0f);
+		recipeZone.Top.Pixels = 176f;
 		recipeZone.OnMouseDown += PressRecipe;
 		panel.Append(recipeZone);
 
@@ -249,40 +249,39 @@ class CraftingAccessUI : UIState
 		recipePanel.Append(recipePanelHeader);
 
 		UIText ingredientText = new UIText(Language.GetText("Mods.MagicStorage.Common.Ingredients"));
-		ingredientText.Top.Set(30f, 0f);
+		ingredientText.Top.Pixels = 30f;
 		recipePanel.Append(ingredientText);
 
 		previewZone = new UISlotZone(GetSelectedItem, inventoryScale);
-		previewZone.Top.Set(0f, 0f);
 		previewZone.Left.Set(-slotWidth, 1f);
 		recipePanel.Append(previewZone);
 
 		ingredientZone = new UISlotZone(GetIngredient, GetIngredientColor, GetIngredientSlotTexture, smallScale);
-		ingredientZone.Top.Set(54f, 0f);
+		ingredientZone.Top.Pixels = 54f;
 		ingredientZone.SetDimensions(recipePanelColumns, ingredientRows);
 		ingredientZone.OnMouseDown += PressIngredient;
 		recipePanel.Append(ingredientZone);
 
 		UIText reqObjText = new UIText(Language.GetText("LegacyInterface.22"));
-		reqObjText.Top.Set(136f, 0f);
+		reqObjText.Top.Pixels = 136f;
 		recipePanel.Append(reqObjText);
 
 		reqObjText2 = new UIText(string.Empty);
-		reqObjText2.Top.Set(160f, 0f);
+		reqObjText2.Top.Pixels = 160f;
 		recipePanel.Append(reqObjText2);
 
 		UIText storedItemsText = new UIText(Language.GetText("Mods.MagicStorage.Common.StoredItems"));
-		storedItemsText.Top.Set(190f, 0f);
+		storedItemsText.Top.Pixels = 190f;
 		recipePanel.Append(storedItemsText);
 
 		storageZone = new UISlotZone(GetStorage, smallScale);
-		storageZone.Top.Set(214f, 0f);
+		storageZone.Top.Pixels = 214f;
 		recipePanel.Append(storageZone);
 
 		craftButton = new UITextPanel<LocalizedText>(Language.GetText("LegacyMisc.72"), 1f);
 		craftButton.Top.Set(-32f, 1f);
-		craftButton.Width.Set(100f, 0f);
-		craftButton.Height.Set(24f, 0f);
+		craftButton.Width.Pixels = 100f;
+		craftButton.Height.Pixels = 24f;
 		craftButton.PaddingTop = 8f;
 		craftButton.PaddingBottom = 8f;
 
@@ -307,7 +306,7 @@ class CraftingAccessUI : UIState
 			}
 		}
 
-		recipePanel.Height.Set(recipeHeight, 0f);
+		recipePanel.Height.Pixels = recipeHeight;
 		recipePanel.Recalculate();
 
 		Append(panel);
@@ -345,6 +344,9 @@ class CraftingAccessUI : UIState
 			return;
 		}
 
+		vanillaRecipes = Array.FindAll(Main.recipe, recipe => !recipe.createItem.IsAir);
+		Array.Sort(vanillaRecipes, (a, b) => SortMode.Default.Compare(a.createItem, b.createItem));
+
 		adjTiles = new bool[player.adjTile.Length];
 		adjLiquids= new bool[Main.maxLiquidTypes];
 		ingredients = new List<Item>(4);
@@ -373,6 +375,7 @@ class CraftingAccessUI : UIState
 		stackDelay = 7;
 		stackCounter = 0;
 
+		vanillaRecipes = null;
 		recipes = null;
 		recipeAvailable = null;
 		selectedRecipe = null;
@@ -670,7 +673,7 @@ class CraftingAccessUI : UIState
 
 	private Texture2D GetIngredientSlotTexture(int slot)
 	{
-		if (slot >= 0 && slot < craftableIngredients.Count && recipes[slot] == selectedRecipe && craftableIngredients[slot] == 1)
+		if (slot >= 0 && slot < craftableIngredients.Count && craftableIngredients[slot] == 1)
 		{
 			return TextureAssets.InventoryBack16.Value;
 		}
@@ -728,55 +731,39 @@ class CraftingAccessUI : UIState
 
 	private void UpdateRecipeText()
 	{
-		StringBuilder builder = new StringBuilder();
-
-		for (int k = 0; k < selectedRecipe.requiredTile.Count; k++)
-		{
-			if (selectedRecipe.requiredTile[k] == -1)
-			{
-				break;
-			}
-
-			if (builder.Length != 0) builder.Append(", ");
-
-			builder.Append(Lang.GetMapObjectName(MapHelper.TileToLookup(selectedRecipe.requiredTile[k], 0)));
-		}
+		List<string> conditions;
+		conditions = selectedRecipe.requiredTile
+			.Select(MapHelper.TileToLookup)
+			.Select(Lang.GetMapObjectName)
+			.ToList();
 
 		if (selectedRecipe.HasCondition(Recipe.Condition.NearWater))
 		{
-			if (builder.Length != 0) builder.Append(", ");
-
-			builder.Append(Language.GetTextValue("LegacyInterface.53"));
+			conditions.Add(Language.GetTextValue("LegacyInterface.53"));
 		}
 
 		if (selectedRecipe.HasCondition(Recipe.Condition.NearHoney))
 		{
-			if (builder.Length != 0) builder.Append(", ");
-
-			builder.Append(Language.GetTextValue("LegacyInterface.58"));
+			conditions.Add(Language.GetTextValue("LegacyInterface.58"));
 		}
 
 		if (selectedRecipe.HasCondition(Recipe.Condition.NearLava))
 		{
-			if (builder.Length != 0) builder.Append(", ");
-
-			builder.Append(Language.GetTextValue("LegacyInterface.56"));
+			conditions.Add(Language.GetTextValue("LegacyInterface.56"));
 		}
 
 		if (selectedRecipe.HasCondition(Recipe.Condition.InSnow))
 		{
-			if (builder.Length != 0) builder.Append(", ");
-
-			builder.Append(Language.GetTextValue("LegacyInterface.123"));
+			conditions.Add(Language.GetTextValue("LegacyInterface.123"));
 		}
 
-		if (builder.Length == 0)
+		if (conditions.Count == 0)
 		{
 			reqObjText2.SetText(Language.GetTextValue("LegacyInterface.23"));
 		}
 		else
 		{
-			reqObjText2.SetText(builder.ToString());
+			reqObjText2.SetText(string.Join(", ", conditions));
 		}
 	}
 
@@ -828,17 +815,22 @@ class CraftingAccessUI : UIState
 
 	private void RefreshRecipes()
 	{
-		Recipe[] temp = ItemSorter.SortAndFilter(Main.recipe, sortMode, filterMode, modFilter, nameFilter);
+		Recipe[] newRecipes = Filter(vanillaRecipes, filterMode, nameFilter, modFilter);
+		if (sortMode != SortMode.Default)
+		{
+			Sort(newRecipes, sortMode);
+		}
 
 		if (recipeMode == RecipeMode.Available)
 		{
-			recipes = temp.AsParallel().AsOrdered().Where(recipe => IsAvailable(recipe)).ToList();
-			recipeAvailable = temp.Select(recipe => true).ToList();
+			recipes = newRecipes.AsParallel().AsOrdered().Where(IsAvailable).ToList();
+			recipeAvailable = new bool[recipes.Count];
+			Array.Fill(recipeAvailable, true);
 		}
 		else if (recipeMode == RecipeMode.All)
 		{
-			recipes = temp.ToList();
-			recipeAvailable = temp.AsParallel().AsOrdered().Select(recipe => IsAvailable(recipe)).ToList();
+			recipes = newRecipes.ToList();
+			recipeAvailable = newRecipes.AsParallel().AsOrdered().Select(IsAvailable).ToArray();
 		}
 
 		recipeZone.UpdateScrollBar((recipes.Count + columns - 1) / columns);
@@ -900,31 +892,13 @@ class CraftingAccessUI : UIState
 		if (recipe.Conditions.Any(c => !(conditions.Contains(c) || c.RecipeAvailable(recipe))))
 			return false;
 
-		foreach (Item ingredient in recipe.requiredItem)
-		{
-			if (itemCounts.ContainsKey(ingredient.type) && itemCounts[ingredient.type] >= ingredient.stack)
-			{
-				continue;
-			}
+		return recipe.requiredItem.TrueForAll(ingredient => EnoughOf(recipe, ingredient));
+	}
 
-			bool enough = false;
-
-			foreach (int id in recipe.acceptedGroups)
-			{
-				if (RecipeGroup.recipeGroups[id].ContainsItem(ingredient.type) && recipeGroupCounts[id] >= ingredient.stack)
-				{
-					enough = true;
-					break;
-				}
-			}
-
-			if (!enough)
-			{
-				return false;
-			}
-		}
-
-		return true;
+	private bool EnoughOf(Recipe recipe, Item item)
+	{
+		return itemCounts.ContainsKey(item.type) && itemCounts[item.type] >= item.stack
+			|| recipe.acceptedGroups.Any(id => RecipeGroup.recipeGroups[id].ContainsItem(item.type) && recipeGroupCounts[id] >= item.stack);
 	}
 
 	private void RefreshStorageItems()
@@ -948,10 +922,6 @@ class CraftingAccessUI : UIState
 
 				foreach (Item ingredient in selectedRecipe.requiredItem)
 				{
-					if (ingredient.type == 0)
-					{
-						break;
-					}
 					if (item.type == ingredient.type || RecipeGroupMatch(selectedRecipe, ingredient.type, item.type))
 					{
 						storageItems.Add(item.Clone());
@@ -1139,9 +1109,13 @@ class CraftingAccessUI : UIState
 				{
 					craftableIngredients.Add(0);
 				}
-				else
+				else if (!EnoughOf(selectedRecipe, ingredient))
 				{
 					craftableIngredients.Add(available ? (byte) 1 : (byte) 2);
+				}
+				else
+				{
+					craftableIngredients.Add(0);
 				}
 			}
 
@@ -1154,7 +1128,7 @@ class CraftingAccessUI : UIState
 		available = false;
 		Recipe? result = null;
 
-		foreach (Recipe recipe in Main.recipe)
+		foreach (Recipe recipe in vanillaRecipes)
 		{
 			if (recipe.createItem.type == item.type)
 			{
@@ -1237,7 +1211,7 @@ class CraftingAccessUI : UIState
 		}
 	}
 
-	internal List<Item> Craft(List<Item> toWithdraw, Item result)
+	internal IEnumerable<Item> Craft(List<Item> toWithdraw, Item result)
 	{
 		List<Item> items = new List<Item>(toWithdraw.Count);
 		foreach (Item tryWithdraw in toWithdraw)
@@ -1271,5 +1245,15 @@ class CraftingAccessUI : UIState
 		}
 
 		return items;
+	}
+
+	public static void Sort(Recipe[] recipes, IComparer<Item> sortMode)
+	{
+		Array.Sort(recipes, (a, b) => sortMode.Compare(a.createItem, b.createItem));
+	}
+
+	public static Recipe[] Filter(Recipe[] recipes, IFilter<Item> filter, string nameFilter, string modFilter)
+	{
+		return Array.FindAll(recipes, recipe => filter.Passes(recipe.createItem) && ItemSorter.FilterName(recipe.createItem, modFilter, nameFilter));
 	}
 }
