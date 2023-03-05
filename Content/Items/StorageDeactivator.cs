@@ -26,14 +26,7 @@ public class StorageDeactivator : ModItem
 		{
 			int i = Player.tileTargetX;
 			int j = Player.tileTargetY;
-			if (Main.tile[i, j].TileFrameX % 36 == 18)
-			{
-				i--;
-			}
-			if (Main.tile[i, j].TileFrameY % 36 == 18)
-			{
-				j--;
-			}
+			(i, j) = Main.tile[i, j].FrameOrigin(i, j);
 			Point16 point = new Point16(i, j);
 			if (TileEntity.ByPosition.ContainsKey(point) && TileEntity.ByPosition[point] is TEStorageUnit storageUnit)
 			{

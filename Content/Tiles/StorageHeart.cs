@@ -32,14 +32,7 @@ public class StorageHeart : StorageAccess
 			return false;
 		}
 
-		if (Main.tile[i, j].TileFrameX % 36 == 18)
-		{
-			i--;
-		}
-		if (Main.tile[i, j].TileFrameY % 36 == 18)
-		{
-			j--;
-		}
+		(i, j) = Main.tile[i, j].FrameOrigin(i, j);
 
 		if (selectedItem.type == ModContent.ItemType<Locator>())
 		{

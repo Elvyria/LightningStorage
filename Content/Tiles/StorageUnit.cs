@@ -84,14 +84,7 @@ public class StorageUnit : StorageComponent
 
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
-		if (Main.tile[i, j].TileFrameX % 36 == 18)
-		{
-			i--;
-		}
-		if (Main.tile[i, j].TileFrameY % 36 == 18)
-		{
-			j--;
-		}
+		(i, j) = Main.tile[i, j].FrameOrigin(i, j);
 
 		Point16 pos = new Point16(i, j);
 		if (TileEntity.ByPosition.ContainsKey(pos) && TileEntity.ByPosition[pos] is TEStorageUnit unitEntity)
@@ -102,14 +95,7 @@ public class StorageUnit : StorageComponent
 
 	public override bool RightClick(int i, int j)
 	{
-		if (Main.tile[i, j].TileFrameX % 36 == 18)
-		{
-			i--;
-		}
-		if (Main.tile[i, j].TileFrameY % 36 == 18)
-		{
-			j--;
-		}
+		(i, j) = Main.tile[i, j].FrameOrigin(i, j);
 
 		if (TryUpgrade(i, j))
 		{

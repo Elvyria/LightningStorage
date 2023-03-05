@@ -80,15 +80,7 @@ public abstract class TEStorageComponent : ModTileEntity
 
             if (TileLoader.GetTile(tile.TileType) is StorageComponent)
             {
-                if (tile.TileFrameX % 36 == 18)
-                {
-						checkX--;
-                }
-					
-                if (tile.TileFrameY % 36 == 18)
-                {
-						checkY--;
-                }
+				(checkX, checkY) = tile.FrameOrigin(checkX, checkY);
 
 					Point16 check = new Point16(checkX, checkY);
                 if (!points.Contains(check))

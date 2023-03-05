@@ -59,15 +59,7 @@ public class StorageAccess : StorageComponent
 
 	public override bool RightClick(int i, int j)
 	{
-		if (Main.tile[i, j].TileFrameX % 36 == 18)
-		{
-			i--;
-		}
-
-		if (Main.tile[i, j].TileFrameY % 36 == 18)
-		{
-			j--;
-		}
+		(i, j) = Main.tile[i, j].FrameOrigin(i, j);
 
 		if (GetHeart(i, j) == null)
 		{

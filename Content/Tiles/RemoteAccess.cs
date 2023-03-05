@@ -28,14 +28,8 @@ public class RemoteAccess : StorageAccess
 		Item item = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
 		if (item.type == ModContent.ItemType<Locator>())
 		{
-			if (Main.tile[i, j].TileFrameX % 36 == 18)
-			{
-				i--;
-			}
-			if (Main.tile[i, j].TileFrameX % 36 == 18)
-			{
-				j--;
-			}
+			(i, j) = Main.tile[i, j].FrameOrigin(i, j);
+
 			TERemoteAccess ent = (TERemoteAccess)TileEntity.ByPosition[new Point16(i, j)];
 			Locator locator = (Locator)item.ModItem;
 			string message;

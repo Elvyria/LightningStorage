@@ -34,14 +34,7 @@ public class PortableAccess : ModItem
 
 			Tile tile = Main.tile[i, j];
 
-			if (tile.TileFrameX % 36 == 18)
-			{
-				i--;
-			}
-			if (tile.TileFrameY % 36 == 18)
-			{
-				j--;
-			}
+			(i, j) = tile.FrameOrigin(i, j);
 
 			if (tile.HasTile && tile.TileType == ModContent.TileType<Tiles.StorageHeart>())
 			{
