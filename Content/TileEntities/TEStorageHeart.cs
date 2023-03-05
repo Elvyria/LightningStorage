@@ -11,7 +11,7 @@ namespace MagicStorage.Content.TileEntities;
 public class TEStorageHeart : TEStorageCenter
 {
 	public List<Point16> remoteAccesses = new List<Point16>();
-	private int updateTimer = 60;
+	private int updateTimer = 0;
 	private CompactStage compactStage = CompactStage.Emptying;
 
 	enum CompactStage
@@ -48,21 +48,9 @@ public class TEStorageHeart : TEStorageCenter
 
 	public override void Update()
 	{
-		for (int k = 0; k < remoteAccesses.Count; k++)
-		{
-			if (!ByPosition.ContainsKey(remoteAccesses[k]) || !(ByPosition[remoteAccesses[k]] is TERemoteAccess))
-			{
-				remoteAccesses.RemoveAt(k);
-				k--;
-			}
-		}
+		remoteAccesses.RemoveAll(access => !ByPosition.ContainsKey(access) || ByPosition[access] is not TERemoteAccess);
 
-		if (updateTimer < 100)
-		{
-			updateTimer++;
-		}
-
-		if (updateTimer == 100 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
+		if (++updateTimer >= 100 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
 		{
 			updateTimer = 0;
 			Compact();

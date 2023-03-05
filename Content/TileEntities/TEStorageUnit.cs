@@ -67,11 +67,7 @@ public class TEStorageUnit : TEStorageComponent
 		return tile.HasTile && tile.TileType == ModContent.TileType<StorageUnit>();
 	}
 
-	public bool HasSpaceInStackFor(Item check)
-	{
-		ItemData data = new ItemData(check);
-		return hasSpaceInStack.Contains(data);
-	}
+	public bool HasSpaceInStackFor(Item check) => hasSpaceInStack.Contains(new ItemData(check));
 
 	public bool HasSpaceFor(Item check) => !IsFull || HasSpaceInStackFor(check);
 

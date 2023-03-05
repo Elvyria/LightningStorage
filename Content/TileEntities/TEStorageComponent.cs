@@ -75,14 +75,14 @@ public abstract class TEStorageComponent : ModTileEntity
                     points.Add(check);
                 }
 
-					continue;
+				continue;
             }
 
             if (TileLoader.GetTile(tile.TileType) is StorageComponent)
             {
 				(checkX, checkY) = tile.FrameOrigin(checkX, checkY);
 
-					Point16 check = new Point16(checkX, checkY);
+				Point16 check = new Point16(checkX, checkY);
                 if (!points.Contains(check))
                 {
                     points.Add(check);
