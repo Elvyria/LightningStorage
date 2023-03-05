@@ -1,164 +1,75 @@
-
 Mods: {
 	MagicStorage: {
-		Items: {
-			UpgradeBlueChlorophyte: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Clorofita Azul)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 240
-					<right> en la unidad de almacenamiento (Sagrado) para utilizar
-					'''
-			}
+		ItemName: {
+			UpgradeBlueChlorophyte: Actualización de Unidad de Almacenamiento (Clorofita Azul)
+			StorageConnector: Conector de Almacenamiento
+			UpgradeCrimtane: Actualización de Unidad de Almacenamiento (Carmesí)
+			CraftingAccess: Interfaz de Elaboración de almacenamiento
+			UpgradeHallowed: Actualización de Unidad de Almacenamiento (Sagrado)
+			StorageUnitTerra: Unidad de Almacenamiento (Tierra)
+			StorageUnitHallowed: Unidad de Almacenamiento (Sagrado)
+			UpgradeLuminite: Actualización de Unidad de Almacenamiento (Luminita)
+			UpgradeHellstone: Actualización de Unidad de Almacenamiento (Piedra Infernal)
+			UpgradeDemonite: Actualización de Unidad de Almacenamiento (Endemoniado)
+			StorageDeactivator: Varita de unidad de almacenamiento
+			StorageUnitHellstone: Unidad de Almacenamiento (Piedra Infernal)
+			StorageHeart: Corazón de Almacenamiento
+			StorageUnitDemonite: Unidad de Almacenamiento (Endemoniado)
+			StorageUnit: Unidad de Almacenamiento
+			StorageUnitCrimtane: Unidad de Almacenamiento (Carmesí)
+			UpgradeTerra: Actualización de Unidad de Almacenamiento (Tierra)
+			StorageUnitLuminite: Unidad de Almacenamiento (Luminita)
+			StorageComponent: Componente de Almacenamiento
+			StorageUnitBlueChlorophyte: Unidad de Almacenamiento (Clorofita Azul)
+			StorageUnitTiny: Unidad de Almacenamiento Minúsculo
+			RemoteAccess: Acceso a Almacenamiento Remoto
+			StorageAccess: Acceso de Almacenamiento
+			Locator: Locador
+		}
 
-			PortableAccess: {
-				/* DisplayName: Portable Remote Storage Access */
-				/* Tooltip:
-					'''
-					<right> Storage Heart to store location
-					Currently not set to any location
-					Use item to access your storage
-					''' */
-			}
-
-			UpgradeCrimtane: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Carmesí)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 80
-					<right> en la unidad de almacenamiento para utilizar
-					'''
-			}
-
-			CraftingAccess: {
-				DisplayName: Interfaz de Elaboración de almacenamiento
-			}
-
-			UpgradeHallowed: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Sagrado)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 160
-					<right> en la unidad de almacenamiento (Piedra Infernal) para utilizar
-					'''
-			}
-
-			StorageUnitTerra: {
-				DisplayName: Unidad de Almacenamiento (Tierra)
-			}
-
-			StorageUnitHallowed: {
-				DisplayName: Unidad de Almacenamiento (Sagrado)
-			}
-
-			UpgradeLuminite: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Luminita)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 320
-					<right> en la unidad de almacenamiento (Clorofita Azul) para utilizar
-					'''
-			}
-
-			UpgradeHellstone: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Piedra Infernal)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 120
-					<right> en la unidad de almacenamiento (Endemoniado/Carmesí) para utilizar
-					'''
-			}
-
-			UpgradeDemonite: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Endemoniado)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 80
-					<right> en la unidad de almacenamiento para utilizar
-					'''
-			}
-
-			StorageDeactivator: {
-				DisplayName: Varita de unidad de almacenamiento
-				Tooltip: <right> para cambiar el unidad de almacenamiento activo/inactivo
-			}
-
-			StorageUnitHellstone: {
-				DisplayName: Unidad de Almacenamiento (Piedra Infernal)
-			}
-
-			StorageUnitDemonite: {
-				DisplayName: Unidad de Almacenamiento (Endemoniado)
-			}
-
-			StorageUnitCrimtane: {
-				DisplayName: Unidad de Almacenamiento (Carmesí)
-			}
-
-			UpgradeTerra: {
-				DisplayName: Actualización de Unidad de Almacenamiento (Tierra)
-				Tooltip:
-					'''
-					Capacidad de unidad de almacenamiento mejorada a 640
-					<right> en la unidad de almacenamiento (Luminita) para utilizar
-					'''
-			}
-
-			StorageUnitLuminite: {
-				DisplayName: Unidad de Almacenamiento (Luminita)
-			}
-
-			StorageUnitBlueChlorophyte: {
-				DisplayName: Unidad de Almacenamiento (Clorofita Azul)
-			}
-
-			StorageUnitTiny: {
-				DisplayName: Unidad de Almacenamiento Minúsculo
-			}
-
-			RemoteAccess: {
-				DisplayName: Acceso a Almacenamiento Remoto
-			}
-
-			LocatorDisk: {
-				DisplayName: Disco Locador
-				Tooltip:
-					'''
-					<right> el Corazón de Almacenamiento para registrar su ubicación
-					<right> el Acceso de Almacenamiento Remoto para establecerlo
-					No se destruye cuando se usa
-					'''
-			}
-
-			StorageConnector: {
-				DisplayName: Conector de Almacenamiento
-			}
-
-			StorageHeart: {
-				DisplayName: Corazón de Almacenamiento
-			}
-
-			StorageUnit: {
-				DisplayName: Unidad de Almacenamiento
-			}
-
-			StorageComponent: {
-				DisplayName: Componente de Almacenamiento
-			}
-
-			StorageAccess: {
-				DisplayName: Acceso de Almacenamiento
-			}
-
-			Locator: {
-				DisplayName: Locador
-				Tooltip:
-					'''
-					<right> el Corazón de Almacenamiento para registrar su ubicación
-					<right> el Acceso de Almacenamiento Remoto para establecerlo
-					<right> Stockage Éloigné pour le mettre en place
-					'''
-			}
+		ItemTooltip: {
+			UpgradeBlueChlorophyte:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 240
+				<right> en la unidad de almacenamiento (Sagrado) para utilizar
+				'''
+			UpgradeCrimtane:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 80
+				<right> en la unidad de almacenamiento para utilizar
+				'''
+			UpgradeHallowed:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 160
+				<right> en la unidad de almacenamiento (Piedra Infernal) para utilizar
+				'''
+			UpgradeLuminite:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 320
+				<right> en la unidad de almacenamiento (Clorofita Azul) para utilizar
+				'''
+			UpgradeHellstone:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 120
+				<right> en la unidad de almacenamiento (Endemoniado/Carmesí) para utilizar
+				'''
+			UpgradeDemonite:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 80
+				<right> en la unidad de almacenamiento para utilizar
+				'''
+			StorageDeactivator: <right> para cambiar el unidad de almacenamiento activo/inactivo
+			UpgradeTerra:
+				'''
+				Capacidad de unidad de almacenamiento mejorada a 640
+				<right> en la unidad de almacenamiento (Luminita) para utilizar
+				'''
+			Locator:
+				'''
+				<right> el Corazón de Almacenamiento para registrar su ubicación
+				<right> el Acceso de Almacenamiento Remoto para establecerlo
+				<right> Stockage Éloigné pour le mettre en place
+				'''
 		}
 
 		Common: {
@@ -180,42 +91,11 @@ Mods: {
 			SearchName: búsqueda por nombre
 			SelectedRecipe: Receta seleccionada
 			SetTo: Ajustado a: X={0}, Y={1}
-			SnowBiomeBlock: Bloque de Biomas de la Nieve
 			SortDefault: Clasificación por defecto
 			SortID: Ordenar por ID
 			SortName: Ordenar por nombre
 			SortStack: Ordenar por pilas
 			StoredItems: Ingredientes almacenados
-		}
-
-		Tiles: {
-			CraftingAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			RemoteAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageComponent: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageConnector: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageHeart: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageUnit: {
-				/* MapEntry: Magic Storage */
-			}
 		}
 	}
 }

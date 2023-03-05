@@ -1,163 +1,81 @@
-
 Mods: {
 	MagicStorage: {
-		Items: {
-			UpgradeBlueChlorophyte: {
-				DisplayName: 存储升级珠(蓝色叶绿)
-				Tooltip:
-					'''
-					将存储单元升级至240容量
-					<right>一个存储单元(神圣)可镶嵌
-					'''
-			}
+		ItemName: {
+			UpgradeBlueChlorophyte: 存储升级珠(蓝色叶绿)
+			PortableAccess: 便携式远程存储装置
+			StorageConnector: 存储连接器
+			UpgradeCrimtane: 存储升级珠(血腥))
+			CraftingAccess: 制作存储单元
+			UpgradeHallowed: 存储升级珠(神圣)
+			StorageUnitTerra: 存储单元(泰拉)
+			StorageUnitHallowed: 存储单元(神圣)
+			UpgradeLuminite: 存储升级珠(夜明)
+			UpgradeHellstone: 存储升级珠(狱岩)
+			UpgradeDemonite: 存储升级珠(魔金)
+			StorageDeactivator: 存储单元魔杖
+			StorageUnitHellstone: 存储单元(狱岩)
+			StorageHeart: 存储核心
+			StorageUnitDemonite: 存储单元(魔金)
+			StorageUnit: 存储单元
+			StorageUnitCrimtane: 存储单元(血腥)
+			UpgradeTerra: 存储升级珠(泰拉)
+			StorageUnitLuminite: 存储单元(夜明)
+			StorageComponent: 存储组件
+			StorageUnitBlueChlorophyte: 存储单元(蓝色叶绿)
+			StorageUnitTiny: 存储单元(小)
+			RemoteAccess: 远程存储装置
+			StorageAccess: 存储装置
+			Locator: 定位器
+		}
 
-			PortableAccess: {
-				DisplayName: 便携式远程存储装置
-				Tooltip:
-					'''
-					<right>存储核心可储存其定位点
-					目前未设置为任何位置
-					使用可直接访问你的存储
-					'''
-			}
-
-			UpgradeCrimtane: {
-				DisplayName: 存储升级珠(血腥))
-				Tooltip:
-					'''
-					将存储单元升级至80容量
-					<right>一个存储单元(血腥)可镶嵌
-					'''
-			}
-
-			CraftingAccess: {
-				DisplayName: 制作存储单元
-			}
-
-			UpgradeHallowed: {
-				DisplayName: 存储升级珠(神圣)
-				Tooltip:
-					'''
-					将存储单元升级至160容量
-					<right>一个存储单元(神圣)可镶嵌
-					'''
-			}
-
-			StorageUnitTerra: {
-				DisplayName: 存储单元(泰拉)
-			}
-
-			StorageUnitHallowed: {
-				DisplayName: 存储单元(神圣)
-			}
-
-			UpgradeLuminite: {
-				DisplayName: 存储升级珠(夜明)
-				Tooltip:
-					'''
-					将存储单元升级至320容量
-					<right>一个存储单元(夜明)可镶嵌
-					'''
-			}
-
-			UpgradeHellstone: {
-				DisplayName: 存储升级珠(狱岩)
-				Tooltip:
-					'''
-					将存储单元升级至120容量
-					<right>一个存储单元(血腥/魔金)可镶嵌
-					'''
-			}
-
-			UpgradeDemonite: {
-				DisplayName: 存储升级珠(魔金)
-				Tooltip:
-					'''
-					将存储单元升级至80容量
-					<right>一个存储单元(魔金)可镶嵌
-					'''
-			}
-
-			StorageDeactivator: {
-				DisplayName: 存储单元魔杖
-				Tooltip: <right>存储单元使其切换启用/禁用
-			}
-
-			StorageUnitHellstone: {
-				DisplayName: 存储单元(狱岩)
-			}
-
-			StorageUnitDemonite: {
-				DisplayName: 存储单元(魔金)
-			}
-
-			StorageUnitCrimtane: {
-				DisplayName: 存储单元(血腥)
-			}
-
-			UpgradeTerra: {
-				DisplayName: 存储升级珠(泰拉)
-				Tooltip:
-					'''
-					将存储单元升级至640容量
-					<right>一个存储单元(泰拉)可镶嵌
-					'''
-			}
-
-			StorageUnitLuminite: {
-				DisplayName: 存储单元(夜明)
-			}
-
-			StorageUnitBlueChlorophyte: {
-				DisplayName: 存储单元(蓝色叶绿)
-			}
-
-			StorageUnitTiny: {
-				DisplayName: 存储单元(小)
-			}
-
-			RemoteAccess: {
-				DisplayName: 远程存储装置
-			}
-
-			LocatorDisk: {
-				DisplayName: 定位器驱动
-				Tooltip:
-					'''
-					<right>存储核心可储存其定位点
-					<right>远程存储装置以设置其定位点
-					使用后不再损坏
-					'''
-			}
-
-			StorageConnector: {
-				DisplayName: 存储连接器
-			}
-
-			StorageHeart: {
-				DisplayName: 存储核心
-			}
-
-			StorageUnit: {
-				DisplayName: 存储单元
-			}
-
-			StorageComponent: {
-				DisplayName: 存储组件
-			}
-
-			StorageAccess: {
-				DisplayName: 存储装置
-			}
-
-			Locator: {
-				DisplayName: 定位器
-				Tooltip:
-					'''
-					<right>存储核心可储存其定位点
-					<right>远程存储装置以设置其定位点
-					'''
-			}
+		ItemTooltip: {
+			UpgradeBlueChlorophyte:
+				'''
+				将存储单元升级至240容量
+				<right>一个存储单元(神圣)可镶嵌
+				'''
+			PortableAccess:
+				'''
+				<right>存储核心可储存其定位点
+				目前未设置为任何位置
+				使用可直接访问你的存储
+				'''
+			UpgradeCrimtane:
+				'''
+				将存储单元升级至80容量
+				<right>一个存储单元(血腥)可镶嵌
+				'''
+			UpgradeHallowed:
+				'''
+				将存储单元升级至160容量
+				<right>一个存储单元(神圣)可镶嵌
+				'''
+			UpgradeLuminite:
+				'''
+				将存储单元升级至320容量
+				<right>一个存储单元(夜明)可镶嵌
+				'''
+			UpgradeHellstone:
+				'''
+				将存储单元升级至120容量
+				<right>一个存储单元(血腥/魔金)可镶嵌
+				'''
+			UpgradeDemonite:
+				'''
+				将存储单元升级至80容量
+				<right>一个存储单元(魔金)可镶嵌
+				'''
+			StorageDeactivator: <right>存储单元使其切换启用/禁用
+			UpgradeTerra:
+				'''
+				将存储单元升级至640容量
+				<right>一个存储单元(泰拉)可镶嵌
+				'''
+			Locator:
+				'''
+				<right>存储核心可储存其定位点
+				<right>远程存储装置以设置其定位点
+				'''
 		}
 
 		Common: {
@@ -179,42 +97,11 @@ Mods: {
 			SearchName: 搜索名称
 			SelectedRecipe: 选择配方
 			SetTo: 已设置为: X={0}, Y={1}
-			SnowBiomeBlock: 雪地环境方块
 			SortDefault: 默认排序
 			SortID: 按ID排序
 			SortName: 按名称排序
 			SortStack: 按堆栈排序
 			StoredItems: 存储中的材料
-		}
-
-		Tiles: {
-			CraftingAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			RemoteAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageAccess: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageComponent: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageConnector: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageHeart: {
-				/* MapEntry: Magic Storage */
-			}
-
-			StorageUnit: {
-				/* MapEntry: Magic Storage */
-			}
 		}
 	}
 }
