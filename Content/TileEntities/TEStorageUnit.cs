@@ -217,7 +217,7 @@ public class TEStorageUnit : TEStorageComponent
 			.ToList();
 
 		tag.Set("Active", active);
-		tag.Set("Center", center);
+		tag.SetPoint16("Center", center);
 		tag.Set("Items",  tagItems);
 	}
 

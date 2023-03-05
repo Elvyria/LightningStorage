@@ -12,7 +12,7 @@ public static class TagExtensions
 		return new TagCompound() {{ "X", p.X }, { "Y", p.Y }};
 	}
 
-	public static void Create(this TagCompound tag, string key, Point16 p)
+	public static void SetPoint16(this TagCompound tag, string key, Point16 p)
 	{
 		tag.Set(key, BuildTag(p));
 	}

@@ -55,7 +55,7 @@ public class TERemoteAccess : TEStorageCenter
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Set("Locator", locator);
+		tag.SetPoint16("Locator", locator);
 	}
 
 	public override void LoadData(TagCompound tag)

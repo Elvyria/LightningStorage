@@ -112,8 +112,8 @@ public class PortableAccess : ModItem
     {
         base.SaveData(tag);
 
-		tag.Create("Storage",  storage);
-		tag.Create("Crafting", crafting);
+		tag.SetPoint16("Storage",  storage);
+		tag.SetPoint16("Crafting", crafting);
     }
 
     public override void LoadData(TagCompound tag)
