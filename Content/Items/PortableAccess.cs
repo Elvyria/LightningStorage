@@ -29,8 +29,7 @@ public class PortableAccess : ModItem
 	{
 		if (player.altFunctionUse == 2)
 		{
-			int i = (int)(((float)Main.mouseX + Main.screenPosition.X) / 16f);
-			int j = (int)(((float)Main.mouseY + Main.screenPosition.Y) / 16f);
+			(int i, int j) = StoragePlayer.MouseTile();
 
 			Tile tile = Main.tile[i, j];
 

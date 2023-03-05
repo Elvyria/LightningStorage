@@ -225,4 +225,12 @@ public class StoragePlayer : ModPlayer
 		Tile tile = Main.tile[accessPosition.X, accessPosition.Y];
 		return tile != null && tile.TileType == ModContent.TileType<CraftingAccess>();
 	}
+
+	public static (int, int) MouseTile()
+	{
+		int i = (int)(((float)Main.mouseX + Main.screenPosition.X) / 16f);
+		int j = (int)(((float)Main.mouseY + Main.screenPosition.Y) / 16f);
+
+		return (i, j);
+	}
 }
