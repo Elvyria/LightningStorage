@@ -493,14 +493,7 @@ class CraftingAccessUI : UIState
 
 			if (Main.mouseLeft && stackSplit <= 1)
 			{
-				if (stackSplit == 0)
-				{
-					stackSplit = 15;
-				}
-				else
-				{
-					stackSplit = stackDelay;
-				}
+				stackSplit = stackSplit == 0 ? 15 : stackDelay;
 
 				TryCraft();
 
@@ -1147,7 +1140,6 @@ class CraftingAccessUI : UIState
 
 	private void TryCraft()
 	{
-		List<Item> availableItems = storageItems.Select(item => item.Clone()).ToList();
 		List<Item> toWithdraw = new List<Item>(selectedRecipe.requiredItem.Count);
 
 		foreach (Item requiredItem in selectedRecipe.requiredItem)
@@ -1159,7 +1151,7 @@ class CraftingAccessUI : UIState
 
 			int stack = requiredItem.stack;
 
-			foreach (Item storageItem in availableItems)
+			foreach (Item storageItem in storageItems)
 			{
 				if (requiredItem.type == storageItem.type || RecipeGroupMatch(selectedRecipe, requiredItem.type, storageItem.type))
 				{

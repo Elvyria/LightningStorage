@@ -1,3 +1,5 @@
+using System.Linq;
+
 using Microsoft.Xna.Framework;
 
 using Terraria.DataStructures;
@@ -36,10 +38,7 @@ public class CraftingAccess : StorageAccess
 		Point16 pos = new Point16(i, j);
 		if (TileEntity.ByPosition.ContainsKey(pos) && TileEntity.ByPosition[pos] is TECraftingAccess access)
 		{
-			foreach (Item item in access.stations)
-			{
-				fail |= !item.IsAir;
-			}
+			fail = access.stations.Any(item => !item.IsAir);
 		}
 	}
 }
