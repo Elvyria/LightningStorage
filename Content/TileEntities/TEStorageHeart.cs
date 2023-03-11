@@ -5,6 +5,7 @@ using Terraria.ModLoader.IO;
 
 using MagicStorage.Common.Players;
 using MagicStorage.Content.Tiles;
+using MagicStorage.Common;
 
 namespace MagicStorage.Content.TileEntities;
 
@@ -225,20 +226,21 @@ public class TEStorageHeart : TEStorageCenter
 	public Item Withdraw(Item lookFor)
 	{
 		Item result = lookFor.Clone();
-		result.stack = 0;
 
 		IEnumerable<TEStorageUnit> units = GetStorageUnits();
 
+		ItemData itemData = new ItemData(lookFor);
+
 		foreach (TEStorageUnit storageUnit in units)
 		{
-			if (storageUnit.HasItem(lookFor))
+			if (storageUnit.HasItem(itemData))
 			{
-				Item withdrawn = storageUnit.Withdraw(lookFor);
+				Item withdrawn = storageUnit.Withdraw(result);
 				if (!withdrawn.IsAir)
 				{
-					result.stack += withdrawn.stack;
+					result.stack -= withdrawn.stack;
 
-					if (result.stack == lookFor.stack)
+					if (result.stack == 0)
 					{
 						break;
 					}
@@ -246,12 +248,14 @@ public class TEStorageHeart : TEStorageCenter
 			}
 		}
 
-		if (result.stack == 0)
+		if (result.stack == lookFor.stack)
 		{
 			return new Item();
 		}
 
 		ResetCompactStage();
+
+		result.stack = lookFor.stack - result.stack;
 
 		return result;
 	}

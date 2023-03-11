@@ -72,15 +72,13 @@ public class TEStorageUnit : TEStorageComponent
 	public bool HasSpaceFor(Item check) => !IsFull || HasSpaceInStackFor(check);
 
 	public bool HasItem(Item item) => hasItem.Contains(new ItemData(item));
+	public bool HasItem(ItemData itemData) => hasItem.Contains(itemData);
 
 	public IEnumerable<Item> GetItems() => items;
 
 	public int Fill(Item deposit, int amount)
 	{
-		if (!HasSpaceInStackFor(deposit) || amount == 0)
-		{
-			return 0;
-		}
+		if (!HasSpaceInStackFor(deposit) || amount <= 0) return 0;
 
 		foreach (Item item in items)
 		{
@@ -122,7 +120,7 @@ public class TEStorageUnit : TEStorageComponent
 		item.favorited = false;
 		items.Add(item);
 
-		RepairMetadata();
+		RepairMetadata(item);
 		UpdateTileFrame();
 
 		return amount;
@@ -135,7 +133,7 @@ public class TEStorageUnit : TEStorageComponent
 		for (int k = 0; k < items.Count; k++)
 		{
 			Item item = items[k];
-			if (ItemData.Matches(lookFor, item))
+			if (item.type == lookFor.type && item.prefix == lookFor.prefix)
 			{
 				if (item.stack > amount)
 				{
@@ -160,7 +158,7 @@ public class TEStorageUnit : TEStorageComponent
 			return new Item();
 		}
 
-		RepairMetadata();
+		RepairMetadata(lookFor);
 		UpdateTileFrame();
 
 		Item result = lookFor.Clone();
@@ -199,7 +197,7 @@ public class TEStorageUnit : TEStorageComponent
 		Item item = items[items.Count - 1];
 		items.RemoveAt(items.Count - 1);
 
-		RepairMetadata();
+		RepairMetadata(item);
 		UpdateTileFrame();
 
 		return item;
@@ -244,6 +242,27 @@ public class TEStorageUnit : TEStorageComponent
 		items.Clear();
 		hasSpaceInStack.Clear();
 		hasItem.Clear();
+	}
+
+	private void RepairMetadata(Item corrupted)
+	{
+		ItemData itemData = new ItemData(corrupted.type, corrupted.prefix);
+
+		hasItem.Remove(itemData);
+		hasSpaceInStack.Remove(itemData);
+
+		foreach (Item item in items)
+		{
+			if (item.type == type && item.prefix == corrupted.prefix)
+			{
+				hasItem.Add(itemData);
+				if (item.stack < item.maxStack)
+				{
+					hasSpaceInStack.Add(itemData);
+					return;
+				}
+			}
+		}
 	}
 
 	private void RepairMetadata()
