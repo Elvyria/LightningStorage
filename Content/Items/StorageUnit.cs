@@ -1,7 +1,14 @@
+using Terraria.Localization;
+
 namespace MagicStorage.Content.Items;
 
 public class StorageUnit : ModItem
 {
+    public override void SetStaticDefaults()
+    {
+		DisplayName.SetDefault(Language.GetTextValue("Mods.MagicStorage.ItemName.StorageUnit"));
+    }
+
 	public override void SetDefaults()
 	{
 		Item.width = 26;
@@ -33,5 +40,91 @@ public class StorageUnit : ModItem
 			.AddIngredient(ItemID.TungstenBar, 10)
 			.AddTile(TileID.WorkBenches)
 			.Register();
+	}
+}
+
+public class StorageUnitTiny : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Tiny;
+	}
+}
+
+public class StorageUnitDemonite : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.Blue;
+		Item.value = Item.sellPrice(silver: 32);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Demonite;
+	}
+}
+
+public class StorageUnitCrimtane : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.Blue;
+		Item.value = Item.sellPrice(silver: 32);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Crimtane;
+	}
+}
+
+public class StorageUnitHellstone : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.sellPrice(silver: 50);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Hellstone;
+	}
+}
+
+public class StorageUnitHallowed : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.LightRed;
+		Item.value = Item.sellPrice(gold: 1);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Hallowed;
+	}
+}
+
+public class StorageUnitBlueChlorophyte : StorageUnit
+{
+    public override void SetDefaults()
+    {
+		base.SetDefaults();
+        Item.rare = ItemRarityID.Lime;
+        Item.value = Item.sellPrice(gold: 1, silver: 60);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.BlueChlorophyte;
+	}
+}
+
+public class StorageUnitLuminite : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.Red;
+		Item.value = Item.sellPrice(gold: 2, silver: 50);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Luminite;
+	}
+}
+
+public class StorageUnitTerra : StorageUnit
+{
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		Item.rare = ItemRarityID.Purple;
+		Item.value = Item.sellPrice(silver: 12);
+		Item.placeStyle = Tiles.StorageUnit.StyleID.Terra;
 	}
 }

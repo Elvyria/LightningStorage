@@ -6,18 +6,12 @@ Mods: {
 			UpgradeCrimtane: Crimtane Storage Upgrade
 			CraftingAccess: Storage Crafting Interface
 			UpgradeHallowed: Hallowed Storage Upgrade
-			StorageUnitTerra: Terra Storage Unit
-			StorageUnitHallowed: Hallowed Storage Unit
 			UpgradeLuminite: Luminite Storage Upgrade
 			UpgradeHellstone: Hellstone Storage Upgrade
 			UpgradeDemonite: Demonite Storage Upgrade
 			StorageDeactivator: Storage Unit Wand
-			StorageUnitHellstone: Hellstone Storage Unit
-			StorageUnitDemonite: Demonite Storage Unit
-			StorageUnitCrimtane: Crimtane Storage Unit
 			UpgradeTerra: Terra Storage Upgrade
-			StorageUnitLuminite: Luminite Storage Unit
-			StorageUnitBlueChlorophyte: Blue Chlorophyte Storage Unit
+			StorageUnit: Storage Unit
 			StorageUnitTiny: Tiny Storage Unit
 			RemoteAccess: Remote Storage Access
 		}
