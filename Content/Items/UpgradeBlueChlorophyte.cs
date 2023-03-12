@@ -17,7 +17,7 @@ public class UpgradeBlueChlorophyte : ModItem, Common.IStorageUpgrade
             .AddIngredient(ItemID.ShroomiteBar, 5)
             .AddIngredient(ItemID.SpectreBar, 5)
             .AddIngredient(ItemID.BeetleHusk, 2)
-            .AddIngredient(ItemID.Emerald)
+            .AddIngredient(ItemID.Sapphire)
             .AddTile(TileID.MythrilAnvil)
             .Register();
     }

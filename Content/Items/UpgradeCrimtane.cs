@@ -15,7 +15,7 @@ public class UpgradeCrimtane : ModItem, Common.IStorageUpgrade
 	{
 		CreateRecipe()
 			.AddIngredient(ItemID.CrimtaneBar, 10)
-			.AddIngredient(ItemID.Amethyst)
+			.AddIngredient(ItemID.Ruby)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

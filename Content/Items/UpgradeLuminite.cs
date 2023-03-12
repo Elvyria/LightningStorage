@@ -19,7 +19,7 @@ public class UpgradeLuminite : ModItem, Common.IStorageUpgrade
 			.AddIngredient(ItemID.FragmentVortex, 5)
 			.AddIngredient(ItemID.FragmentNebula, 5)
 			.AddIngredient(ItemID.FragmentStardust, 5)
-			.AddIngredient(ItemID.Ruby)
+			.AddIngredient(ItemID.Diamond)
 			.AddTile(TileID.LunarCraftingStation)
 			.Register();
 	}

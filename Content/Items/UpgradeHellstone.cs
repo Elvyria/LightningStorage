@@ -15,7 +15,7 @@ public class UpgradeHellstone : ModItem, Common.IStorageUpgrade
 	{
 		CreateRecipe()
 			.AddIngredient(ItemID.HellstoneBar, 10)
-			.AddIngredient(ItemID.Topaz)
+			.AddIngredient(ItemID.Amber)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

@@ -18,7 +18,7 @@ public class UpgradeHallowed : ModItem, Common.IStorageUpgrade
 			.AddIngredient(ItemID.SoulofFright)
 			.AddIngredient(ItemID.SoulofMight)
 			.AddIngredient(ItemID.SoulofSight)
-			.AddIngredient(ItemID.Sapphire)
+			.AddIngredient(ItemID.Topaz)
 			.AddTile(TileID.MythrilAnvil)
 			.Register();
 	}

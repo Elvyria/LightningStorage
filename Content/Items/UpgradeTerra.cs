@@ -14,18 +14,10 @@ public class UpgradeTerra : ModItem, Common.IStorageUpgrade
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.Diamond, 3)
-			.AddIngredient(ItemID.Ruby, 7)
+			.AddIngredient(ItemID.BrokenHeroSword)
+			.AddIngredient(ItemID.Emerald)
 			.AddTile(TileID.LunarCraftingStation)
 			.Register();
-
-		if (ModLoader.TryGetMod("CalamityMod", out var calamityMod))
-		{
-			CreateRecipe()
-				.AddIngredient(calamityMod, "CosmiliteBar", 20)
-				.AddTile(TileID.LunarCraftingStation)
-				.Register();
-		}
 	}
 
 	public void Upgrade(int i, int j) {
