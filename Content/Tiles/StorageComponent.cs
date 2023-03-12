@@ -65,4 +65,14 @@ public abstract class StorageComponent : ModTile
 			TEStorageComponent.RefreshNetwork(new Point16(i, j));
 		}
 	}
+
+	public static void SetStyle(int i, int j, short style)
+	{
+		style *= 36;
+
+		Main.tile[i, j].TileFrameY = style;
+		Main.tile[i, j + 1].TileFrameY = unchecked((short)(style + 18));
+		Main.tile[i + 1, j].TileFrameY = style;
+		Main.tile[i + 1, j + 1].TileFrameY = unchecked((short)(style + 18));
+	}
 }

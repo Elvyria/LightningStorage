@@ -192,7 +192,7 @@ class StorageAccessUI : UIState, ISwitchable
 
 		UIScrollableBar scrollbar = new UIScrollableBar();
 		scrollbar.Left.Pixels = -30f;
-		slotZone.SetScrollbar(scrollbar);
+		slotZone.Scrollbar = scrollbar;
 
 		panel.Append(scrollbar);
 

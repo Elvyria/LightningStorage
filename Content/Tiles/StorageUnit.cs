@@ -11,7 +11,7 @@ using MagicStorage.Content.TileEntities;
 
 namespace MagicStorage.Content.Tiles;
 
-public class StorageUnit : StorageComponent
+public class StorageUnit : StorageComponent, IUpgradeable
 {
 	[AllowNull]
 	private Asset<Texture2D> glowTexture;
@@ -115,37 +115,29 @@ public class StorageUnit : StorageComponent
 	{
 		Player player = Main.LocalPlayer;
 		Item item = player.inventory[player.selectedItem];
-		bool success = false;
 
 		if (item.ModItem is IStorageUpgrade upgrade)
 		{
 			if (upgrade.CanUpgrade(i, j))
 			{
 				upgrade.Upgrade(i, j);
-				success = true;
+
+				TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
+				storageUnit.UpdateTileFrame();
+
+				TEStorageHeart? heart = storageUnit.GetHeart();
+				heart?.ResetCompactStage();
+
+				if (--item.stack <= 0)
+				{
+					item.TurnToAir();
+				}
+
+				return true;
 			}
 		}
 
-		if (success)
-		{
-			TEStorageUnit storageUnit = (TEStorageUnit)TileEntity.ByPosition[new Point16(i, j)];
-			storageUnit.UpdateTileFrame();
-
-			TEStorageHeart? heart = storageUnit.GetHeart();
-			heart?.ResetCompactStage();
-
-			item.stack--;
-			if (item.stack <= 0)
-			{
-				item.TurnToAir();
-			}
-			if (player.selectedItem == 58)
-			{
-				Main.mouseItem = item.Clone();
-			}
-		}
-
-		return success;
+		return false;
 	}
 
 	public static void SetIndicator(int i, int j, short style)
@@ -156,16 +148,6 @@ public class StorageUnit : StorageComponent
 		Main.tile[i, j + 1].TileFrameX = style;
 		Main.tile[i + 1, j].TileFrameX = unchecked((short)(style + 18));
 		Main.tile[i + 1, j + 1].TileFrameX = unchecked((short)(style + 18));
-	}
-
-	public static void SetStyle(int i, int j, short style)
-	{
-		style *= 36;
-
-		Main.tile[i, j].TileFrameY = style;
-		Main.tile[i, j + 1].TileFrameY = unchecked((short)(style + 18));
-		Main.tile[i + 1, j].TileFrameY = style;
-		Main.tile[i + 1, j + 1].TileFrameY = unchecked((short)(style + 18));
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

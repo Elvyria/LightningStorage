@@ -7,7 +7,9 @@ namespace MagicStorage.Content.TileEntities;
 
 public class TECraftingAccess : TEStorageComponent
 {
-    public Item[] stations = new Item[10];
+    public Item[] stations = new Item[capacities[0]];
+
+	public static int[] capacities = new[] { 10, 12, 12, 14, 16, 18, 19, 20 };
 
     public TECraftingAccess()
     {
@@ -76,7 +78,8 @@ public class TECraftingAccess : TEStorageComponent
             stations[slot] = temp;
             return item;
         }
-        else if (!item.IsAir && stations[slot].IsAir)
+
+        if (!item.IsAir && stations[slot].IsAir)
         {
             stations[slot] = item.Clone();
             stations[slot].stack = 1;
@@ -90,6 +93,31 @@ public class TECraftingAccess : TEStorageComponent
 
         return item;
     }
+
+    public override void OnPlace()
+    {
+        base.OnPlace();
+
+		Resize();
+    }
+
+	public void Resize()
+	{
+		int style = Main.tile[Position.X, Position.Y].TileFrameY / 36;
+
+		if (style >= 0 && style < capacities.Length)
+		{
+			Array.Resize(ref stations, capacities[style]);
+
+			for (int k = 0; k < stations.Length; k++)
+			{
+				if (stations[k] == null)
+				{
+					stations[k] = new Item();
+				}
+			}
+		}
+	}
 
     public override void SaveData(TagCompound tag)
     {

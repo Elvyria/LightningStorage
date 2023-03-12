@@ -225,9 +225,54 @@ class CraftingAccessUI : UIState
 
 		stationZone = new UISlotZone(GetStation, inventoryScale);
 		stationZone.Top.Pixels = 100f;
-		stationZone.SetDimensions(columns, 1);
 		stationZone.OnMouseDown += PressStation;
 		panel.Append(stationZone);
+
+		UIScrollableBar scrollbar = new UIScrollableBar();
+		stationZone.Scrollbar = scrollbar;
+
+		stationZone.SetDimensions(columns);
+
+		UIScrollButton stationButtonLeft = new UIScrollButton(TextureAssets.ScrollLeftButton, false);
+		stationButtonLeft.Top.Pixels = stationZone.Top.Pixels + stationZone.padding;
+		stationButtonLeft.Left.Pixels = stationZone.Left.Pixels + stationZone.Width.Pixels + 13f;
+		stationButtonLeft.OnMouseDown += (_, _) =>
+		{
+			if (stationButtonLeft.active)
+			{
+				stationButtonLeft.color = StateColor.blue;
+				stationZone.Scrollbar.ViewPosition -= 1f;
+			}
+		};
+		stationButtonLeft.OnMouseUp += (_, _) =>
+		{
+			stationButtonLeft.color = Color.White;
+		};
+		panel.Append(stationButtonLeft);
+
+		UIScrollButton stationButtonRight = new UIScrollButton(TextureAssets.ScrollRightButton);
+		stationButtonRight.Top.Pixels = stationZone.Top.Pixels + stationZone.Height.Pixels - stationZone.padding - stationButtonRight.Height.Pixels;
+		stationButtonRight.Left = stationButtonLeft.Left;
+		stationButtonRight.OnMouseDown += (_, _) =>
+		{
+			if (stationButtonRight.active)
+			{
+				stationButtonRight.color = StateColor.blue;
+				stationZone.Scrollbar.ViewPosition += 1f;
+			}
+		};
+		stationButtonRight.OnMouseUp += (_, _) =>
+		{
+			stationButtonRight.color = Color.White;
+		};
+
+		panel.Append(stationButtonRight);
+
+		stationZone.OnUpdate += (_) =>
+		{
+			stationButtonLeft.active = stationZone.Scrollbar.ViewPosition != 0;
+			stationButtonRight.active = access.stations.Length - columns != stationZone.Scrollbar.ViewPosition;
+		};
 
 		UIText recipeText = new UIText(Language.GetText("Mods.MagicStorage.Common.Recipes"));
 		recipeText.Top.Pixels = 152f;
@@ -238,9 +283,9 @@ class CraftingAccessUI : UIState
 		recipeZone.OnMouseDown += PressRecipe;
 		panel.Append(recipeZone);
 
-		UIScrollableBar scrollbar = new UIScrollableBar();
+		scrollbar = new UIScrollableBar();
 		scrollbar.Left.Pixels = -30f;
-		recipeZone.SetScrollbar(scrollbar);
+		recipeZone.Scrollbar = scrollbar;
 		panel.Append(scrollbar);
 
 		recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + 2 * recipeZone.padding)));
@@ -396,6 +441,8 @@ class CraftingAccessUI : UIState
 		filterButtons.choice = FilterMode.All.index();
 		sortButtons.choice = SortMode.Default.index();
 		recipeButtons.choice = (int) RecipeMode.Available;
+
+		stationZone.Scrollbar.ViewPosition = 0.0f;
 
 		modFilter = string.Empty;
 		nameFilter = string.Empty;
@@ -875,6 +922,8 @@ class CraftingAccessUI : UIState
 
 		if (adjLiquids[LiquidID.Honey])
 			conditions.Add(Recipe.Condition.NearHoney);
+
+		stationZone.UpdateScrollBar(access.stations.Length + 1 - columns);
 	}
 
 	private bool IsAvailable(Recipe recipe)

@@ -21,7 +21,7 @@ public class UpgradeTerra : ModItem, Common.IStorageUpgrade
 	}
 
 	public void Upgrade(int i, int j) {
-		Content.Tiles.StorageUnit.SetStyle(i, j, Tiles.StorageUnit.StyleID.Terra);
+		Content.Tiles.StorageComponent.SetStyle(i, j, Tiles.StorageUnit.StyleID.Terra);
 	}
 
 	public bool CanUpgrade(int i, int j) {
@@ -29,6 +29,6 @@ public class UpgradeTerra : ModItem, Common.IStorageUpgrade
 		int style = tile.TileFrameY / 36;
 
 		return style == Tiles.StorageUnit.StyleID.Luminite
-			&& tile.TileType == ModContent.TileType<Tiles.StorageUnit>();
+			&& ModContent.GetModTile(tile.TileType) is Common.IUpgradeable;
 	}
 }

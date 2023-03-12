@@ -15,6 +15,7 @@ public class UISlotZone : UIElement
 	public int mouseSlot = -1;
 	public int padding = 4;
 
+	private int step = 1;
 	private int columns = 1;
 	private int rows = 1;
 
@@ -27,6 +28,21 @@ public class UISlotZone : UIElement
 	private float slotWidth;
 
 	private UIScrollbar? scrollbar;
+	public UIScrollbar? Scrollbar
+	{
+		get { return scrollbar; }
+		set {
+			scrollbar = value;
+
+			if (scrollbar != null)
+			{
+				scrollbar.Top.Set(Top.Pixels + padding, Top.Percent);
+				scrollbar.Left.Set(Width.Pixels + scrollbar.Left.Pixels, 0);
+				scrollbar.Height = Height;
+			}
+		}
+
+	}
 
 	public UISlotZone(Func<int, Item> getItem, float scale)
 	{
@@ -59,7 +75,7 @@ public class UISlotZone : UIElement
 		slotWidth = TextureAssets.InventoryBack.Width() * scale;
 	}
 
-	public void SetDimensions(int columns, int rows)
+	public void SetDimensions(int columns = 1, int rows = 1)
 	{
 		if (this.rows != rows)
 		{
@@ -76,15 +92,8 @@ public class UISlotZone : UIElement
 			if (scrollbar != null)
 				scrollbar.Left.Set(Width.Pixels + scrollbar.Left.Pixels, 0);
 		}
-	}
 
-	public void SetScrollbar(UIScrollbar scrollbar)
-	{
-		this.scrollbar = scrollbar;
-
-		scrollbar.Top.Set(Top.Pixels + padding, Top.Percent);
-		scrollbar.Left.Set(Width.Pixels + scrollbar.Left.Pixels, 0);
-		scrollbar.Height = Height;
+		this.step = this.rows == 1 ? 1 : columns;
 	}
 
 	public void UpdateScrollBar(int rows)
@@ -122,14 +131,14 @@ public class UISlotZone : UIElement
 
 		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition;
 
-		return increment * columns + row * columns + column;
+		return increment * step + row * columns + column;
 	}
 
 	protected override void DrawSelf(SpriteBatch spriteBatch)
 	{
 		Vector2 origin = GetDimensions().Position();
 
-		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition * columns;
+		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition * step;
 		int length = columns * rows;
 
 		for (int k = 0; k < length; k++)
