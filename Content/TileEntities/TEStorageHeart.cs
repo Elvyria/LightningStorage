@@ -49,8 +49,6 @@ public class TEStorageHeart : TEStorageCenter
 
 	public override void Update()
 	{
-		remoteAccesses.RemoveAll(access => !ByPosition.ContainsKey(access) || ByPosition[access] is not TERemoteAccess);
-
 		if (++updateTimer >= 100 && StoragePlayer.LocalPlayer.ViewingStorage() == Point16.NegativeOne)
 		{
 			updateTimer = 0;
@@ -60,7 +58,7 @@ public class TEStorageHeart : TEStorageCenter
 
 	public void Compact()
 	{
-        bool v = compactStage switch
+        bool _ = compactStage switch
 		{
 			CompactStage.Emptying   => EmptyInactive(),
 			CompactStage.Defragging => Defragment(),
