@@ -1,14 +1,7 @@
-using Terraria.Localization;
-
 namespace MagicStorage.Content.Items;
 
 public class CraftingAccess : ModItem
 {
-    public override void SetStaticDefaults()
-    {
-		DisplayName.SetDefault(Language.GetTextValue("Mods.MagicStorage.ItemName.CraftingAccess"));
-    }
-
 	public override void SetDefaults()
 	{
 		Item.width = 26;
