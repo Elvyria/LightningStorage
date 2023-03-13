@@ -82,7 +82,7 @@ public class TEStorageUnit : TEStorageComponent
 
 		foreach (Item item in items)
 		{
-			if (ItemData.Matches(deposit, item) && item.stack < item.maxStack)
+			if (deposit.type == item.type && item.stack < item.maxStack && deposit.prefix == item.prefix)
 			{
 				int available = item.maxStack - item.stack;
 
@@ -105,7 +105,7 @@ public class TEStorageUnit : TEStorageComponent
 
 	public int Deposit(Item deposit, int amount)
 	{
-		if (amount < 1) return 0;
+		if (amount <= 0) return 0;
 
 		int filled = Fill(deposit, amount);
 
@@ -253,7 +253,7 @@ public class TEStorageUnit : TEStorageComponent
 
 		foreach (Item item in items)
 		{
-			if (item.type == type && item.prefix == corrupted.prefix)
+			if (item.type == corrupted.type && item.prefix == corrupted.prefix)
 			{
 				hasItem.Add(itemData);
 				if (item.stack < item.maxStack)
