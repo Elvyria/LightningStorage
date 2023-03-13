@@ -884,7 +884,7 @@ class CraftingAccessUI : UIState
 
 		foreach (Item item in access.stations)
 		{
-			if (item.createTile >= 0)
+			if (!item.IsAir && item.createTile >= 0)
 			{
 				ModTile tile = TileLoader.GetTile(item.createTile);
 				if (tile is not null)
