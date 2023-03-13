@@ -1,23 +1,44 @@
 namespace MagicStorage.Common.Sorting;
 
 #nullable disable
-public static class SortMode
+public class SortMode : ILoadable
 {
-	public static readonly IComparer<Item> Default = new SortDefault();
-	public static readonly IComparer<Item> Id = new SortID();
-	public static readonly IComparer<Item> Name = new SortName();
-	public static readonly IComparer<Item> Quantity = new SortQuantity();
-	public static readonly IComparer<Item> Power = null;
-	public static readonly IComparer<Item> Damage = null;
+	public static IComparer<Item> Default;
+	public static IComparer<Item> Id;
+	public static IComparer<Item> Name;
+	public static IComparer<Item> Quantity;
+	public static IComparer<Item> Power;
+	public static IComparer<Item> Damage;
 
-	private static readonly IComparer<Item>[] indices = new[] {
+	private static IComparer<Item>[] indices = new[] {
 		Default,
 		Id,
 		Name,
 		Quantity
 	};
 
-	public static int index(this IComparer<Item> comparer)
+    public void Load(Mod mod)
+    {
+		Default  = new SortDefault();
+		Id       = new SortID();
+		Name     = new SortName();
+		Quantity = new SortQuantity();
+
+		indices = new[] { Default, Id, Name, Quantity };
+    }
+
+    public void Unload()
+    {
+		Default = null;
+		Id = null;
+		Name = null;
+		Quantity = null;
+		Power = null;
+		Damage = null;
+		indices = null;
+    }
+
+	public static int index(IComparer<Item> comparer)
 	{
 		return Array.IndexOf(indices, comparer);
 	}
@@ -30,7 +51,7 @@ public static class SortMode
 		return indices[0];
 	}
 
-	public class SortDefault : IComparer<Item>
+    public class SortDefault : IComparer<Item>
 	{
 		int IComparer<Item>.Compare(Item a, Item b)
 		{

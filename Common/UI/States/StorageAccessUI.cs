@@ -260,8 +260,8 @@ class StorageAccessUI : UIState, ISwitchable
 		sortMode = SortMode.Default;
 		filterMode = FilterMode.All;
 
-		sortButtons.choice = SortMode.Default.index();
-		filterButtons.choice = FilterMode.All.index();
+		sortButtons.choice = SortMode.index(sortMode);
+		filterButtons.choice = FilterMode.index(filterMode);
 
 		nameFilter = string.Empty;
 		modFilter = string.Empty;

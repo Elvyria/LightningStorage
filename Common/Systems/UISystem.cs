@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using MagicStorage.Common.Players;
 using MagicStorage.Common.UI;
 using MagicStorage.Common.UI.States;
 
@@ -8,9 +7,9 @@ namespace MagicStorage.Common.Systems;
 
 public class UISystem : ModSystem
 {
-	internal readonly HashSet<IInput> inputs = new HashSet<IInput>(2);
-
 #nullable disable
+	internal HashSet<IInput> inputs;
+
 	internal UserInterface UI;
 	internal StorageAccessUI StorageUI;
 	internal CraftingAccessUI CraftingUI;
@@ -25,6 +24,8 @@ public class UISystem : ModSystem
 	{
 		if (!Main.dedServ)
 		{
+			inputs = new HashSet<IInput>(2);
+
 			UI = new UserInterface();
 
 			StorageUI = new StorageAccessUI();
@@ -37,16 +38,22 @@ public class UISystem : ModSystem
 
 	public override void Unload()
 	{
+		inputs = null;
+
 		UI = null;
 		StorageUI = null;
 		CraftingUI = null;
 
 		ItemUI = null;
 		AccessState = null;
+
+		_lastUpdateUiGameTime = null;
 	}
 
-	public override void PreSaveAndQuit() {
-		StoragePlayer.LocalPlayer.CloseStorage();
+	public override void PreSaveAndQuit()
+	{
+		UI.SetState(null);
+		ItemUI.SetState(null);
 	}
 
 	public override void UpdateUI(GameTime gameTime)

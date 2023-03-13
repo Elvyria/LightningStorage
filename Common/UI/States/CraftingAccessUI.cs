@@ -438,8 +438,8 @@ class CraftingAccessUI : UIState
 		filterMode = FilterMode.All;
 		sortMode = SortMode.Default;
 
-		filterButtons.choice = FilterMode.All.index();
-		sortButtons.choice = SortMode.Default.index();
+		filterButtons.choice = FilterMode.index(filterMode);
+		sortButtons.choice = SortMode.index(sortMode);
 		recipeButtons.choice = (int) RecipeMode.Available;
 
 		stationZone.Scrollbar.ViewPosition = 0.0f;

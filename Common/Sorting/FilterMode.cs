@@ -1,26 +1,45 @@
 namespace MagicStorage.Common.Sorting;
 
-public static class FilterMode
+#nullable disable
+public class FilterMode : ILoadable
 {
-	public static readonly IFilter<Item> All = new FilterAll();
-	public static readonly IFilter<Item> Weapons = new FilterWeapon();
-	public static readonly IFilter<Item> Tools = new FilterTool();
-	public static readonly IFilter<Item> Equipment = new FilterEquipment();
-	public static readonly IFilter<Item> Potions = new FilterPotion();
-	public static readonly IFilter<Item> Placeables = new FilterPlaceable();
-	public static readonly IFilter<Item> Misc = new FilterMisc();
+	public static IFilter<Item> All;
+	public static IFilter<Item> Weapons;
+	public static IFilter<Item> Tools;
+	public static IFilter<Item> Equipment;
+	public static IFilter<Item> Potions;
+	public static IFilter<Item> Placeables;
+	public static IFilter<Item> Misc;
 
-	private static readonly IFilter<Item>[] indices = new[] {
-		All,
-		Weapons,
-		Tools,
-		Equipment,
-		Potions,
-		Placeables,
-		Misc,
-	};
+	private static IFilter<Item>[] indices;
 
-	public static int index(this IFilter<Item> comparer)
+    public void Load(Mod mod)
+    {
+		All        = new FilterAll();
+		Weapons    = new FilterWeapon();
+		Tools      = new FilterTool();
+		Equipment  = new FilterEquipment();
+		Potions    = new FilterPotion();
+		Placeables = new FilterPlaceable();
+		Misc       = new FilterMisc();
+
+		indices = new[] { All, Weapons, Tools, Equipment, Potions, Placeables, Misc };
+    }
+
+    public void Unload()
+    {
+		All = null;
+		Weapons = null;
+		Tools = null;
+		Equipment = null;
+		Potions = null;
+		Placeables = null;
+		Misc = null;
+
+		indices = null;
+    }
+
+	public static int index(IFilter<Item> comparer)
 	{
 		return Array.IndexOf(indices, comparer);
 	}
@@ -33,7 +52,7 @@ public static class FilterMode
 		return indices[0];
 	}
 
-	public class FilterAll : IFilter<Item>
+    public class FilterAll : IFilter<Item>
 	{
 		bool IFilter<Item>.Passes(Item item)
 		{
@@ -167,7 +186,7 @@ public static class FilterMode
 
 	public class FilterMisc : IFilter<Item>
 	{
-		private static readonly IFilter<Item>[] blacklist = new[] {
+		private readonly IFilter<Item>[] blacklist = new[] {
 			Weapons,
 			Tools,
 			Equipment,
