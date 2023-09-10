@@ -30,7 +30,7 @@ public class UISearchBar : UIElement, IInput
 	public UISearchBar()
 	{
 		SetPadding(padding);
-		OnClick += (_, _) => Focus();
+		OnLeftClick += (_, _) => Focus();
 		OnRightClick += (_, _) => Clear();
 	}
 

@@ -36,11 +36,11 @@ public class UIScrollButton : UIElement
         base.MouseOver(evt);
     }
 
-    public override void Click(UIMouseEvent evt)
+    public override void LeftClick(UIMouseEvent evt)
     {
 		if (active)
 		{
-			base.Click(evt);
+			base.LeftClick(evt);
 
 			SoundEngine.PlaySound(SoundID.MenuTick);
 		}

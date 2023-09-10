@@ -23,7 +23,6 @@ public class StorageConnector : ModTile
 		AddMapEntry(new Color(153, 107, 61), CreateMapEntryName());
 
 		DustType = 7;
-		ItemDrop = ModContent.ItemType<Items.StorageConnector>();
 	}
 
 	public static int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternative)

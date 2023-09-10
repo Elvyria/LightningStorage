@@ -42,7 +42,7 @@ public class UIButtonChoice : UIElement
 		MinWidth.Set(width, 0f);
 		Height.Set(size, 0f);
 		MinHeight.Set(size, 0f);
-		OnClick += SelectButton;
+		OnLeftClick += SelectButton;
 	}
 
 	public override void Update(GameTime gameTime)

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
+using Terraria;
 
 using Terraria.DataStructures;
 using Terraria.GameInput;
@@ -75,7 +76,7 @@ class CraftingAccessUI : UIState
 
 	private bool[] adjTiles;
 	private bool[] adjLiquids;
-	private List<Recipe.Condition> conditions;
+	private List<Condition> conditions;
 
 	private Recipe[] vanillaRecipes;
 	private List<Recipe> recipes;
@@ -151,7 +152,7 @@ class CraftingAccessUI : UIState
 					Language.GetText("Mods.MagicStorage.Common.SortName")
 				});
 
-		sortButtons.OnClick += ClickSortButtons;
+		sortButtons.OnLeftClick += ClickSortButtons;
 
 		topBar.Append(sortButtons);
 
@@ -168,7 +169,7 @@ class CraftingAccessUI : UIState
 					Language.GetText("Mods.MagicStorage.Common.RecipeAll")
 				});
 
-		recipeButtons.OnClick += ClickRecipeButtons;
+		recipeButtons.OnLeftClick += ClickRecipeButtons;
 		float recipeButtonsLeft = sortButtonsRight + 32f + 3 * padding;
 		recipeButtons.Left.Pixels = recipeButtonsLeft;
 		topBar.Append(recipeButtons);
@@ -207,7 +208,7 @@ class CraftingAccessUI : UIState
 					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
 				});
 
-		filterButtons.OnClick += ClickFilterButtons;
+		filterButtons.OnLeftClick += ClickFilterButtons;
 
 		topBar2.Append(filterButtons);
 
@@ -225,7 +226,7 @@ class CraftingAccessUI : UIState
 
 		stationZone = new UISlotZone(GetStation, inventoryScale);
 		stationZone.Top.Pixels = 100f;
-		stationZone.OnMouseDown += PressStation;
+		stationZone.OnLeftMouseDown += PressStation;
 		panel.Append(stationZone);
 
 		UIScrollableBar scrollbar = new UIScrollableBar();
@@ -236,7 +237,7 @@ class CraftingAccessUI : UIState
 		UIScrollButton stationButtonLeft = new UIScrollButton(TextureAssets.ScrollLeftButton, false);
 		stationButtonLeft.Top.Pixels = stationZone.Top.Pixels + stationZone.padding;
 		stationButtonLeft.Left.Pixels = stationZone.Left.Pixels + stationZone.Width.Pixels + 13f;
-		stationButtonLeft.OnMouseDown += (_, _) =>
+		stationButtonLeft.OnLeftMouseDown += (_, _) =>
 		{
 			if (stationButtonLeft.active)
 			{
@@ -244,7 +245,7 @@ class CraftingAccessUI : UIState
 				stationZone.Scrollbar.ViewPosition -= 1f;
 			}
 		};
-		stationButtonLeft.OnMouseUp += (_, _) =>
+		stationButtonLeft.OnLeftMouseUp += (_, _) =>
 		{
 			stationButtonLeft.color = Color.White;
 		};
@@ -253,7 +254,7 @@ class CraftingAccessUI : UIState
 		UIScrollButton stationButtonRight = new UIScrollButton(TextureAssets.ScrollRightButton);
 		stationButtonRight.Top.Pixels = stationZone.Top.Pixels + stationZone.Height.Pixels - stationZone.padding - stationButtonRight.Height.Pixels;
 		stationButtonRight.Left = stationButtonLeft.Left;
-		stationButtonRight.OnMouseDown += (_, _) =>
+		stationButtonRight.OnLeftMouseDown += (_, _) =>
 		{
 			if (stationButtonRight.active)
 			{
@@ -261,7 +262,7 @@ class CraftingAccessUI : UIState
 				stationZone.Scrollbar.ViewPosition += 1f;
 			}
 		};
-		stationButtonRight.OnMouseUp += (_, _) =>
+		stationButtonRight.OnLeftMouseUp += (_, _) =>
 		{
 			stationButtonRight.color = Color.White;
 		};
@@ -280,7 +281,7 @@ class CraftingAccessUI : UIState
 
 		recipeZone = new UISlotZone(GetRecipe, GetRecipeColor, GetRecipeSlotTexture, inventoryScale);
 		recipeZone.Top.Pixels = 176f;
-		recipeZone.OnMouseDown += PressRecipe;
+		recipeZone.OnLeftMouseDown += PressRecipe;
 		panel.Append(recipeZone);
 
 		scrollbar = new UIScrollableBar();
@@ -304,7 +305,7 @@ class CraftingAccessUI : UIState
 		ingredientZone = new UISlotZone(GetIngredient, GetIngredientColor, GetIngredientSlotTexture, smallScale);
 		ingredientZone.Top.Pixels = 54f;
 		ingredientZone.SetDimensions(recipePanelColumns, ingredientRows);
-		ingredientZone.OnMouseDown += PressIngredient;
+		ingredientZone.OnLeftMouseDown += PressIngredient;
 		recipePanel.Append(ingredientZone);
 
 		UIText reqObjText = new UIText(Language.GetText("LegacyInterface.22"));
@@ -335,7 +336,7 @@ class CraftingAccessUI : UIState
 		resultZone = new UISlotZone(GetResultItem, inventoryScale);
 		resultZone.Left.Set(-slotWidth, 1f);
 		resultZone.Top.Set(-slotHeight, 1f);
-		resultZone.OnMouseDown += PressResult;
+		resultZone.OnLeftMouseDown += PressResult;
 		recipePanel.Append(resultZone);
 
 		float recipeHeight = 0;
@@ -398,7 +399,7 @@ class CraftingAccessUI : UIState
 		craftableIngredients = new List<byte>(4);
 		itemCounts = new Dictionary<int, int>();
 		recipeGroupCounts = new Dictionary<int, int>(RecipeGroup.recipeGroups.Count);
-		conditions = new List<Recipe.Condition>(3);
+		conditions = new List<Condition>(3);
 		storageItems = new List<Item>();
 
 		panel.Left.Pixels = opening ? -panel.Width.Pixels : panelLeft;
@@ -777,22 +778,22 @@ class CraftingAccessUI : UIState
 			.Select(Lang.GetMapObjectName)
 			.ToList();
 
-		if (selectedRecipe.HasCondition(Recipe.Condition.NearWater))
+		if (selectedRecipe.HasCondition(Condition.NearWater))
 		{
 			conditions.Add(Language.GetTextValue("LegacyInterface.53"));
 		}
 
-		if (selectedRecipe.HasCondition(Recipe.Condition.NearHoney))
+		if (selectedRecipe.HasCondition(Condition.NearHoney))
 		{
 			conditions.Add(Language.GetTextValue("LegacyInterface.58"));
 		}
 
-		if (selectedRecipe.HasCondition(Recipe.Condition.NearLava))
+		if (selectedRecipe.HasCondition(Condition.NearLava))
 		{
 			conditions.Add(Language.GetTextValue("LegacyInterface.56"));
 		}
 
-		if (selectedRecipe.HasCondition(Recipe.Condition.InSnow))
+		if (selectedRecipe.HasCondition(Condition.InSnow))
 		{
 			conditions.Add(Language.GetTextValue("LegacyInterface.123"));
 		}
@@ -915,13 +916,13 @@ class CraftingAccessUI : UIState
 		}
 
 		if (adjLiquids[LiquidID.Water])
-			conditions.Add(Recipe.Condition.NearWater);
+			conditions.Add(Condition.NearWater);
 
 		if (adjLiquids[LiquidID.Lava])
-			conditions.Add(Recipe.Condition.NearLava);
+			conditions.Add(Condition.NearLava);
 
 		if (adjLiquids[LiquidID.Honey])
-			conditions.Add(Recipe.Condition.NearHoney);
+			conditions.Add(Condition.NearHoney);
 
 		stationZone.UpdateScrollBar(access.stations.Length + 1 - columns);
 	}
@@ -931,7 +932,7 @@ class CraftingAccessUI : UIState
 		if (recipe.requiredTile.Any(t => !adjTiles[t]))
 			return false;
 
-		if (recipe.Conditions.Any(c => !(conditions.Contains(c) || c.RecipeAvailable(recipe))))
+		if (recipe.Conditions.Any(c => !c.IsMet()))
 			return false;
 
 		return recipe.requiredItem.TrueForAll(ingredient => EnoughOf(recipe, ingredient));
@@ -1220,7 +1221,7 @@ class CraftingAccessUI : UIState
 						stack -= storageItem.stack;
 
 						storageItem.stack = 0;
-						storageItem.type = 0;
+						storageItem.type = ItemID.None;
 
 						if (stack == 0) { break; }
 					}
@@ -1244,11 +1245,11 @@ class CraftingAccessUI : UIState
 		toWithdraw.ForEach(item => RecipeLoader.ConsumeItem(selectedRecipe, item.type, ref item.stack));
 		toWithdraw = toWithdraw.FindAll(item => item.stack > 0);
 
-		RecipeLoader.OnCraft(resultItem, selectedRecipe, toWithdraw);
+		RecipeLoader.OnCraft(resultItem, selectedRecipe, new Item());
 
 		foreach (Item item in Craft(toWithdraw, resultItem))
 		{
-			player.QuickSpawnClonedItem(new EntitySource_TileEntity(heart), item, item.stack);
+			player.QuickSpawnItem(new EntitySource_TileEntity(heart), item, item.stack);
 		}
 	}
 

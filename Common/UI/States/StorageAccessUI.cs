@@ -99,7 +99,7 @@ class StorageAccessUI : UIState, ISwitchable
 					Language.GetText("Mods.MagicStorage.Common.SortStack")
 				});
 
-		sortButtons.OnClick += (_, _) =>
+		sortButtons.OnLeftClick += (_, _) =>
 		{
 			IComparer<Item> newSort = SortMode.from(sortButtons.choice);
 			if (newSort != sortMode)
@@ -119,7 +119,7 @@ class StorageAccessUI : UIState, ISwitchable
 		depositButton.Height.Set(-2 * padding, 1f);
 		depositButton.PaddingTop = 8f;
 		depositButton.PaddingBottom = 8f;
-		depositButton.OnClick += ClickDeposit;
+		depositButton.OnLeftClick += ClickDeposit;
 		depositButton.OnMouseOver += (_, _) => depositButton.BackgroundColor = StateColor.lightBlue;
 		depositButton.OnMouseOut  += (_, _) => depositButton.BackgroundColor = StateColor.blue;
 
@@ -161,7 +161,7 @@ class StorageAccessUI : UIState, ISwitchable
 					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
 				});
 
-		filterButtons.OnClick += (_, _) =>
+		filterButtons.OnLeftClick += (_, _) =>
 		{
 			IFilter<Item> newFilter = FilterMode.from(filterButtons.choice);
 			if (newFilter != filterMode)
@@ -186,7 +186,7 @@ class StorageAccessUI : UIState, ISwitchable
 		slotZone.Width.Percent = 1f;
 		slotZone.Top.Pixels = 76f;
 		slotZone.Height.Set(-116f, 1f);
-		slotZone.OnMouseDown += PressSlotZone;
+		slotZone.OnLeftMouseDown += PressSlotZone;
 
 		panel.Append(slotZone);
 
