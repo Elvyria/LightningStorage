@@ -13,13 +13,13 @@ Mods: {
 			CraftingAccessLuminite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
 			CraftingAccessTerra: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
 			StorageUpgrade: Storage Upgrade
-			UpgradeDemonite: "Demonite {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeCrimtane: "Crimtane {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeHellstone: "Hellstone {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeHallowed: "Hallowed {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeBlueChlorophyte: "Blue Chlorophyte {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeLuminite: "Luminite {$Mods.MagicStorage.ItemName.StorageUpgrade}"
-			UpgradeTerra: "Terra {$Mods.MagicStorage.ItemName.StorageUpgrade}"
+			UpgradeDemonite: Demonite {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeCrimtane: Crimtane {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeHellstone: Hellstone {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeHallowed: Hallowed {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeBlueChlorophyte: Blue Chlorophyte {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeLuminite: Luminite {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeTerra: Terra {$Mods.MagicStorage.ItemName.StorageUpgrade}
 			StorageUnit: Storage Unit
 			StorageUnitDemonite: "{$Mods.MagicStorage.ItemName.StorageUnit}"
 			StorageUnitCrimtane: "{$Mods.MagicStorage.ItemName.StorageUnit}"
@@ -28,7 +28,7 @@ Mods: {
 			StorageUnitBlueChlorophyte: "{$Mods.MagicStorage.ItemName.StorageUnit}"
 			StorageUnitLuminite: "{$Mods.MagicStorage.ItemName.StorageUnit}"
 			StorageUnitTerra: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitTiny: "Tiny {$Mods.MagicStorage.ItemName.StorageUnit}"
+			StorageUnitTiny: Tiny {$Mods.MagicStorage.ItemName.StorageUnit}
 		}
 
 		ItemTooltip: {
@@ -105,6 +105,177 @@ Mods: {
 			SortName: Sort by Name
 			SortStack: Sort by Stacks
 			StoredItems: Stored Ingredients
+		}
+
+		Tiles: {
+			CraftingAccess.MapEntry: Crafting Access
+			RemoteAccess.MapEntry: Remote Access
+			StorageAccess.MapEntry: Storage Access
+			StorageConnector.MapEntry: Storage Connector
+			StorageHeart.MapEntry: Storage Heart
+			StorageUnit.MapEntry: Storage Unit
+		}
+
+		Items: {
+			CraftingAccess: {
+				DisplayName: Crafting Access
+				Tooltip: ""
+			}
+
+			CraftingAccessBlueChlorophyte: {
+				DisplayName: Crafting Access Blue Chlorophyte
+				Tooltip: ""
+			}
+
+			CraftingAccessCrimtane: {
+				DisplayName: Crafting Access Crimtane
+				Tooltip: ""
+			}
+
+			CraftingAccessDemonite: {
+				DisplayName: Crafting Access Demonite
+				Tooltip: ""
+			}
+
+			CraftingAccessHallowed: {
+				DisplayName: Crafting Access Hallowed
+				Tooltip: ""
+			}
+
+			CraftingAccessHellstone: {
+				DisplayName: Crafting Access Hellstone
+				Tooltip: ""
+			}
+
+			CraftingAccessLuminite: {
+				DisplayName: Crafting Access Luminite
+				Tooltip: ""
+			}
+
+			CraftingAccessTerra: {
+				DisplayName: Crafting Access Terra
+				Tooltip: ""
+			}
+
+			Locator: {
+				DisplayName: Locator
+				Tooltip: ""
+			}
+
+			PortableAccess: {
+				DisplayName: Portable Access
+				Tooltip: ""
+			}
+
+			RemoteAccess: {
+				DisplayName: Remote Access
+				Tooltip: ""
+			}
+
+			StorageAccess: {
+				DisplayName: Storage Access
+				Tooltip: ""
+			}
+
+			StorageComponent: {
+				DisplayName: Storage Component
+				Tooltip: ""
+			}
+
+			StorageConnector: {
+				DisplayName: Storage Connector
+				Tooltip: ""
+			}
+
+			StorageDeactivator: {
+				DisplayName: Storage Deactivator
+				Tooltip: ""
+			}
+
+			StorageHeart: {
+				DisplayName: Storage Heart
+				Tooltip: ""
+			}
+
+			StorageUnit: {
+				DisplayName: Storage Unit
+				Tooltip: ""
+			}
+
+			StorageUnitBlueChlorophyte: {
+				DisplayName: Storage Unit Blue Chlorophyte
+				Tooltip: ""
+			}
+
+			StorageUnitCrimtane: {
+				DisplayName: Storage Unit Crimtane
+				Tooltip: ""
+			}
+
+			StorageUnitDemonite: {
+				DisplayName: Storage Unit Demonite
+				Tooltip: ""
+			}
+
+			StorageUnitHallowed: {
+				DisplayName: Storage Unit Hallowed
+				Tooltip: ""
+			}
+
+			StorageUnitHellstone: {
+				DisplayName: Storage Unit Hellstone
+				Tooltip: ""
+			}
+
+			StorageUnitLuminite: {
+				DisplayName: Storage Unit Luminite
+				Tooltip: ""
+			}
+
+			StorageUnitTerra: {
+				DisplayName: Storage Unit Terra
+				Tooltip: ""
+			}
+
+			StorageUnitTiny: {
+				DisplayName: Storage Unit Tiny
+				Tooltip: ""
+			}
+
+			UpgradeBlueChlorophyte: {
+				DisplayName: Upgrade Blue Chlorophyte
+				Tooltip: ""
+			}
+
+			UpgradeCrimtane: {
+				DisplayName: Upgrade Crimtane
+				Tooltip: ""
+			}
+
+			UpgradeDemonite: {
+				DisplayName: Upgrade Demonite
+				Tooltip: ""
+			}
+
+			UpgradeHallowed: {
+				DisplayName: Upgrade Hallowed
+				Tooltip: ""
+			}
+
+			UpgradeHellstone: {
+				DisplayName: Upgrade Hellstone
+				Tooltip: ""
+			}
+
+			UpgradeLuminite: {
+				DisplayName: Upgrade Luminite
+				Tooltip: ""
+			}
+
+			UpgradeTerra: {
+				DisplayName: Upgrade Terra
+				Tooltip: ""
+			}
 		}
 	}
 }

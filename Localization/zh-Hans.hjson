@@ -1,31 +1,34 @@
 Mods: {
 	MagicStorage: {
 		ItemName: {
-			UpgradeBlueChlorophyte: 存储升级珠(蓝色叶绿)
 			PortableAccess: 便携式远程存储装置
-			StorageConnector: 存储连接器
-			UpgradeCrimtane: 存储升级珠(血腥))
-			CraftingAccess: 制作存储单元
-			UpgradeHallowed: 存储升级珠(神圣)
-			StorageUnitTerra: 存储单元(泰拉)
-			StorageUnitHallowed: 存储单元(神圣)
-			UpgradeLuminite: 存储升级珠(夜明)
-			UpgradeHellstone: 存储升级珠(狱岩)
-			UpgradeDemonite: 存储升级珠(魔金)
 			StorageDeactivator: 存储单元魔杖
-			StorageUnitHellstone: 存储单元(狱岩)
-			StorageHeart: 存储核心
-			StorageUnitDemonite: 存储单元(魔金)
-			StorageUnit: 存储单元
-			StorageUnitCrimtane: 存储单元(血腥)
-			UpgradeTerra: 存储升级珠(泰拉)
-			StorageUnitLuminite: 存储单元(夜明)
-			StorageComponent: 存储组件
-			StorageUnitBlueChlorophyte: 存储单元(蓝色叶绿)
-			StorageUnitTiny: 存储单元(小)
 			RemoteAccess: 远程存储装置
-			StorageAccess: 存储装置
-			Locator: 定位器
+			CraftingAccess: 制作存储单元
+			// CraftingAccessDemonite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessCrimtane: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHellstone: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHallowed: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessBlueChlorophyte: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessLuminite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessTerra: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// StorageUpgrade: Storage Upgrade
+			UpgradeDemonite: 存储升级珠(魔金)
+			UpgradeCrimtane: 存储升级珠(血腥))
+			UpgradeHellstone: 存储升级珠(狱岩)
+			UpgradeHallowed: 存储升级珠(神圣)
+			UpgradeBlueChlorophyte: 存储升级珠(蓝色叶绿)
+			UpgradeLuminite: 存储升级珠(夜明)
+			UpgradeTerra: 存储升级珠(泰拉)
+			StorageUnit: 存储单元
+			StorageUnitDemonite: 存储单元(魔金)
+			StorageUnitCrimtane: 存储单元(血腥)
+			StorageUnitHellstone: 存储单元(狱岩)
+			StorageUnitHallowed: 存储单元(神圣)
+			StorageUnitBlueChlorophyte: 存储单元(蓝色叶绿)
+			StorageUnitLuminite: 存储单元(夜明)
+			StorageUnitTerra: 存储单元(泰拉)
+			StorageUnitTiny: 存储单元(小)
 		}
 
 		ItemTooltip: {
@@ -102,6 +105,177 @@ Mods: {
 			SortName: 按名称排序
 			SortStack: 按堆栈排序
 			StoredItems: 存储中的材料
+		}
+
+		Tiles: {
+			// CraftingAccess.MapEntry: Crafting Access
+			// RemoteAccess.MapEntry: Remote Access
+			// StorageAccess.MapEntry: Storage Access
+			// StorageConnector.MapEntry: Storage Connector
+			// StorageHeart.MapEntry: Storage Heart
+			// StorageUnit.MapEntry: Storage Unit
+		}
+
+		Items: {
+			CraftingAccess: {
+				// DisplayName: Crafting Access
+				// Tooltip: ""
+			}
+
+			CraftingAccessBlueChlorophyte: {
+				// DisplayName: Crafting Access Blue Chlorophyte
+				// Tooltip: ""
+			}
+
+			CraftingAccessCrimtane: {
+				// DisplayName: Crafting Access Crimtane
+				// Tooltip: ""
+			}
+
+			CraftingAccessDemonite: {
+				// DisplayName: Crafting Access Demonite
+				// Tooltip: ""
+			}
+
+			CraftingAccessHallowed: {
+				// DisplayName: Crafting Access Hallowed
+				// Tooltip: ""
+			}
+
+			CraftingAccessHellstone: {
+				// DisplayName: Crafting Access Hellstone
+				// Tooltip: ""
+			}
+
+			CraftingAccessLuminite: {
+				// DisplayName: Crafting Access Luminite
+				// Tooltip: ""
+			}
+
+			CraftingAccessTerra: {
+				// DisplayName: Crafting Access Terra
+				// Tooltip: ""
+			}
+
+			Locator: {
+				// DisplayName: Locator
+				// Tooltip: ""
+			}
+
+			PortableAccess: {
+				// DisplayName: Portable Access
+				// Tooltip: ""
+			}
+
+			RemoteAccess: {
+				// DisplayName: Remote Access
+				// Tooltip: ""
+			}
+
+			StorageAccess: {
+				// DisplayName: Storage Access
+				// Tooltip: ""
+			}
+
+			StorageComponent: {
+				// DisplayName: Storage Component
+				// Tooltip: ""
+			}
+
+			StorageConnector: {
+				// DisplayName: Storage Connector
+				// Tooltip: ""
+			}
+
+			StorageDeactivator: {
+				// DisplayName: Storage Deactivator
+				// Tooltip: ""
+			}
+
+			StorageHeart: {
+				// DisplayName: Storage Heart
+				// Tooltip: ""
+			}
+
+			StorageUnit: {
+				// DisplayName: Storage Unit
+				// Tooltip: ""
+			}
+
+			StorageUnitBlueChlorophyte: {
+				// DisplayName: Storage Unit Blue Chlorophyte
+				// Tooltip: ""
+			}
+
+			StorageUnitCrimtane: {
+				// DisplayName: Storage Unit Crimtane
+				// Tooltip: ""
+			}
+
+			StorageUnitDemonite: {
+				// DisplayName: Storage Unit Demonite
+				// Tooltip: ""
+			}
+
+			StorageUnitHallowed: {
+				// DisplayName: Storage Unit Hallowed
+				// Tooltip: ""
+			}
+
+			StorageUnitHellstone: {
+				// DisplayName: Storage Unit Hellstone
+				// Tooltip: ""
+			}
+
+			StorageUnitLuminite: {
+				// DisplayName: Storage Unit Luminite
+				// Tooltip: ""
+			}
+
+			StorageUnitTerra: {
+				// DisplayName: Storage Unit Terra
+				// Tooltip: ""
+			}
+
+			StorageUnitTiny: {
+				// DisplayName: Storage Unit Tiny
+				// Tooltip: ""
+			}
+
+			UpgradeBlueChlorophyte: {
+				// DisplayName: Upgrade Blue Chlorophyte
+				// Tooltip: ""
+			}
+
+			UpgradeCrimtane: {
+				// DisplayName: Upgrade Crimtane
+				// Tooltip: ""
+			}
+
+			UpgradeDemonite: {
+				// DisplayName: Upgrade Demonite
+				// Tooltip: ""
+			}
+
+			UpgradeHallowed: {
+				// DisplayName: Upgrade Hallowed
+				// Tooltip: ""
+			}
+
+			UpgradeHellstone: {
+				// DisplayName: Upgrade Hellstone
+				// Tooltip: ""
+			}
+
+			UpgradeLuminite: {
+				// DisplayName: Upgrade Luminite
+				// Tooltip: ""
+			}
+
+			UpgradeTerra: {
+				// DisplayName: Upgrade Terra
+				// Tooltip: ""
+			}
 		}
 	}
 }
