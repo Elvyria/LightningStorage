@@ -111,14 +111,14 @@ class CraftingAccessUI : UIState
 		float smallSlotHeight = TextureAssets.InventoryBack9.Height() * smallScale;
 
 		float panelTop = Main.instance.invBottom + 60f;
-		const float pannelBottom = 20f;
+		const float pannelBottom = 10f;
 
 		panel = new UIPanel();
 
 		float innerPanelLeft = panelLeft + panel.PaddingLeft;
 		float innerPanelWidth = columns * (slotWidth + padding) + 20f + padding;
 		float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
-		float panelHeight = Main.screenHeight - panelTop - pannelBottom;
+		float panelHeight = Main.screenHeight / Main.UIScale - panelTop - pannelBottom;
 
 		panel.Left.Set((int)(opening ? -panelWidth : panelLeft), 0f);
 		panel.Top.Pixels = panelTop;
@@ -289,7 +289,7 @@ class CraftingAccessUI : UIState
 		recipeZone.Scrollbar = scrollbar;
 		panel.Append(scrollbar);
 
-		recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + 2 * recipeZone.padding)));
+		recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + recipeZone.padding)));
 
 		UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.Common.SelectedRecipe"));
 		recipePanel.Append(recipePanelHeader);

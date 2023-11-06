@@ -65,13 +65,14 @@ class StorageAccessUI : UIState, ISwitchable
 		float slotHeight = TextureAssets.InventoryBack9.Height() * inventoryScale;
 
 		float panelTop = Main.instance.invBottom + 60f;
+		const float pannelBottom = 10f;
 
 		panel = new UIPanel();
 
 		float innerPanelLeft = panelLeft + panel.PaddingLeft;
 		float innerPanelWidth = columns * (slotWidth + padding) + 20f + padding;
 		float panelWidth = panel.PaddingLeft + innerPanelWidth + panel.PaddingRight;
-		float panelHeight = Main.screenHeight - panelTop - 20f;
+		float panelHeight = Main.screenHeight / Main.UIScale - panelTop - pannelBottom;
 
 		panel.Left.Pixels = (int)(opening ? -panelWidth : panelLeft);
 		panel.Top.Pixels = panelTop;
@@ -184,7 +185,7 @@ class StorageAccessUI : UIState, ISwitchable
 
 		slotZone = new UISlotZone(GetItem, inventoryScale);
 		slotZone.Width.Percent = 1f;
-		slotZone.Top.Pixels = 76f;
+		slotZone.Top.Pixels = 86f;
 		slotZone.Height.Set(-116f, 1f);
 		slotZone.OnLeftMouseDown += PressSlotZone;
 
