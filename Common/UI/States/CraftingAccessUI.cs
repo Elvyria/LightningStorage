@@ -875,6 +875,7 @@ class CraftingAccessUI : UIState
 		}
 
 		recipeZone.UpdateScrollBar((recipes.Count + columns - 1) / columns);
+		recipeZone.LoadItems();
 	}
 
 	private void RefreshStations()
@@ -925,6 +926,7 @@ class CraftingAccessUI : UIState
 			conditions.Add(Condition.NearHoney);
 
 		stationZone.UpdateScrollBar(access.stations.Length + 1 - columns);
+		stationZone.LoadItems();
 	}
 
 	private bool IsAvailable(Recipe recipe)
@@ -1163,6 +1165,11 @@ class CraftingAccessUI : UIState
 			}
 
 			RefreshStorageItems();
+
+			previewZone.LoadItems();
+			ingredientZone.LoadItems();
+			storageZone.LoadItems();
+			resultZone.LoadItems();
 		}
 	}
 

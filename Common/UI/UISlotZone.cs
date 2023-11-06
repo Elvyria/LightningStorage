@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using ReLogic.Content;
 using ReLogic.Graphics;
 
 using Terraria.GameContent;
@@ -18,6 +18,7 @@ public class UISlotZone : UIElement
 	private int step = 1;
 	private int columns = 1;
 	private int rows = 1;
+	private int position = 0;
 
 	private Func<int, Item> getItem;
 	private Func<int, Color> getColor;
@@ -38,7 +39,12 @@ public class UISlotZone : UIElement
 			{
 				scrollbar.Top.Set(Top.Pixels + padding, Top.Percent);
 				scrollbar.Left.Set(Width.Pixels + scrollbar.Left.Pixels, 0);
-				scrollbar.Height = Height;
+
+				if (scrollbar != null)
+				{
+					scrollbar.Height = Height;
+					scrollbar.Height.Pixels -= padding;
+				}
 			}
 		}
 
@@ -82,7 +88,10 @@ public class UISlotZone : UIElement
 			this.rows = rows;
 			Height.Set(slotHeight * rows + (rows - 2) * padding, 0);
 			if (scrollbar != null)
+			{
 				scrollbar.Height = Height;
+				scrollbar.Height.Pixels -= padding;
+			}
 		}
 
 		if (this.columns != columns)
@@ -110,6 +119,47 @@ public class UISlotZone : UIElement
 		}
 	}
 
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+		if (scrollbar != null && (int)scrollbar.ViewPosition - position != 0)
+		{
+			int start = position < scrollbar.ViewPosition ? position + rows : (int)scrollbar.ViewPosition;
+			int end = start + Math.Abs((int)scrollbar.ViewPosition - position);
+
+			for (int i = start * step; i < end * step; i++)
+			{
+				Item item = getItem(i);
+				if (item.type > 0 && item.type < TextureAssets.Item.Length)
+				{
+					Asset<Texture2D> asset = TextureAssets.Item[item.type];
+					if (asset.State == AssetState.NotLoaded)
+					{
+						Main.Assets.Request<Texture2D>(asset.Name, AssetRequestMode.AsyncLoad);
+					}
+				}
+			}
+
+			position = (int)scrollbar.ViewPosition;
+		}
+    }
+
+	public void LoadItems() {
+		int offset = position * step;
+		int length = offset + columns * rows;
+
+		for (int i = offset; i < length; i++)
+		{
+			Item item = getItem(i);
+            Asset<Texture2D> asset = TextureAssets.Item[item.type];
+			if (asset.State == AssetState.NotLoaded)
+			{
+				Main.Assets.Request<Texture2D>(asset.Name, AssetRequestMode.AsyncLoad);
+			}
+		}
+	}
+
 	public int MouseSlot()
 	{
 		if (!IsMouseHovering) return -1;
@@ -129,16 +179,14 @@ public class UISlotZone : UIElement
 			return -1;
 		}
 
-		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition;
-
-		return increment * step + row * columns + column;
+		return position * step + row * columns + column;
 	}
 
 	protected override void DrawSelf(SpriteBatch spriteBatch)
 	{
 		Vector2 origin = GetDimensions().Position();
 
-		int increment = scrollbar == null ? 0 : (int)scrollbar.ViewPosition * step;
+		int increment = position * step;
 		int length = columns * rows;
 
 		for (int k = 0; k < length; k++)
@@ -154,26 +202,24 @@ public class UISlotZone : UIElement
 		// Draw item slot background
 		spriteBatch.Draw(slotTexture, drawPos, null, slotColor, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
-		if (!item.IsAir)
+		if (item.type > 0 && item.type < TextureAssets.Item.Length && item.type < Main.itemAnimations.Length)
 		{
 			float lightScale = 1f;
 			Color color = Color.White;
 			ItemSlot.GetItemLight(ref color, ref lightScale, item);
 
-			Main.instance.LoadItem(item.type);
 			Texture2D itemTexture = TextureAssets.Item[item.type].Value;
 			Rectangle rectangle2 = Main.itemAnimations[item.type] == null ? itemTexture.Frame() : Main.itemAnimations[item.type].GetFrame(itemTexture);
 
-			float itemScale = 1f;
+			float itemScale = scale;
 			if (rectangle2.Width > 32 || rectangle2.Height > 32)
 			{
-				itemScale = 32f / Math.Max(rectangle2.Width, rectangle2.Height);
+				itemScale *= 32f / Math.Max(rectangle2.Width, rectangle2.Height);
 			}
-			itemScale *= scale;
 
 			Vector2 drawPosition = drawPos;
-			drawPosition.X += (TextureAssets.InventoryBack9.Width() * scale - rectangle2.Width * itemScale) / 2;
-			drawPosition.Y += (TextureAssets.InventoryBack9.Height() * scale - rectangle2.Height * itemScale) / 2;
+			drawPosition.X += (slotWidth - rectangle2.Width * itemScale) / 2;
+			drawPosition.Y += (slotHeight - rectangle2.Height * itemScale) / 2;
 
 			Vector2 origin = rectangle2.Size() * (lightScale / 2f - 0.5f);
 

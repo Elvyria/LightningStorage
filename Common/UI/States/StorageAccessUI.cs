@@ -420,6 +420,7 @@ class StorageAccessUI : UIState, ISwitchable
 		UpdateCounter();
 
 		slotZone.UpdateScrollBar((items.Count + columns - 1) / columns);
+		slotZone.LoadItems();
 	}
 
 	private void ClickDeposit(UIMouseEvent e, UIElement depositButton)
