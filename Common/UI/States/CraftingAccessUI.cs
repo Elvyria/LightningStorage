@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
-using Terraria;
 
 using Terraria.DataStructures;
 using Terraria.GameInput;
@@ -59,6 +58,10 @@ class CraftingAccessUI : UIState
 
 	private UISlotZone stationZone;
 	private UISlotZone recipeZone;
+
+	private UISlotZone previewZone;
+	private UISlotZone ingredientZone;
+	private UISlotZone storageZone;
 	private UISlotZone resultZone;
 
 	private List<Item> items;
@@ -87,10 +90,6 @@ class CraftingAccessUI : UIState
 
 	private UIPanel panel;
 	private UIPanel recipePanel;
-
-	private UISlotZone previewZone;
-	private UISlotZone ingredientZone;
-	private UISlotZone storageZone;
 
 	private UIText reqObjText2;
 
@@ -282,11 +281,13 @@ class CraftingAccessUI : UIState
 		recipeZone = new UISlotZone(GetRecipe, GetRecipeColor, GetRecipeSlotTexture, inventoryScale);
 		recipeZone.Top.Pixels = 176f;
 		recipeZone.OnLeftMouseDown += PressRecipe;
+
 		panel.Append(recipeZone);
 
 		scrollbar = new UIScrollableBar();
 		scrollbar.Left.Pixels = -30f;
 		recipeZone.Scrollbar = scrollbar;
+
 		panel.Append(scrollbar);
 
 		recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + recipeZone.padding)));
@@ -1065,7 +1066,7 @@ class CraftingAccessUI : UIState
 
 		if (ItemSlot.ShiftInUse)
 		{
-			Item station = player.GetItem(Main.myPlayer, access.stations[slot], GetItemSettings.InventoryEntityToPlayerInventorySettings);
+			Item station = player.GetItem(Main.myPlayer, access.stations[slot].Clone(), GetItemSettings.InventoryEntityToPlayerInventorySettings);
 			if (station.IsAir)
 			{
 				access.WithdrawStation(slot);
