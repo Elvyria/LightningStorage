@@ -162,7 +162,7 @@ public class FilterMode : ILoadable
 				|| item.bodySlot >= 0
 				|| item.legSlot >= 0
 				|| item.accessory
-				|| Main.projHook[item.shoot]
+				|| item.shoot > 0 && item.useAmmo == AmmoID.None && Main.projHook[item.shoot]
 				|| item.mountType >= 0
 				|| item.buffType > 0 && (Main.lightPet[item.buffType] || Main.vanityPet[item.buffType]);
 		}
