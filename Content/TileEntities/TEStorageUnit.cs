@@ -3,12 +3,12 @@ using System.Linq;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-using MagicStorage.Common;
-using MagicStorage.Content.Tiles;
+using LightningStorage.Common;
+using LightningStorage.Content.Tiles;
 
-using IndicatorStyle = MagicStorage.Content.Tiles.StorageUnit.IndicatorStyle;
+using IndicatorStyle = LightningStorage.Content.Tiles.StorageUnit.IndicatorStyle;
 
-namespace MagicStorage.Content.TileEntities;
+namespace LightningStorage.Content.TileEntities;
 
 public class TEStorageUnit : TEStorageComponent
 {

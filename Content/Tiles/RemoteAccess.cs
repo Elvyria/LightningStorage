@@ -2,11 +2,11 @@ using Microsoft.Xna.Framework;
 
 using Terraria.DataStructures;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Content.Items;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common.Players;
+using LightningStorage.Content.Items;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Content.Tiles;
+namespace LightningStorage.Content.Tiles;
 
 public class RemoteAccess : StorageAccess
 {

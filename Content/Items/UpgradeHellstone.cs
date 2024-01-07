@@ -1,4 +1,4 @@
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class UpgradeHellstone : ModItem, Common.IStorageUpgrade
 {

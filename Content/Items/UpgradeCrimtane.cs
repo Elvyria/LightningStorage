@@ -1,4 +1,4 @@
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class UpgradeCrimtane : ModItem, Common.IStorageUpgrade
 {

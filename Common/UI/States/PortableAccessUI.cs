@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using MagicStorage.Common.Systems;
+using LightningStorage.Common.Systems;
 
-namespace MagicStorage.Common.UI.States;
+namespace LightningStorage.Common.UI.States;
 
 class PortableAccessUI : UIState, ISwitchable
 {
@@ -25,8 +25,8 @@ class PortableAccessUI : UIState, ISwitchable
     {
 		selector = new UISelector(new Asset<Texture2D>[]
 				{
-					ModContent.Request<Texture2D>("MagicStorage/Content/Items/StorageAccess"),
-					ModContent.Request<Texture2D>("MagicStorage/Content/Items/CraftingAccess"),
+					ModContent.Request<Texture2D>("LightningStorage/Content/Items/StorageAccess"),
+					ModContent.Request<Texture2D>("LightningStorage/Content/Items/CraftingAccess"),
 				},
 				new Vector2[]
 				{

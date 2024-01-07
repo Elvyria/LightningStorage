@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using Terraria.Localization;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UIButtonChoice : UIElement
 {
@@ -28,8 +28,8 @@ public class UIButtonChoice : UIElement
 	{
 		base.OnInitialize();
 
-		backTexture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackground");
-		backTextureActive = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackgroundActive");
+		backTexture = LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackground");
+		backTextureActive = LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortButtonBackgroundActive");
 	}
 
 	public UIButtonChoice(Asset<Texture2D>[] textures, LocalizedText[] labels)

@@ -1,4 +1,4 @@
-namespace MagicStorage.Common;
+namespace LightningStorage.Common;
 
 public interface IStorageUpgrade
 {

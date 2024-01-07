@@ -3,11 +3,11 @@ using System.Linq;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Content.Tiles;
-using MagicStorage.Common;
+using LightningStorage.Common.Players;
+using LightningStorage.Content.Tiles;
+using LightningStorage.Common;
 
-namespace MagicStorage.Content.TileEntities;
+namespace LightningStorage.Content.TileEntities;
 
 public class TEStorageHeart : TEStorageCenter
 {

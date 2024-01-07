@@ -10,12 +10,12 @@ global using Terraria.UI;
 
 using System.IO;
 
-namespace MagicStorage;
+namespace LightningStorage;
 
-public class MagicStorage : Mod
+public class LightningStorage : Mod
 {
 	[AllowNull]
-	public static MagicStorage Instance;
+	public static LightningStorage Instance;
 
 	public override void Load()
 	{

@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace MagicStorage.Common.Sorting;
+namespace LightningStorage.Common.Sorting;
 
 public static class ItemSorter
 {

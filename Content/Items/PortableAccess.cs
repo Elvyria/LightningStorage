@@ -1,11 +1,11 @@
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Common.UI.States;
-using MagicStorage.Common.Systems;
+using LightningStorage.Common.Players;
+using LightningStorage.Common.UI.States;
+using LightningStorage.Common.Systems;
 
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class PortableAccess : ModItem
 {

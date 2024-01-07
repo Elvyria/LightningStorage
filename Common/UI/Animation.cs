@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public static class Animation
 {

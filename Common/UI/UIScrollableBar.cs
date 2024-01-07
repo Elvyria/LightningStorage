@@ -1,6 +1,6 @@
 using Terraria.GameContent.UI.Elements;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UIScrollableBar : UIScrollbar
 {

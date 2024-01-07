@@ -10,12 +10,12 @@ using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 
-using MagicStorage.Common.Systems;
-using MagicStorage.Common.Players;
-using MagicStorage.Common.Sorting;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common.Systems;
+using LightningStorage.Common.Players;
+using LightningStorage.Common.Sorting;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Common.UI.States;
+namespace LightningStorage.Common.UI.States;
 
 class StorageAccessUI : UIState, ISwitchable
 {
@@ -88,16 +88,16 @@ class StorageAccessUI : UIState, ISwitchable
 		sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
 				{
 					TextureAssets.InventorySort[0],
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortNumber")
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortName"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortNumber")
 				},
 				new LocalizedText[]
 				{
-					Language.GetText("Mods.MagicStorage.Common.SortDefault"),
-					Language.GetText("Mods.MagicStorage.Common.SortID"),
-					Language.GetText("Mods.MagicStorage.Common.SortName"),
-					Language.GetText("Mods.MagicStorage.Common.SortStack")
+					Language.GetText("Mods.LightningStorage.Common.SortDefault"),
+					Language.GetText("Mods.LightningStorage.Common.SortID"),
+					Language.GetText("Mods.LightningStorage.Common.SortName"),
+					Language.GetText("Mods.LightningStorage.Common.SortStack")
 				});
 
 		sortButtons.OnLeftClick += (_, _) =>
@@ -114,7 +114,7 @@ class StorageAccessUI : UIState, ISwitchable
 
 		topBar.Append(sortButtons);
 
-		UITextPanel<LocalizedText> depositButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.MagicStorage.Common.DepositAll"), 1f);
+		UITextPanel<LocalizedText> depositButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.LightningStorage.Common.DepositAll"), 1f);
 		depositButton.Left.Pixels = sortButtons.GetDimensions().Width + 2 * padding;
 		depositButton.Width.Pixels = 128f;
 		depositButton.Height.Set(-2 * padding, 1f);
@@ -127,7 +127,7 @@ class StorageAccessUI : UIState, ISwitchable
 		topBar.Append(depositButton);
 
 		float depositButtonRight = sortButtons.GetDimensions().Width + 2 * padding + depositButton.GetDimensions().Width;
-		searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
+		searchBar = new UISearchBar(Language.GetText("Mods.LightningStorage.Common.SearchName"));
 		searchBar.Left.Pixels = depositButtonRight + padding;
 		searchBar.Width.Set(-depositButtonRight - 2 * padding, 1f);
 		searchBar.Height.Percent = 1f;
@@ -143,23 +143,23 @@ class StorageAccessUI : UIState, ISwitchable
 
 		filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
 				{
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
 				},
 				new LocalizedText[]
 				{
-					Language.GetText("Mods.MagicStorage.Common.FilterAll"),
-					Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
-					Language.GetText("Mods.MagicStorage.Common.FilterTools"),
-					Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
-					Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
-					Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
-					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
+					Language.GetText("Mods.LightningStorage.Common.FilterAll"),
+					Language.GetText("Mods.LightningStorage.Common.FilterWeapons"),
+					Language.GetText("Mods.LightningStorage.Common.FilterTools"),
+					Language.GetText("Mods.LightningStorage.Common.FilterEquips"),
+					Language.GetText("Mods.LightningStorage.Common.FilterPotions"),
+					Language.GetText("Mods.LightningStorage.Common.FilterTiles"),
+					Language.GetText("Mods.LightningStorage.Common.FilterMisc")
 				});
 
 		filterButtons.OnLeftClick += (_, _) =>
@@ -176,7 +176,7 @@ class StorageAccessUI : UIState, ISwitchable
 
 		topBar2.Append(filterButtons);
 
-		searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
+		searchBar2 = new UISearchBar(Language.GetText("Mods.LightningStorage.Common.SearchMod"));
 		searchBar2.Left.Pixels = depositButtonRight + padding;
 		searchBar2.Width.Set(-depositButtonRight - 2 * padding, 1f);
 		searchBar2.Height.Percent = 1f;

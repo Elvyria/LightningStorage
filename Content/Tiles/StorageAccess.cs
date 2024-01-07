@@ -7,10 +7,10 @@ using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.GameInput;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common.Players;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Content.Tiles;
+namespace LightningStorage.Content.Tiles;
 
 public class StorageAccess : StorageComponent
 {

@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using Terraria.GameContent;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UISelector : UIElement, ISwitchable
 {

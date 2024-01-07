@@ -1,11 +1,11 @@
 using Terraria.DataStructures;
 
-using MagicStorage.Common.UI;
-using MagicStorage.Common.Systems;
-using MagicStorage.Content.TileEntities;
-using MagicStorage.Content.Tiles;
+using LightningStorage.Common.UI;
+using LightningStorage.Common.Systems;
+using LightningStorage.Content.TileEntities;
+using LightningStorage.Content.Tiles;
 
-namespace MagicStorage.Common.Players;
+namespace LightningStorage.Common.Players;
 
 public class StoragePlayer : ModPlayer
 {

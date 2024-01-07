@@ -1,4 +1,4 @@
-namespace MagicStorage.Common.Sorting;
+namespace LightningStorage.Common.Sorting;
 
 #nullable disable
 public class SortMode : ILoadable

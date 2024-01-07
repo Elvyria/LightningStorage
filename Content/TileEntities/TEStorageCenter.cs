@@ -3,7 +3,7 @@ using System.Linq;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-namespace MagicStorage.Content.TileEntities;
+namespace LightningStorage.Content.TileEntities;
 
 public abstract class TEStorageCenter : TEStorageComponent
 {

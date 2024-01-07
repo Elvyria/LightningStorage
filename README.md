@@ -1,5 +1,5 @@
 # Lightning Storage
-My personal, blazing fast fork of [MagicStorage v0.4.3.3](https://github.com/blushiemagic/MagicStorage), an item storage mod for Terraria.  
+My personal, blazing fast fork of [LightningStorage v0.4.3.3](https://github.com/blushiemagic/LightningStorage), an item storage mod for Terraria.  
 
 (This mod is not following development of the original and not striving to be compatible)
 

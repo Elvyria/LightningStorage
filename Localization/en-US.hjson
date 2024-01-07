@@ -1,34 +1,34 @@
 Mods: {
-	MagicStorage: {
+	LightningStorage: {
 		ItemName: {
 			PortableAccess: Portable Remote Storage Access
 			StorageDeactivator: Storage Unit Wand
 			RemoteAccess: Remote Storage Access
 			CraftingAccess: Storage Crafting Interface
-			CraftingAccessDemonite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessCrimtane: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessHellstone: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessHallowed: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessBlueChlorophyte: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessLuminite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			CraftingAccessTerra: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			CraftingAccessDemonite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessCrimtane: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessHellstone: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessHallowed: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessBlueChlorophyte: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessLuminite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			CraftingAccessTerra: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
 			StorageUpgrade: Storage Upgrade
-			UpgradeDemonite: Demonite {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeCrimtane: Crimtane {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeHellstone: Hellstone {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeHallowed: Hallowed {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeBlueChlorophyte: Blue Chlorophyte {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeLuminite: Luminite {$Mods.MagicStorage.ItemName.StorageUpgrade}
-			UpgradeTerra: Terra {$Mods.MagicStorage.ItemName.StorageUpgrade}
+			UpgradeDemonite: Demonite {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeCrimtane: Crimtane {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeHellstone: Hellstone {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeHallowed: Hallowed {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeBlueChlorophyte: Blue Chlorophyte {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeLuminite: Luminite {$Mods.LightningStorage.ItemName.StorageUpgrade}
+			UpgradeTerra: Terra {$Mods.LightningStorage.ItemName.StorageUpgrade}
 			StorageUnit: Storage Unit
-			StorageUnitDemonite: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitCrimtane: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitHellstone: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitHallowed: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitBlueChlorophyte: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitLuminite: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitTerra: "{$Mods.MagicStorage.ItemName.StorageUnit}"
-			StorageUnitTiny: Tiny {$Mods.MagicStorage.ItemName.StorageUnit}
+			StorageUnitDemonite: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitCrimtane: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitHellstone: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitHallowed: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitBlueChlorophyte: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitLuminite: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitTerra: "{$Mods.LightningStorage.ItemName.StorageUnit}"
+			StorageUnitTiny: Tiny {$Mods.LightningStorage.ItemName.StorageUnit}
 		}
 
 		ItemTooltip: {

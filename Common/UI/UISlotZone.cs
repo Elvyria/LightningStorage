@@ -6,7 +6,7 @@ using ReLogic.Graphics;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UISlotZone : UIElement
 {

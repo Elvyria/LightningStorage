@@ -1,6 +1,6 @@
-global using MagicStorage.Common.Extensions;
+global using LightningStorage.Common.Extensions;
 
-namespace MagicStorage.Common.Extensions;
+namespace LightningStorage.Common.Extensions;
 
 public static class TileExtensions
 {

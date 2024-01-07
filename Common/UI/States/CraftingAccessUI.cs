@@ -14,12 +14,12 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.Map;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Common.Sorting;
-using MagicStorage.Common.Systems;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common.Players;
+using LightningStorage.Common.Sorting;
+using LightningStorage.Common.Systems;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Common.UI.States;
+namespace LightningStorage.Common.UI.States;
 
 class CraftingAccessUI : UIState
 {
@@ -141,14 +141,14 @@ class CraftingAccessUI : UIState
 		sortButtons = new UIButtonChoice(new Asset<Texture2D>[]
 				{
 					TextureAssets.InventorySort[0],
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SortName")
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortID"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SortName")
 				},
 				new LocalizedText[]
 				{
-					Language.GetText("Mods.MagicStorage.Common.SortDefault"),
-					Language.GetText("Mods.MagicStorage.Common.SortID"),
-					Language.GetText("Mods.MagicStorage.Common.SortName")
+					Language.GetText("Mods.LightningStorage.Common.SortDefault"),
+					Language.GetText("Mods.LightningStorage.Common.SortID"),
+					Language.GetText("Mods.LightningStorage.Common.SortName")
 				});
 
 		sortButtons.OnLeftClick += ClickSortButtons;
@@ -159,13 +159,13 @@ class CraftingAccessUI : UIState
 
 		recipeButtons = new UIButtonChoice(new Asset<Texture2D>[]
 				{
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAvailable"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAll")
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAvailable"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/RecipeAll")
 				},
 				new LocalizedText[]
 				{
-					Language.GetText("Mods.MagicStorage.Common.RecipeAvailable"),
-					Language.GetText("Mods.MagicStorage.Common.RecipeAll")
+					Language.GetText("Mods.LightningStorage.Common.RecipeAvailable"),
+					Language.GetText("Mods.LightningStorage.Common.RecipeAll")
 				});
 
 		recipeButtons.OnLeftClick += ClickRecipeButtons;
@@ -174,7 +174,7 @@ class CraftingAccessUI : UIState
 		topBar.Append(recipeButtons);
 		float recipeButtonsRight = recipeButtonsLeft + recipeButtons.GetDimensions().Width + padding;
 
-		searchBar = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchName"));
+		searchBar = new UISearchBar(Language.GetText("Mods.LightningStorage.Common.SearchName"));
 		searchBar.Left.Set(recipeButtonsRight + padding, 0f);
 		searchBar.Width.Set(-recipeButtonsRight - 2 * padding, 1f);
 		searchBar.Height.Percent = 1f;
@@ -188,23 +188,23 @@ class CraftingAccessUI : UIState
 
 		filterButtons = new UIButtonChoice(new Asset<Texture2D>[]
 				{
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
-					MagicStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterAll"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMelee"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPickaxe"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterArmor"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterPotion"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterTile"),
+					LightningStorage.Instance.Assets.Request<Texture2D>("Assets/FilterMisc"),
 				},
 				new LocalizedText[]
 				{
-					Language.GetText("Mods.MagicStorage.Common.FilterAll"),
-					Language.GetText("Mods.MagicStorage.Common.FilterWeapons"),
-					Language.GetText("Mods.MagicStorage.Common.FilterTools"),
-					Language.GetText("Mods.MagicStorage.Common.FilterEquips"),
-					Language.GetText("Mods.MagicStorage.Common.FilterPotions"),
-					Language.GetText("Mods.MagicStorage.Common.FilterTiles"),
-					Language.GetText("Mods.MagicStorage.Common.FilterMisc")
+					Language.GetText("Mods.LightningStorage.Common.FilterAll"),
+					Language.GetText("Mods.LightningStorage.Common.FilterWeapons"),
+					Language.GetText("Mods.LightningStorage.Common.FilterTools"),
+					Language.GetText("Mods.LightningStorage.Common.FilterEquips"),
+					Language.GetText("Mods.LightningStorage.Common.FilterPotions"),
+					Language.GetText("Mods.LightningStorage.Common.FilterTiles"),
+					Language.GetText("Mods.LightningStorage.Common.FilterMisc")
 				});
 
 		filterButtons.OnLeftClick += ClickFilterButtons;
@@ -213,13 +213,13 @@ class CraftingAccessUI : UIState
 
 		float filterButtonsRight = filterButtons.GetDimensions().Width + padding;
 
-		searchBar2 = new UISearchBar(Language.GetText("Mods.MagicStorage.Common.SearchMod"));
+		searchBar2 = new UISearchBar(Language.GetText("Mods.LightningStorage.Common.SearchMod"));
 		searchBar2.Left.Set(filterButtonsRight + padding, 0f);
 		searchBar2.Width.Set(-filterButtonsRight - 2 * padding, 1f);
 		searchBar2.Height.Percent = 1f;
 		topBar2.Append(searchBar2);
 
-		UIText stationText = new UIText(Language.GetText("Mods.MagicStorage.Common.CraftingStations"));
+		UIText stationText = new UIText(Language.GetText("Mods.LightningStorage.Common.CraftingStations"));
 		stationText.Top.Pixels = 76f;
 		panel.Append(stationText);
 
@@ -274,7 +274,7 @@ class CraftingAccessUI : UIState
 			stationButtonRight.active = access.stations.Length - columns != stationZone.Scrollbar.ViewPosition;
 		};
 
-		UIText recipeText = new UIText(Language.GetText("Mods.MagicStorage.Common.Recipes"));
+		UIText recipeText = new UIText(Language.GetText("Mods.LightningStorage.Common.Recipes"));
 		recipeText.Top.Pixels = 152f;
 		panel.Append(recipeText);
 
@@ -292,10 +292,10 @@ class CraftingAccessUI : UIState
 
 		recipeZone.SetDimensions(columns, (int)((panel.Height.Pixels - panel.PaddingBottom - recipeZone.Top.Pixels) / (slotHeight + recipeZone.padding)));
 
-		UIText recipePanelHeader = new UIText(Language.GetText("Mods.MagicStorage.Common.SelectedRecipe"));
+		UIText recipePanelHeader = new UIText(Language.GetText("Mods.LightningStorage.Common.SelectedRecipe"));
 		recipePanel.Append(recipePanelHeader);
 
-		UIText ingredientText = new UIText(Language.GetText("Mods.MagicStorage.Common.Ingredients"));
+		UIText ingredientText = new UIText(Language.GetText("Mods.LightningStorage.Common.Ingredients"));
 		ingredientText.Top.Pixels = 30f;
 		recipePanel.Append(ingredientText);
 
@@ -317,7 +317,7 @@ class CraftingAccessUI : UIState
 		reqObjText2.Top.Pixels = 160f;
 		recipePanel.Append(reqObjText2);
 
-		UIText storedItemsText = new UIText(Language.GetText("Mods.MagicStorage.Common.StoredItems"));
+		UIText storedItemsText = new UIText(Language.GetText("Mods.LightningStorage.Common.StoredItems"));
 		storedItemsText.Top.Pixels = 190f;
 		recipePanel.Append(storedItemsText);
 

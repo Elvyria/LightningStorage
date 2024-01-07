@@ -1,4 +1,4 @@
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class StorageUnit : ModItem
 {
@@ -22,14 +22,14 @@ public class StorageUnit : ModItem
 	{
 		CreateRecipe()
 			.AddIngredient<Items.StorageComponent>()
-			.AddRecipeGroup("MagicStorage:AnyChest")
+			.AddRecipeGroup("LightningStorage:AnyChest")
 			.AddIngredient(ItemID.SilverBar, 10)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 
 		CreateRecipe()
 			.AddIngredient<Items.StorageComponent>()
-			.AddRecipeGroup("MagicStorage:AnyChest")
+			.AddRecipeGroup("LightningStorage:AnyChest")
 			.AddIngredient(ItemID.TungstenBar, 10)
 			.AddTile(TileID.WorkBenches)
 			.Register();

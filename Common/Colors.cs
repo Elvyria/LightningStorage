@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace MagicStorage.Common;
+namespace LightningStorage.Common;
 
 public static class StateColor
 {

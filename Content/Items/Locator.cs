@@ -2,10 +2,10 @@ using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.Localization;
 
-using MagicStorage.Common.Players;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common.Players;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class Locator : ModItem
 {
@@ -82,7 +82,7 @@ public class Locator : ModItem
 		{
 			if (isSet && lines[k].Mod == "Terraria" && lines[k].Name == "Tooltip0")
 			{
-				lines[k].Text = Language.GetTextValue("Mods.MagicStorage.Common.SetTo", location.X, location.Y);
+				lines[k].Text = Language.GetTextValue("Mods.LightningStorage.Common.SetTo", location.X, location.Y);
 			}
 			else if (!isSet && lines[k].Mod == "Terraria" && lines[k].Name == "Tooltip1")
 			{

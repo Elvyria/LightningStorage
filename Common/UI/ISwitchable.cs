@@ -1,4 +1,4 @@
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 interface ISwitchable
 {

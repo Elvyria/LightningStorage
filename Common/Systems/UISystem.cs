@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 
-using MagicStorage.Common.UI;
-using MagicStorage.Common.UI.States;
+using LightningStorage.Common.UI;
+using LightningStorage.Common.UI.States;
 
-namespace MagicStorage.Common.Systems;
+namespace LightningStorage.Common.Systems;
 
 public class UISystem : ModSystem
 {
@@ -82,7 +82,7 @@ public class UISystem : ModSystem
 	{
 		int invIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
 		layers.Insert(invIndex + 1, new LegacyGameInterfaceLayer(
-					"MagicStorage: StorageAccess",
+					"LightningStorage: StorageAccess",
 					delegate
 					{
 						if (_lastUpdateUiGameTime != null && UI?.CurrentState != null)
@@ -96,7 +96,7 @@ public class UISystem : ModSystem
 
 		int wireIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Wire Selection"));
 		layers.Insert(wireIndex, new LegacyGameInterfaceLayer(
-					"MagicStorage: Portable Access",
+					"LightningStorage: Portable Access",
 					delegate
 					{
 						if (_lastUpdateUiGameTime != null && ItemUI?.CurrentState != null)

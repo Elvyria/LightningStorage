@@ -1,17 +1,17 @@
 Mods: {
-	MagicStorage: {
+	LightningStorage: {
 		ItemName: {
 			// PortableAccess: Portable Remote Storage Access
 			StorageDeactivator: Różdżka jednostki magazynującej
 			RemoteAccess: Zdalna Jednostka Dostępu
 			CraftingAccess: Interfejs Rzemieślniczy Magazynu
-			// CraftingAccessDemonite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessCrimtane: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessHellstone: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessHallowed: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessBlueChlorophyte: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessLuminite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessTerra: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessDemonite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessCrimtane: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHellstone: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHallowed: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessBlueChlorophyte: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessLuminite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessTerra: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
 			// StorageUpgrade: Storage Upgrade
 			UpgradeDemonite: Ulepszenie jednostki magazynującej (Demonit)
 			UpgradeCrimtane: Ulepszenie jednostki magazynującej (Karmazynit)

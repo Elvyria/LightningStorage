@@ -1,9 +1,9 @@
-global using MagicStorage.Common.Extensions;
+global using LightningStorage.Common.Extensions;
 
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-namespace MagicStorage.Common.Extensions;
+namespace LightningStorage.Common.Extensions;
 
 public static class TagExtensions
 {

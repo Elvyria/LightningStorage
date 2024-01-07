@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
-using MagicStorage.Content.Tiles;
+using LightningStorage.Content.Tiles;
 
-namespace MagicStorage.Content.TileEntities;
+namespace LightningStorage.Content.TileEntities;
 
 public abstract class TEStorageComponent : ModTileEntity
 {

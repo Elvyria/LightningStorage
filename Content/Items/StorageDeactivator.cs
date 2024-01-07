@@ -1,8 +1,8 @@
 using Terraria.DataStructures;
 
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Content.Items;
+namespace LightningStorage.Content.Items;
 
 public class StorageDeactivator : ModItem
 {

@@ -1,8 +1,8 @@
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using MagicStorage.Content.Tiles;
+using LightningStorage.Content.Tiles;
 
-namespace MagicStorage.Content.TileEntities;
+namespace LightningStorage.Content.TileEntities;
 
 public class TERemoteAccess : TEStorageCenter
 {

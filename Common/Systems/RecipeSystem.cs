@@ -1,12 +1,12 @@
 using Terraria.Localization;
 
-namespace MagicStorage.Common.Systems;
+namespace LightningStorage.Common.Systems;
 
 public class RecipeSystem : ModSystem
 {
 	public override void PostAddRecipes()
 	{
-		var logger = MagicStorage.Instance.Logger;
+		var logger = LightningStorage.Instance.Logger;
 
 		foreach (Recipe recipe in Main.recipe)
 		{
@@ -73,7 +73,7 @@ public class RecipeSystem : ModSystem
 				ItemID.GraniteChest,
 				ItemID.MeteoriteChest,
 				ItemID.MarbleChest);
-		RecipeGroup.RegisterGroup("MagicStorage:AnyChest", group);
+		RecipeGroup.RegisterGroup("LightningStorage:AnyChest", group);
 	}
 }
 

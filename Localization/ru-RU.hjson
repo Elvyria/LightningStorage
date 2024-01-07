@@ -1,17 +1,17 @@
 Mods: {
-	MagicStorage: {
+	LightningStorage: {
 		ItemName: {
 			PortableAccess: Портативный Модуль Удаленного Доступа к Хранилищу
 			StorageDeactivator: Жезл Ячейки Хранилища
 			RemoteAccess: Модуль Удаленного Доступа к Хранилищу
 			CraftingAccess: Модуль Создания Предметов
-			// CraftingAccessDemonite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessCrimtane: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessHellstone: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessHallowed: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessBlueChlorophyte: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessLuminite: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
-			// CraftingAccessTerra: "{$Mods.MagicStorage.ItemName.CraftingAccess}"
+			// CraftingAccessDemonite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessCrimtane: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHellstone: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessHallowed: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessBlueChlorophyte: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessLuminite: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
+			// CraftingAccessTerra: "{$Mods.LightningStorage.ItemName.CraftingAccess}"
 			// StorageUpgrade: Storage Upgrade
 			UpgradeDemonite: Демонитовое Улучшение Ячейки Хранилища
 			UpgradeCrimtane: Кримтановое Улучшение Ячейки Хранилища

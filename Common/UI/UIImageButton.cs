@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UIScrollButton : UIElement
 {

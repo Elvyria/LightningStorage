@@ -6,10 +6,10 @@ using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-using MagicStorage.Common;
-using MagicStorage.Content.TileEntities;
+using LightningStorage.Common;
+using LightningStorage.Content.TileEntities;
 
-namespace MagicStorage.Content.Tiles;
+namespace LightningStorage.Content.Tiles;
 
 public class StorageUnit : StorageComponent, IUpgradeable
 {

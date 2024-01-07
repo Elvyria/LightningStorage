@@ -9,7 +9,7 @@ using Terraria.Localization;
 using Terraria.GameInput;
 using Terraria.GameContent;
 
-namespace MagicStorage.Common.UI;
+namespace LightningStorage.Common.UI;
 
 public class UISearchBar : UIElement, IInput
 {
@@ -17,7 +17,7 @@ public class UISearchBar : UIElement, IInput
 	private bool Focused { get { return focused; } }
 
 	private const int padding = 4;
-	private LocalizedText defaultText = Language.GetText("Mods.MagicStorage.Common.Search");
+	private LocalizedText defaultText = Language.GetText("Mods.LightningStorage.Common.Search");
 	private string text = string.Empty;
 	private int cursorPosition = 0;
 	private int cursorTimer = 0;
@@ -36,7 +36,7 @@ public class UISearchBar : UIElement, IInput
 
 	public override void OnInitialize()
 	{
-		texture = MagicStorage.Instance.Assets.Request<Texture2D>("Assets/SearchBar");
+		texture = LightningStorage.Instance.Assets.Request<Texture2D>("Assets/SearchBar");
 	}
 
 	public UISearchBar(LocalizedText defaultText) : this()
