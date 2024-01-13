@@ -43,6 +43,8 @@ public class StorageUnitTiny : StorageUnit
 		base.SetDefaults();
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Tiny;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitDemonite : StorageUnit
@@ -54,6 +56,8 @@ public class StorageUnitDemonite : StorageUnit
 		Item.value = Item.sellPrice(silver: 32);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Demonite;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitCrimtane : StorageUnit
@@ -65,6 +69,8 @@ public class StorageUnitCrimtane : StorageUnit
 		Item.value = Item.sellPrice(silver: 32);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Crimtane;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitHellstone : StorageUnit
@@ -76,6 +82,8 @@ public class StorageUnitHellstone : StorageUnit
 		Item.value = Item.sellPrice(silver: 50);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Hellstone;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitHallowed : StorageUnit
@@ -87,6 +95,8 @@ public class StorageUnitHallowed : StorageUnit
 		Item.value = Item.sellPrice(gold: 1);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Hallowed;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitBlueChlorophyte : StorageUnit
@@ -98,6 +108,8 @@ public class StorageUnitBlueChlorophyte : StorageUnit
         Item.value = Item.sellPrice(gold: 1, silver: 60);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.BlueChlorophyte;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitLuminite : StorageUnit
@@ -109,6 +121,8 @@ public class StorageUnitLuminite : StorageUnit
 		Item.value = Item.sellPrice(gold: 2, silver: 50);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Luminite;
 	}
+
+	public override void AddRecipes() {}
 }
 
 public class StorageUnitTerra : StorageUnit
@@ -120,4 +134,6 @@ public class StorageUnitTerra : StorageUnit
 		Item.value = Item.sellPrice(silver: 12);
 		Item.placeStyle = Tiles.StorageUnit.StyleID.Terra;
 	}
+
+	public override void AddRecipes() {}
 }
