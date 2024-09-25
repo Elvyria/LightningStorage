@@ -935,7 +935,7 @@ class CraftingAccessUI : UIState
 		if (recipe.requiredTile.Any(t => !adjTiles[t]))
 			return false;
 
-		if (recipe.Conditions.Any(c => !c.IsMet()))
+		if (recipe.Conditions.Any(c => !(conditions.Contains(c) || c.IsMet())))
 			return false;
 
 		return recipe.requiredItem.TrueForAll(ingredient => EnoughOf(recipe, ingredient));
