@@ -8,6 +8,7 @@ using Terraria.ObjectData;
 
 using LightningStorage.Common;
 using LightningStorage.Content.TileEntities;
+using LightningStorage.Common.Players;
 
 namespace LightningStorage.Content.Tiles;
 
@@ -113,8 +114,7 @@ public class StorageUnit : StorageComponent, IUpgradeable
 
 	private bool TryUpgrade(int i, int j)
 	{
-		Player player = Main.LocalPlayer;
-		Item item = player.inventory[player.selectedItem];
+		Item item = StoragePlayer.HeldItem();
 
 		if (item.ModItem is IStorageUpgrade upgrade)
 		{

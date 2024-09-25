@@ -16,6 +16,17 @@ public class StoragePlayer : ModPlayer
 
 	private Point16 accessPosition = Point16.NegativeOne;
 
+	public static Item HeldItem()
+	{
+		Player player = Main.LocalPlayer;
+		Item item = Main.mouseItem;
+
+		if (item.IsAir)
+			item = player.HeldItem;
+
+		return item;
+	}
+
 	public void RefreshItems()
 	{
 		if (accessPosition != Point16.NegativeOne)
